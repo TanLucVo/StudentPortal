@@ -11,6 +11,15 @@ router.get('/',async function (req, res, next) {
 	user.find({}, function(err, result) {
 		console.log(result)
 	});
+	// try {
+	// 	const newUser = new user({
+	// 		name : "!23",
+	// 		email:"123123"
+	// 	})
+	// 	await newUser.save()
+	// } catch (error) {
+	// 	console.log(error)
+	// }
 });
 
 // POST login page
