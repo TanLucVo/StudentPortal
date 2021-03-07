@@ -5,11 +5,30 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
 const loginRouter = require("./routes/login");
-const usersRouter = require("./routes/users");
+const index = require("./routes/index");
 require('dotenv').config()
+const {ensureAuth, ensureGuest} = require('./middleware/auth')
 const app = express();
 //database
 const mongoose = require('mongoose')
+
+//session
+const session = require('express-session')
+app.use(
+	session({
+	  secret: 'keyboard cat',
+	  resave: false,
+	  saveUninitialized: false,
+	})
+)
+
+//passport
+const passport = require('passport')
+// Passport config
+require('./config/passport')(passport)
+// Passport middleware
+app.use(passport.initialize())
+app.use(passport.session())
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -25,8 +44,8 @@ app.use(
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/login", loginRouter);
-app.use("/users", usersRouter);
+app.use("/auth", ensureGuest, loginRouter);
+app.use("/",ensureAuth, index);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
