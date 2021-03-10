@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-
+const flash = require('connect-flash');
 const loginRouter = require("./routes/login");
 const index = require("./routes/index");
 require('dotenv').config()
@@ -41,10 +41,11 @@ app.use(
 		extended: false,
 	})
 );
+app.use(flash());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/auth", ensureGuest, loginRouter);
+app.use("/auth", loginRouter);
 app.use("/",ensureAuth, index);
 
 // catch 404 and forward to error handler

@@ -1,6 +1,7 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const mongoose = require('mongoose')
-const Student = require('../models/student')
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('../models/user')
 module.exports = function (passport) {
     passport.use(
         new GoogleStrategy({
@@ -9,38 +10,67 @@ module.exports = function (passport) {
                 callbackURL: '/auth/google/callback',
             },
             async (accessToken, refreshToken, profile, done) => {
-                const newStudent = {
-                    googleId: profile.id,
-                    displayName: profile.displayName,
-                    firstName: profile.name.givenName,
-                    lastName: profile.name.familyName,
+                console.log(profile)
+                let username = profile._json.email
+                username = username.replace('@student.tdtu.edu.vn',"")
+                console.log(username)
+                const newUser = {
+                    userId: profile.id,
+                    name: profile.displayName,
                     image: profile.photos[0].value,
+                    type: "student",
+                    username:username,
+                    password:username
                 }
 
                 try {
-                    let student = await Student.findOne({
-                        googleId: profile.id
+                    let user = await User.findOne({
+                        userId: profile.id
                     })
-
-                    if (student) {
-                        done(null, student)
-                        console.log("User da tao")
-                    } else {
-                        student = await Student.create(newStudent)
-                        console.log("User chua tao")
-                        done(null, student)
+                    
+                    if(profile._json.hd !== "student.tdtu.edu.vn"){
+                        done(null, false, {message : "email is not valid"})
+                    }else{
+                        if (user) {
+                            return done(null, user)
+                        } else {
+                            user = await User.create(newUser)
+                            return done(null, user)
+                        }
                     }
+                    
                 } catch (err) {
                     console.error(err)
                 }
             }
         )
     )
-    passport.serializeUser((student, done) => {
-        done(null, student.id)
-      })
+    passport.use('local-login', new LocalStrategy({
+        usernameField: 'username',
+        passwordField: 'password',
+        passReqToCallback : true,
+        
+        },
+        async function(req, username, password, done) {
+            try {
+                let user = await User.findOne({ username:  username, password: password })
+                if (!user)
+                    return done(null, false, req.flash('loginMessage', 'No user found.'));
+                return done(null, user);
+                
+            } catch (err) {
+                console.error(err)
+            }
+           
+        }));
+
+
+    passport.serializeUser((user, done) => {
+        done(null, user.id)
+    })
     
-      passport.deserializeUser((id, done) => {
-        Student.findById(id, (err, student) => done(err, student))
-      })
+    passport.deserializeUser((id, done) => {
+        User.findById(id, (err, user) => done(err, user))
+    })
+
 }
