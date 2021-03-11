@@ -1,63 +1,44 @@
 var express = require('express');
 var router = express.Router();
 const passport = require('passport');
+//token
+const jwt = require('jsonwebtoken')
+const {generateAccessToken} = require('../config/token')
 const {
 	ensureGuest
 } = require('../middleware/auth')
 const createError = require("http-errors");
 const User = require('../models/user')
+
+
 /* GET login page. */
 router.get('/', ensureGuest, async function (req, res, next) {
 	res.render('login', {
-		title: 'Express',
-		error: req.session.error || null
+		error: req.flash('loginMessage')
 	});
-	req.session.destroy();
 });
 
-// POST login page
-// router.post('/', async function (req, res, next) {
-// 	const username = req.body.username
-// 	const password = req.body.password
-// 	if (!username || !password) {
-// 		return res.render('login', {
-// 			error: "Username or password not empty"
-// 		})
-// 	} else {
-// 		const user = await User.findOne({
-// 			username: username,
-// 			password: password
-// 		})
-// 		if (!user) {
-// 			return res.render('login', {
-// 				error: "Username or password is not correct"
-// 			})
-// 		}
-// 	}
-// });
-// passport.authenticate('local-login', {
-// 	successRedirect: '/',
-// 	failureRedirect: '/auth',
-// 	failureFlash: true,
-// })
 router.post('/',(req, res, next) => {
 	passport.authenticate('local-login',{
 			successRedirect: '/',
 			failureRedirect: '/auth',
-			failureFlash: true,
+			failureFlash: true,	
 		}, function (err, user, info) {
 		if (err) {
 			return next(err);
 		}
 		if (!user) {
-			req.session.error = 'email is not valid';
-			return res.redirect('/auth');
+			// req.flash('loginMessage', 'Email or password is incorrect')
+			return res.json({error:info.message});
 		}
 		req.logIn(user, function (err) {
 			if (err) {
 				return next(err);
 			}
-			return res.redirect('/');
+			// Tạo 1 token và payload data và response lại với status code là 200 cùng với payloaded data
+			const token = generateAccessToken({userId: user.id})
+			return res.json({token:token});
+			// res.redirect('/')
 		});
 	})(req, res, next);
 });
@@ -82,7 +63,7 @@ router.get(
 				return next(err);
 			}
 			if (!user) {
-				req.session.error = 'email is not valid';
+				req.flash('loginMessage', 'Email is not valid')
 				return res.redirect('/auth');
 			}
 			req.logIn(user, function (err) {

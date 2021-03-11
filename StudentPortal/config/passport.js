@@ -1,8 +1,9 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy
-const mongoose = require('mongoose')
 const LocalStrategy = require('passport-local').Strategy;
+
 const User = require('../models/user')
 module.exports = function (passport) {
+
     passport.use(
         new GoogleStrategy({
                 clientID: process.env.GOOGLE_CLIENT_ID,
@@ -10,7 +11,6 @@ module.exports = function (passport) {
                 callbackURL: '/auth/google/callback',
             },
             async (accessToken, refreshToken, profile, done) => {
-                console.log(profile)
                 let username = profile._json.email
                 username = username.replace('@student.tdtu.edu.vn',"")
                 console.log(username)
@@ -29,7 +29,7 @@ module.exports = function (passport) {
                     })
                     
                     if(profile._json.hd !== "student.tdtu.edu.vn"){
-                        done(null, false, {message : "email is not valid"})
+                        done(null, false)
                     }else{
                         if (user) {
                             return done(null, user)
@@ -54,8 +54,11 @@ module.exports = function (passport) {
         async function(req, username, password, done) {
             try {
                 let user = await User.findOne({ username:  username, password: password })
+                if(username.trim()==="" || password.trim()===""){
+                    return done(null, false,{ message: "Username or password not empty" });
+                }
                 if (!user)
-                    return done(null, false, req.flash('loginMessage', 'No user found.'));
+                    return done(null, false,{ message: "Username or password is incorrect" });
                 return done(null, user);
                 
             } catch (err) {
@@ -63,7 +66,9 @@ module.exports = function (passport) {
             }
            
         }));
+    
 
+    
 
     passport.serializeUser((user, done) => {
         done(null, user.id)

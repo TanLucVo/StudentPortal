@@ -34,6 +34,13 @@
 .login-page .alert-danger{
 	display: none;
 }
+.login-page .show-error-login{
+	display: none;
+}
+.login-page .spinner-border{
+	left: 30%;
+	display: none;
+}
 @media (max-width: 991.98px) {
 	.login-page .content .bg {
 		height: 500px;

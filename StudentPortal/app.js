@@ -22,6 +22,8 @@ app.use(
 	})
 )
 
+
+
 //passport
 const passport = require('passport')
 // Passport config
@@ -46,7 +48,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/auth", loginRouter);
-app.use("/",ensureAuth, index);
+app.use("/",ensureAuth,  index);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -32,7 +32,7 @@
                                 <h3>Sign In</h3>
                                 <p class="mb-4">Student Portal</p>
                             </div>
-                            <form method="post">
+                            <form method="post" id="login_form">
                                 <div class="form-group first">
                                     <input placeholder="Username" type="text" name="username" class="form-control" id="username">
                                 </div>
@@ -42,20 +42,22 @@
                                 <div class="d-flex mb-4 align-items-center">
                                     <label class="control control--checkbox mb-0"><span class="caption">Remember
                                             me</span>
-                                        <input type="checkbox" checked="checked"  />
+                                        <input type="checkbox" checked="checked" name="remember_me"/>
                                         <div class="control__indicator"></div>
                                     </label>
                                     
                                 </div>
-                                <%if(locals.error){ %>
-                                    <div class="alert alert-danger alert-dismissible fade show show-error-login" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        <strong><%= error %></strong>
-                                    </div>
-                                <% } %>
-                                <input type="submit" value="Log In" class="btn btn-block btn-primary">
+
+                                <div class="show-error-login mb-2" role="alert">
+                                    <strong class="login-content-error text-danger "></strong>
+                                </div>
+                                <div class="login-button">
+                                    
+                                    <button type="submit" class="btn btn-block btn-primary d-flex justify-content-center align-items-center">
+                                    <span class="spinner-border spinner-border-md mr-2" role="status" aria-hidden="true"></span>
+                                    Log In</button>
+
+                                </div>
                                 <span class="d-block text-left my-4 text-muted">&mdash; or &mdash;</span>
                                 <div class="social-login">
                                     <div class="col-md-12 mb-3">
@@ -76,7 +78,23 @@
     <script>
         $(document).ready(function(){
             //login function
-            $(".show-error-login").fadeIn()
+            $("#login_form").submit(e=>{
+                e.preventDefault()
+                const [username, password, remember_me] = $("#login_form").serializeArray();
+                $(".spinner-border").fadeIn()
+                $.post( "/auth",{username: username.value, password:password.value, remember_me:remember_me.value}, function( data ) {
+                    if(!data.error){
+                        document.cookie = `token=${data.token}`
+                        localStorage.setItem('token', data.token);
+                        location.reload();
+                    }else{
+                        $(".spinner-border").fadeOut("fast")
+                        $(".login-content-error").text(data.error)
+                        $(".show-error-login").fadeIn("slow");
+
+                    }
+                });
+            })
         })
     </script>
 </body>
