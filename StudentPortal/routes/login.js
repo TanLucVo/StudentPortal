@@ -36,7 +36,8 @@ router.post('/',(req, res, next) => {
 				return next(err);
 			}
 			// Tạo 1 token và payload data và response lại với status code là 200 cùng với payloaded data
-			const token = generateAccessToken({userId: user.id})
+			const token = generateAccessToken({ userId: user.id })
+			res.cookie('token', token)
 			return res.json({token:token});
 			// res.redirect('/')
 		});
@@ -63,13 +64,16 @@ router.get(
 				return next(err);
 			}
 			if (!user) {
-				req.flash('loginMessage', 'Email is not valid')
+				req.flash('loginMessage', `Email must be TDTU's mail`)
 				return res.redirect('/auth');
 			}
 			req.logIn(user, function (err) {
+
 				if (err) {
 					return next(err);
 				}
+				const token = generateAccessToken({ userId: user.id })
+				res.cookie('token', token)
 				return res.redirect('/');
 			});
 		})(req, res, next);

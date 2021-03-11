@@ -13,7 +13,7 @@ function authenticateToken(req, res, next) {
 function generateAccessToken(username) {
     // expires after half and hour (1800 seconds = 30 minutes)
     try {
-        return jwt.sign(username, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '3s' });
+        return jwt.sign(username, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '300s' });
     } catch (error) {
         console.log(error)
     }
