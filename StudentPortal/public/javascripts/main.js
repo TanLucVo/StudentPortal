@@ -73,9 +73,39 @@ $(document).ready(function() {
     //     return false;
     // });
 
-    $('.top-area > .setting-area > .notification-status').on("click",function(){
-        $('.notification-status .dropdowns').toggleClass("active");
+    $('.index-page .top-area > .setting-area > .notification-status').on("click",function(){
+        $('.index-page .notification-status .dropdowns').toggleClass("active");
     });
+
+    // New submit post box
+	$(".new-postbox").click(function () {
+	    $(".postoverlay").fadeIn(500);
+	});
+	$(".postoverlay").not(".new-postbox").click(function() {
+	    $(".postoverlay").fadeOut(500);
+	});
+	$("[type = submit]").click(function () {
+	    var post = $("textarea").val();
+	    $("<p class='post'>" + post + "</p>").appendTo("section");
+	});
+
+    //---- responsive header -> create menu jquery canvas
+    if ($.isFunction($.fn.mmenu)) {
+        $(function() {
+            //	create the menus
+            $('#menu').mmenu();
+
+            //	fire the plugin
+            $('.mh-head.first').mhead({
+                scroll: {
+                    hide: 200
+                }
+            });
+            $('.mh-head.second').mhead({
+                scroll: false
+            });
+        });
+    }
 });
 
 

@@ -17692,6 +17692,35 @@ footer.style2 .share-article {
 .col-lg-3:last-child .serv-box::after {
     display: none;
 }
+/*------- widget title start -------*/
+
+.widget-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333333;
+    margin-bottom: 45px;
+    text-transform: capitalize;
+    position: relative;
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1199.98px) {
+    .widget-title {
+        font-size: 16px;
+    }
+}
+
+.widget-title:before {
+    bottom: -12px;
+    left: 0;
+    width: 30px;
+    height: 1px;
+    content: "";
+    position: absolute;
+    background-color: #dc4734;
+}
+
+
+/*------- widget title end -------*/
 /*--- company nave ---*/
 .topbar.transperent {
     background: transparent none repeat scroll 0 0;
@@ -18904,9 +18933,9 @@ table.adition tbody tr td {
 	.main-menu {
 	    margin-right: 20px;
 	}
-	.topbar .logo img {
+	/* .topbar .logo img {
 	    width: 90px;
-	}
+	} */
 	.header-inner{
 		max-width: 70%;
 	}
