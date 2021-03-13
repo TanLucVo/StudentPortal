@@ -6,6 +6,7 @@ const logger = require("morgan");
 const flash = require('connect-flash');
 const loginRouter = require("./routes/login");
 const index = require("./routes/index");
+const PhongBan = require("./routes/PhongBan");
 require('dotenv').config()
 const {ensureAuth, ensureGuest} = require('./middleware/auth')
 const app = express();
@@ -48,8 +49,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/auth", loginRouter);
-app.use("/",ensureAuth,  index);
-
+app.use(ensureAuth)
+app.use("/",index);
+app.use("/PhongBan",PhongBan);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
 	next(createError(404));
