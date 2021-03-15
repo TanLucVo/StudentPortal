@@ -1,26 +1,25 @@
 const mongoose = require('mongoose')
 const StudentSchema = mongoose.Schema({
-    userId: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    image: {
-
-      type: String,
-    },
-    type: {
-	  type: String,
-	  required: true,
+  userId: {
+    type: String,
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+  },
+  type: {
+    type: String,
+    required: true,
 	},
-	username:{
+	username: {
 		type: String,
 	  	required: true,
 	},
-	password:{
+	password: {
 		type: String,
 	  required: true,
 	}
