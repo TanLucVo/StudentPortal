@@ -1,14 +1,16 @@
-var express = require('express')
+const express = require('express')
 const passport = require('passport')
-var router = express.Router()
-
+const router = express.Router()
+const {createStatus} = require('../controllers/statusController')
+const {authenticateToken} = require('../config/token')
 // api status: GET POST PUT DELETE
 
 router.get('/',(req, res) => {
-    res.json('success')
+    res.json("success")
 })
 
-router.post('/',(req, res) => {
+router.post('/',createStatus, authenticateToken, function(req, res, next) {
+    res.json("success")
 })
 
 module.exports = router

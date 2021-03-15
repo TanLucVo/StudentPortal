@@ -16,4 +16,4 @@ const StatusSchema = mongoose.Schema({
         require: true,
     }
 })
-module.exports - mongoose.model('status', StatusSchema)
+module.exports = mongoose.model('status', StatusSchema)

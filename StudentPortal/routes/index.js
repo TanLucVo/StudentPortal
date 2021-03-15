@@ -3,7 +3,7 @@ const passport = require('passport');
 var router = express.Router();
 const {authenticateToken} = require('../config/token')
 /* GET users listing. */
-router.get('/' ,authenticateToken, function(req, res) {
+router.get('/' , authenticateToken, function(req, res) {
   res.render('index',{user: req.user});
 });
 
