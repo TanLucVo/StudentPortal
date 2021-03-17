@@ -6,7 +6,7 @@ async function createStatus(req, res) {
         statusId: mongoose.Types.ObjectId(),
         comment: req.body.comment,
         image: "no image",
-        userId: "sdsdsd",
+        userId: req.user.userId
     })
 
     await status
@@ -28,4 +28,23 @@ async function createStatus(req, res) {
     });
 }
 
-module.exports = {createStatus}
+async function getAllStatus(req, res) {
+  statusModel.find()
+    .select('_id statusId image userId')
+    .then((allStatus) => {
+      return res.status(200).json({
+        success: true,
+        message: 'A list of all status',
+        Status: allStatus,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: 'Server error. Please try again.',
+        error: err.message,
+      });
+    });
+}
+
+module.exports = {createStatus, getAllStatus}
