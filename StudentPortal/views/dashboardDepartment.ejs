@@ -5,18 +5,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phòng ban</title>
     <%- include partial/cdn.ejs %>
+    <style>
+        .dashboardDepartment{
+            background-color: #ECEDF1;
+        }
+        .breadcrumb{
+            background-color: #fff;
+        }
+        .breadcrumb a{
+            color: #007bff;
+        }
+        .breadcrumb a:hover{
+            text-decoration: underline;
+        }
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 1px solid #e3e6f0;
+            border-radius: .35rem;
+            transition:all .15s ease-in;
+        }
+        .card:hover{
+            box-shadow: 8px 8px 8px blue;
+            transform:scale(1.05);
+        }
+        .card:hover p {
+            color: red !important
+        }
+        .card:hover{
+            border-left: .25rem solid #28a745!important;
+        }
+
+        .border-left-primary{
+            border-left: .25rem solid #4e73df!important;
+        }
+        .row a{
+            text-decoration: none;
+        }
+    </style>
 </head>
-<body class="">
+
+<body class="dashboardDepartment">
     <%- include partial/header.ejs %>
     <%- include partial/slideRightBar.ejs %>
-    <div aria-label="breadcrumb" >
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item"><a href="#">Library</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Data</li>
-        </ol>
+    <div class="container mx-auto">
+        <div class="gap2 pr-2 pl-2">
+            <div aria-label="breadcrumb" class="mt-4" >
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="./">Trang chủ</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">Danh sách phòng ban</li>
+                </ol>
+            </div>
+            <div class="row pt-4 mt-0">
+                <a href="#" class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 pb-0 mb-0">
+                        <img class="card-img-top" src="images/avatar-default.jpg" width="100%" height="100%" alt="Card image cap">
+                        <div class="card-footer">
+                            <p class="card-text text-center">Phòng đại học</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 pb-0 mb-0">
+                        <img class="card-img-top" src="images/avatar-default.jpg" width="100%" height="100%" alt="Card image cap">
+                        <div class="card-footer">
+                            <p class="card-text text-center">Phòng đại học</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 pb-0 mb-0">
+                        <img class="card-img-top" src="images/avatar-default.jpg" width="100%" height="100%" alt="Card image cap">
+                        <div class="card-footer">
+                            <p class="card-text text-center">Phòng đại học</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 pb-0 mb-0">
+                        <img class="card-img-top" src="images/avatar-default.jpg" width="100%" height="100%" alt="Card image cap">
+                        <div class="card-footer">
+                            <p class="card-text text-center">Phòng đại học</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 pb-0 mb-0">
+                        <img class="card-img-top" src="images/avatar-default.jpg" width="100%" height="100%" alt="Card image cap">
+                        <div class="card-footer">
+                            <p class="card-text text-center">Phòng đại học</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 pb-0 mb-0">
+                        <img class="card-img-top" src="images/avatar-default.jpg" width="100%" height="100%" alt="Card image cap">
+                        <div class="card-footer">
+                            <p class="card-text text-center">Phòng đại học</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 pb-0 mb-0">
+                        <img class="card-img-top" src="images/avatar-default.jpg" width="100%" height="100%" alt="Card image cap">
+                        <div class="card-footer">
+                            <p class="card-text text-center">Phòng đại học</p>
+                        </div>
+                    </div>
+                </a>
+                
+            </div>
+        </div>
     </div>
+   
     
     <script src="/javascripts/main.js"></script>
+    
 </body>
 </html>
