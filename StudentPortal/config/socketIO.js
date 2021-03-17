@@ -4,8 +4,13 @@ const socketIO = {
 };
 
 // Add your socket.io logic here!
-io.on( "connection", function( socket ) {
-    console.log("Server : clientID",socket.id);
+io.on( "connection", function( client ) {
+    console.log("Client "+client.id+" da ket noi")
+    let users=Array.from(io.sockets.sockets.values()).map(socket => ({id:socket.id}))
+    console.log(users)
+
+    client.on('disconnect', ()=> console.log("Client "+client.id+" da thoat"))
+    client.emit('list-users',users)
 });
 // end of socket.io logic
 
