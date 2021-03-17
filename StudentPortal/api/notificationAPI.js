@@ -3,17 +3,21 @@ const { authenticateTokenAPIAdmin } = require('../config/token')
 const router = express.Router()
 const postNofiticationValidator = require('../validator/postNoffication')
 const {validationResult}= require('express-validator')
+const socketIO = require("../config/socketIO")
 const Notification = require('../models/notification')
 // GET
+const io = socketIO.io;
+
 
 router.get('/',authenticateTokenAPIAdmin ,async (req,res)=>{
-
-    await Notification.find({}, (err, data)=>{
+    
+    await Notification.find({}, (err, data) => {
+        
         if (err){ 
             res.status(403).json({err: err})
         } 
-        else{ 
-            res.status(200).json({data: data})
+        else { 
+            res.status(200).json({ data: data })
         } 
     })
     
@@ -34,7 +38,8 @@ router.post('/',authenticateTokenAPIAdmin, postNofiticationValidator ,(req,res)=
             if (err){ 
                 return res.status(403).json({message:err})
             } 
-            else{ 
+            else { 
+                io.emit('add-notification',{title : title, id:data._id})
                 return res.status(200).json({message:"Thêm thành công", data: data})
             } 
         }) 

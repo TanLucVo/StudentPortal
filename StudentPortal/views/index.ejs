@@ -232,15 +232,19 @@
     <script>
         $(document).ready(function(){
             const socket =io()
-            socket.on('connect', () => {
-                console.log("da ket noi thanh cong voi id"+socket.id);
-            });
+            socket.on('connect', handleConnectionSuccess);
             socket.on('disconnect', () => {
                 console.log("Mat ket noi voi server");
             });
             socket.on('list-users', handleUserList);
+            socket.on('add-notification', (data)=> console.log("1 thong bao da them" + data));
             function handleUserList(user){
                 console.log(user)
+            }
+            function handleConnectionSuccess(){
+                console.log("da ket noi thanh cong voi id"+socket.id);
+                let userId = '<%= user.id %>'
+                socket.emit('register-id', {socketId:socket.id,userId:userId }) //gui id qua cho server
             }
         })
     </script>
