@@ -7,7 +7,7 @@ const flash = require('connect-flash');
 const loginRouter = require("./routes/login");
 const indexRouter = require("./routes/index");
 const statusRouter = require("./routes/status");
-const notification = require("./routes/notification");
+const api = require("./routes/API");
 const departmentRouter = require("./routes/department");
 require('dotenv').config()
 const {ensureAuth, ensureGuest} = require('./middleware/auth')
@@ -51,13 +51,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/auth", loginRouter);
+//api push thong bao
+app.use('/api', api)
+
+
 app.use(ensureAuth)
 app.use("/status",statusRouter)
 app.use("/",indexRouter);
 app.use("/department",departmentRouter);
 
-//api push thong bao
-app.use('/notification', notification)
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
