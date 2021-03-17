@@ -6,8 +6,17 @@
     <title>Phòng ban</title>
     <%- include partial/cdn.ejs %>
 </head>
-<body class="dashboardDepartment">
+<body class="">
     <%- include partial/header.ejs %>
     <%- include partial/slideRightBar.ejs %>
+    <div aria-label="breadcrumb" >
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Library</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Data</li>
+        </ol>
+    </div>
+    
+    <script src="/javascripts/main.js"></script>
 </body>
 </html>
