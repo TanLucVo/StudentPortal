@@ -5044,6 +5044,7 @@ canvas {
 
 .mh-btns-left {
     margin-left: 15px;
+    margin-bottom: 5px;
 }
 .mh-btns-left a {
     color: white;
@@ -5074,6 +5075,7 @@ canvas {
 
 .mh-head {
     width: 100%;
+    display: flex;
 }
 
 .mh-text {
@@ -5081,6 +5083,9 @@ canvas {
     width: 10%;
     font-size: 16px;
     font-weight: 500;
+    flex: 1;
+    max-width: 100px;
+    margin: auto;
 }
 
 .mh-text img {
@@ -5150,6 +5155,27 @@ canvas {
 
 .mh-head .mh-form {
     padding: 10px 0;
+    flex: 1;
+    position: relative !important;
+}
+.mh-head button {
+    position: absolute;
+
+    text-decoration: none;
+    border: none;
+    background-color: white;
+    right: 10px;
+    bottom: 15px;
+    z-index: 3;
+    color: red
+}
+.mh-head .mh-form i{
+    position: absolute;
+
+    right: 10px;
+    bottom: 3px;
+    z-index: 3;
+    color: red
 }
 
 .mm-panel.mm-hasnavbar.mm-opened .setting-row span {
@@ -7365,7 +7391,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', e
 .badged > li {
     display: inline-block;
     margin-right: 5px;
-    max-width: 30px;
+    max-width: 50px;
 }
 
 /*--- invite people for fav page ---*/
