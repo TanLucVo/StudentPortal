@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const notificationSchema = mongoose.Schema({
-    _id : mongoose.Schema.ObjectId,
     createAt: {
         require: true,
         type: Number
