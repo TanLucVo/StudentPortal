@@ -24,7 +24,7 @@ app.use(
 	})
 )
 
-
+app.use(express.static('public'))
 
 //passport
 const passport = require('passport')
