@@ -5032,6 +5032,10 @@ canvas {
     display: none;
 }
 
+.mh-btns-left {
+    margin-left: 15px;
+}
+
 .mh-head {
     background: #4bb5ef;
     color: #fff;

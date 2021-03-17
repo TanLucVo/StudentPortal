@@ -1,7 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const router = express.Router()
-const {createStatus, getAllStatus, getStatusId, deleteStatusId} = require('../controllers/statusController')
+const {createStatus, getAllStatus, getStatusId, deleteStatusId, updateStatusId} = require('../controllers/statusController')
 const {authenticateToken} = require('../config/token')
 // api status: GET POST PUT DELETE
 
@@ -9,9 +9,7 @@ const {authenticateToken} = require('../config/token')
 
 router.get('/', getAllStatus, authenticateToken)
 
-router.get('/:statusId',getStatusId ,authenticateToken, function(req, res) {
-    console.log(req.params.statusId)
-})
+router.get('/:id',getStatusId ,authenticateToken)
 
 // POST
 
@@ -19,11 +17,9 @@ router.post('/',createStatus, authenticateToken)
 
 // PUT
 
-router.put('/:statusId',authenticateToken, function(req, res) {
-
-})
+router.put('/:id',updateStatusId ,authenticateToken)
 
 // DELETE
 
-router.delete('/:statusId',deleteStatusId ,authenticateToken)
+router.delete('/:id',deleteStatusId ,authenticateToken)
 module.exports = router
