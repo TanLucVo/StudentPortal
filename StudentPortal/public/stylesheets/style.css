@@ -446,6 +446,11 @@ section {
     padding-bottom: 0;
 }
 
+a {
+    color: #fff;
+    text-decoration: none;
+}
+
 .ext-gap {
     padding: 100px 0;
     float: left;
@@ -3377,12 +3382,17 @@ footer .widget .colla-apps > li a{
     margin: 10px 0;
 }
 .user-setting ul.chat-setting li a {
+    text-decoration: none;
+    color: #757A95;
     padding-left: 35px;
 }
 .user-setting ul.log-out {
     margin: 10px 0 0;
 }
-
+.user-setting ul.log-out a {
+    color: #757A95;
+    text-decoration: none;
+}
 
 .user-setting .status {
     left: 15px;
@@ -5040,9 +5050,13 @@ canvas {
 }
 
 .mh-head {
-    background: #4bb5ef;
+    background: #34465D;
     color: #fff;
     height: auto;
+}
+
+.mh-head .first .Sticky {
+    text-align:center
 }
 
 .mh-form {
@@ -5058,9 +5072,19 @@ canvas {
     width: 100%;
 }
 
+.mh-head {
+    width: 100%;
+}
+
 .mh-text {
+    display: inline-block;
+    width: 10%;
     font-size: 16px;
     font-weight: 500;
+}
+
+.mh-text img {
+    width: 100%;
 }
 
 .mh-head .hamburger-inner,
@@ -5104,7 +5128,6 @@ canvas {
 
 .mh-head {
     float: left;
-    width: 100%;
 }
 
 .mh-head .mh-text {
@@ -5260,6 +5283,7 @@ canvas {
 
 .index-page .page-name a { 
     color: #fff;
+    text-decoration: none;
 }
 
 .top-search {
@@ -7911,7 +7935,8 @@ aside .widget.pitnik-links > ul > li > a {
 	line-height: 21px;
 }
 .nav-list > li > a {
-    color: #fff
+    color: #fff;
+    text-decoration:none;
 }
 .nav-list > li:hover {
     background: #1a2c43;
@@ -7944,6 +7969,7 @@ aside .widget.pitnik-links > ul > li > a {
     position: relative;
 }
 .nav-list > li ul > li > a {
+    text-decoration: none;
     color: #fff;
     display: inline-block;
     font-size: 13px;
@@ -15396,6 +15422,9 @@ table.adition tbody tr td {
 
 @media screen and (min-width: 1024px) and (max-width: 1281px)  {
     
+    .user-img h5 {
+        display: none;
+    }
 	.page-name {
 	    padding-left: 15px;
 	    padding-right: 15px;
@@ -15445,6 +15474,9 @@ table.adition tbody tr td {
 /*--- tablet landscape ---*/
 
 @media screen and (max-width: 1024px) {
+    .user-img h5 {
+        display: none;
+    }
 	.container {
 	    max-width: 1000px;
 	}
@@ -18618,7 +18650,6 @@ a.learnmore,
 .total > i,
 .login-frm .main-btn,
 .search-tab .nav-tabs .nav-item > a.active::after,
-.mh-head,
 .job-tgs > a:hover,
 .owl-prev:hover:before, 
 .owl-next:hover:before,
