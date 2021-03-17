@@ -36,7 +36,7 @@ router.post('/',(req, res, next) => {
 				return next(err);
 			}
 			// Tạo 1 token và payload data và response lại với status code là 200 cùng với payloaded data
-			const token = generateAccessToken({ userId: user.id })
+			const token = generateAccessToken({ userId: user.id, type:user.type})
 			res.cookie('token', token)
 			return res.json({token:token});
 			// res.redirect('/')
@@ -72,7 +72,7 @@ router.get(
 				if (err) {
 					return next(err);
 				}
-				const token = generateAccessToken({ userId: user.id })
+				const token = generateAccessToken({ userId: user.id, type:user.type})
 				res.cookie('token', token)
 				return res.redirect('/');
 			});

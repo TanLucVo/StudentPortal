@@ -1,4 +1,30 @@
 const jwt = require('jsonwebtoken')
+function authenticateTokenAPI(req, res, next) {
+    // Gather the jwt access token from the request header
+    const authHeader = req.cookies.token
+    const token = authHeader
+    if (token == null) return res.status(401).json({message:"Missing token"}); // if there isn't any token
+  
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET , (err, user) => {
+      if (err) return res.status(203).json({message:"Non-Authoritative Information"});
+      next() // pass the execution off to whatever request the client intended
+    })
+}
+
+//Xac thu api cho admin va phong ban
+function authenticateTokenAPIAdmin(req, res, next) {
+    // Gather the jwt access token from the request header
+    const authHeader = req.cookies.token
+    const token = authHeader
+    if (token == null) return res.status(401).json({message:"Missing token"}); // if there isn't any token
+  
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET , (err, user) => {
+      if (err) return res.status(203).json({message:"Non-Authoritative Information"});
+      if(user.type !=="admin") return res.status(203).json({message:"Access denied"});
+      next() // pass the execution off to whatever request the client intended
+    })
+}
+
 function authenticateToken(req, res, next) {
     // Gather the jwt access token from the request header
     const authHeader = req.cookies.token
@@ -19,4 +45,4 @@ function generateAccessToken(username) {
     }
      
 }
-module.exports = {authenticateToken, generateAccessToken}
+module.exports = {authenticateToken, generateAccessToken,authenticateTokenAPI,authenticateTokenAPIAdmin}
