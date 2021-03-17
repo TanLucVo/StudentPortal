@@ -36,6 +36,8 @@ weatherBookedScript.src = widgetSrc;
 
 document.body.appendChild(weatherBookedScript)
 
+// ------------------
+
 $(document).ready(function() {
     /*--- left menu full ---*/
     $('.index-page .menu-small').on("click", function() {

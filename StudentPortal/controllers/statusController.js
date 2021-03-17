@@ -47,4 +47,23 @@ async function getAllStatus(req, res) {
     });
 }
 
-module.exports = {createStatus, getAllStatus}
+async function getStatusId(req, res) {
+  const id = req.params.statusId;
+  Course.findById(id)
+    .then((singleStatus) => {
+      res.status(200).json({
+        success: true,
+        message: `More on ${singleStatus.statusId}`,
+        Course: singleStatus,
+      });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        success: false,
+        message: 'This course does not exist',
+        error: err.message,
+      });
+   });
+}
+
+module.exports = {createStatus, getAllStatus, getStatusId}
