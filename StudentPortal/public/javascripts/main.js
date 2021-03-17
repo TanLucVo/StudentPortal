@@ -2,40 +2,7 @@
 // -------------------------------------------------------------------------------------------- //
 // Index Page
 
-// widget-weather
-var css_file=document.createElement("link"); 
-var widgetUrl = location.href; 
-css_file.setAttribute("rel","stylesheet"); 
-css_file.setAttribute("type","text/css"); 
-css_file.setAttribute("href",'https://s.bookcdn.com/css/w/booked-wzs-prime-vertical-one.css?v=0.0.1'); 
-document.getElementsByTagName("head")[0].appendChild(css_file); 
-function setWidgetData(data) { if(typeof(data) != 'undefined' && data.results.length > 0) {
-    for(var i = 0; i < data.results.length; ++i) {
-
-        var objMainBlock = document.getElementById('m-booked-vertical-one-prime-45326');
-
-        if(objMainBlock !== null) {
-            var copyBlock = document.getElementById('m-bookew-weather-copy-'+data.results[i].widget_type);
-            objMainBlock.innerHTML = data.results[i].html_code;
-            if(copyBlock !== null) objMainBlock.appendChild(copyBlock); 
-        }
-    } 
-    } else {
-    alert('data=undefined||data.results is empty'); 
-    }
-}
-var widgetSrc = "https://widgets.booked.net/weather/info?action=get_weather_info;ver=6;cityID=18408;type=7;scode=124;ltid=3458;domid=;anc_id=90532;countday=undefined;cmetric=1;wlangID=33;color=137AE9;wwidth=216;header_color=ffffff;text_color=333333;link_color=08488D;border_form=1;footer_color=ffffff;footer_text_color=333333;transparent=0;v=0.0.1";
-
-widgetSrc += ';ref=' + widgetUrl;
-
-var weatherBookedScript = document.createElement("script"); 
-
-weatherBookedScript.setAttribute("type", "text/javascript"); 
-
-weatherBookedScript.src = widgetSrc; 
-
-document.body.appendChild(weatherBookedScript)
-
+// widget
 // ------------------
 
 $(document).ready(function() {
@@ -96,16 +63,6 @@ $(document).ready(function() {
         $(function() {
             //	create the menus
             $('#menu').mmenu();
-
-            //	fire the plugin
-            $('.mh-head.first').mhead({
-                scroll: {
-                    hide: 200
-                }
-            });
-            $('.mh-head.second').mhead({
-                scroll: false
-            });
         });
     }
 });

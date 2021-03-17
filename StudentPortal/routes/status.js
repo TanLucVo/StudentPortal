@@ -17,10 +17,7 @@ router.post('/',createStatus, authenticateToken)
 
 // PUT
 
-router.put('/:id',updateStatusId ,authenticateToken, function(req, res){
-    console.log(req.params.id)
-    console.log(req.body.comment)
-})
+router.put('/:id',updateStatusId ,authenticateToken)
 
 // DELETE
 
