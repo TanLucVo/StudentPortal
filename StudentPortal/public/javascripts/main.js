@@ -40,30 +40,30 @@ document.body.appendChild(weatherBookedScript)
 
 $(document).ready(function() {
     /*--- left menu full ---*/
-    $('.index-page .menu-small').on("click", function() {
-        $(".index-page .fixed-sidebar.left").addClass("open");
+    $(' .menu-small').on("click", function() {
+        $(".fixed-sidebar.left").addClass("open");
     });
-    $('.index-page .closd-f-menu').on("click", function() {
-        $(".index-page .fixed-sidebar.left").removeClass("open");
+    $('.closd-f-menu').on("click", function() {
+        $(".fixed-sidebar.left").removeClass("open");
     });
 
     //--- user setting dropdown on topbar
-    $('.index-page .user-img').on('click', function() {
+    $('.user-img').on('click', function() {
         // toggleClass(): Thêm hoặc loại bỏ một hoặc nhiều class của thành phần.
-        $('.index-page .user-setting').toggleClass("active");
+        $('.user-setting').toggleClass("active");
     });
 
-    $('.index-page .gap2 .container').on('click', function() {
+    $('.gap2 .container').on('click', function() {
         // hide all when click index page
-        $('.index-page .user-setting').removeClass("active");
-        $(".index-page .fixed-sidebar.left").removeClass("open");
+        $('.user-setting').removeClass("active");
+        $(".fixed-sidebar.left").removeClass("open");
         $(".top-area > .setting-area > li > a").removeClass('active');
     });
 
     // top menu list
-	$('.index-page .main-menu > span').on('click', function () {
+	$('.main-menu > span').on('click', function () {
         // slideToggle(): Hiển thị và ẩn các thành phần phù hợp với hiệu ứng chuyển động trượt (slide).
-		$('.index-page .nav-list').slideToggle(300);
+		$('.nav-list').slideToggle(300);
 	});
 
     //------- Notifications Dropdowns
@@ -75,8 +75,8 @@ $(document).ready(function() {
     //     return false;
     // });
 
-    $('.index-page .top-area > .setting-area > .notification-status').on("click",function(){
-        $('.index-page .notification-status .dropdowns').toggleClass("active");
+    $('.top-area > .setting-area > .notification-status').on("click",function(){
+        $('.notification-status .dropdowns').toggleClass("active");
     });
 
     // New submit post box

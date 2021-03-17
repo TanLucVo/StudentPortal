@@ -3,6 +3,6 @@ var router = express.Router();
 
 /* GET login page. */
 router.get('/', async function (req, res, next) {
-	res.render('department');
+	res.render('dashboardDepartment',{user: req.user});
 });
 module.exports = router
