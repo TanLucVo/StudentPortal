@@ -49,7 +49,7 @@ async function getAllStatus(req, res) {
 
 async function getStatusId(req, res) {
   const id = req.params.statusId;
-  Course.findById(id)
+  statusModel.findById(id)
     .then((singleStatus) => {
       res.status(200).json({
         success: true,
@@ -60,10 +60,14 @@ async function getStatusId(req, res) {
     .catch((err) => {
       res.status(500).json({
         success: false,
-        message: 'This course does not exist',
+        message: 'This status does not exist in database',
         error: err.message,
       });
    });
 }
 
-module.exports = {createStatus, getAllStatus, getStatusId}
+async function deleteStatusId(req, res) {
+  res.json('success')
+}
+
+module.exports = {createStatus, getAllStatus, getStatusId, deleteStatusId}
