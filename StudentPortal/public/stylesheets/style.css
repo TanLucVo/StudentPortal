@@ -1,5 +1,8 @@
 /***login page***/
-
+body{
+    min-width: 360px;
+    overflow-x: scroll !important;
+}
 .login-page {
 	font-family: "Roboto", sans-serif;
 	background-color: #f8fafb;

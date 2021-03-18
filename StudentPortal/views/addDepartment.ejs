@@ -75,15 +75,23 @@
         .signup-image figure{
             width: 100%;
             height: 100%;
-            padding: 20px 0;;
+            padding: 20px 0;
         }
         .form-group{
             position: relative;
         }
-        /* .form-group label{
+        .form-group i{
             position: absolute;
-            bottom: 0;
-        } */
+            bottom: 10px;
+            left: 7px;
+        }
+        .form-check-input{
+            margin: 7px 12px;
+            width: 30px;
+            position: absolute;
+            right: 0;
+
+        }
 
     </style>
 </head>
@@ -112,23 +120,32 @@
                                 <input type="text" name="username" id="username" placeholder="Tên đăng nhập">
                             </div>
                             <div class="form-group">
-                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                                <label for="pass"><i class="fas fa-lock"></i></label>
                                 <input type="password" name="pass" id="pass" placeholder="Mật khẩu">
                             </div>
                             <div class="form-group">
-                                <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                                <label for="re-pass"><i class="fas fa-lock"></i></label>
                                 <input type="password" name="re_pass" id="re_pass" placeholder="Xác nhận mật khẩu">
                             </div>
                             <div class="form-group">
-                                <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <label for="name"><i class="fas fa-file-signature"></i></label>
                                 <input type="text" name="name" id="name" placeholder="Tên phòng">
                             </div>
                             <div class="form-group">
-                                <label for="email"><i class="zmdi zmdi-email"></i></label>
+                                <label for="email"><i class="fas fa-code-branch"></i></label>
                                 <input type="text" name="maphong" id="maphong" placeholder="Mã phòng">
                             </div>
+                            <div class="row">
+                                <% department.forEach(function(item){ %>
+                                    <div class="form-check col-xl-6 col-md-12 p-0">
+                                        <input class="form-check-input w-a" type="checkbox" id="<%= item.id %>" name="department" value="<%= item.type %>">
+                                        <label class="form-check-label" for="<%= item.id %>"><%= item.name %></label>
+                                    </div>
+                                <% }) %>
+                            </div>
+                            
                             <div class="form-group form-button">
-                                <input type="submit" name="signup" id="signup" class="form-submit" value="Register">
+                                <input type="submit" id="signup" class="form-submit" value="Register">
                             </div>
                         </form>
                     </div>
