@@ -66,6 +66,14 @@
             position: relative;
             
         }
+        .dashboardDepartment .show-image{
+            opacity: 1 !important;
+            
+        }
+        .dashboardDepartment .card-img-top{
+            opacity: 0;
+            transition:all .3s ease-in;
+        }
         
         .dashboardDepartment .card-img .loading{
             position: absolute;
@@ -118,11 +126,10 @@
         $(document).ready(function(){
             //onload image
             $(".dashboardDepartment .row img ").each(function (k, v) {
-                $(this).attr('display','none')
                 v.onload = function () {
                     $(this).parent().children('.loading').attr('display','none')
                     $(this).parent().children('.loading').removeClass('d-flex')
-                    $(this).fadeIn(300)
+                    $(this).addClass('show-image')
                 };
                 v.src = v.src;
             });
