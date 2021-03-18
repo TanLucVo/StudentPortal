@@ -49,33 +49,20 @@
             box-sizing: border-box;
             outline: none;
         }
-        .signup-form {
-            
-        }
+
         .signup-image img{
             width: 100%;
             object-fit: contain;
         }
-        .form-submit {
-            display: inline-block;
-            background: #6dabe4;
-            color: #fff;
-            border-bottom: none;
-            width: auto;
-            padding: 15px 39px;
-            border-radius: 5px;
-            -moz-border-radius: 5px;
-            -webkit-border-radius: 5px;
-            -o-border-radius: 5px;
-            -ms-border-radius: 5px;
-            margin-top: 25px;
-            cursor: pointer;
-        }
+
         .signup-image figure{
             position: sticky;
             top: 200px;
             width: 100%;
             padding: 20px 0;
+        }
+        .form-submit{
+            padding: 15px 35px;
         }
         .form-group{
             position: relative;
@@ -97,9 +84,11 @@
 </head>
 
 <body class="addDepartment">
+    
     <%- include partial/header-leftbar.ejs %>
     <div class="container mx-auto">
         <div class="gap2 pr-2 pl-2">
+            
             <div aria-label="breadcrumb" class="mt-4">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="../">Trang chủ</a></li>
@@ -111,9 +100,11 @@
                 <div class="row">
                     <div class="signup-image col-sm-5 ">
                         <figure><img src="/images/pexels-mateusz-dach-2811648.jpg" alt="sing up image"></figure>
+
                     </div>
                     <div class="signup-form col-sm-7 pr-5 pl-5">
                         <h2 class="form-title">Tạo mới phòng ban</h2>
+
                         <form method="POST" class="register-form" id="register-form" autocomplete="off">
                             <div class="form-group">
                                 <label for="username"><i class="far fa-user"></i></label>
@@ -148,9 +139,13 @@
                                     </div>
                                 <% }) %>
                             </div>
-                            
-                            <div class="form-group form-button">
-                                <input type="submit" id="signup" class="form-submit" value="Register">
+                            <div class="collapse mt-2" id="myCollapsible">
+                                <div class="alert alert-success" role="alert">
+                                    
+                                </div>
+                            </div>
+                            <div class="form-group form-button ">
+                                <button type="submit" id="signup" class="form-submit btn btn-outline-primary" >Register</button>
                             </div>
                         </form>
                     </div>
@@ -158,7 +153,7 @@
                 </div>
             </div>
         </div>
-
+        
     </div>
     <script src="/javascripts/main.js"></script>
     <link href="https://transloadit.edgly.net/releases/uppy/v1.6.0/uppy.min.css" rel="stylesheet">
@@ -177,37 +172,53 @@
             })
             .use(Uppy.Dashboard, {
                 inline: true,
-                target: '#drag-drop-area',
-                
+                target: '.addDepartment #drag-drop-area',
+                replaceTargetContent: true,
+                showProgressDetails: true,
+                note: 'Images and video only 1 file, up to 10MB',
+                height: 300,
             })
-            .use(Uppy.Tus, {endpoint: 'https://master.tus.io/files/',maxNumberOfFiles:1}) //you can put upload URL here, where you want to upload images
-    
+            .use(Uppy.GoogleDrive, { target: Uppy.Dashboard, companionUrl: 'https://companion.uppy.io' })
+            .use(Uppy.Tus, {endpoint: 'https://master.tus.io/files/'}) //you can put upload URL here, where you want to upload images
             uppy.on('complete', (result) => {
                 result.successful.map(e =>{
-                    $('#urlImage').val(e.uploadURL)
+                    $('.addDepartment #urlImage').val(e.uploadURL)
                 })
                 
             })
             $(".addDepartment .register-form").submit(e=>{
                 e.preventDefault();
                 let department =[]
-                $("input:checkbox:checked").each(function() { 
+                $(".addDepartment input:checkbox:checked").each(function() { 
                     department.push($(this).val()); 
                 }); 
                 let user ={
-                    username:$('#username').val(),
-                    pass:$('#pass').val(),
-                    re_pass:$('#re_pass').val(),
-                    name:$('#name').val(),
-                    maphong:$('#maphong').val(),
-                    urlImage:$('#urlImage').val(),
+                    username:$('.addDepartment #username').val(),
+                    pass:$('.addDepartment #pass').val(),
+                    re_pass:$('.addDepartment #re_pass').val(),
+                    name:$('.addDepartment #name').val(),
+                    maphong:$('.addDepartment #maphong').val(),
+                    urlImage:$('.addDepartment #urlImage').val(),
                     department: department
                 }
-                console.log(user)
                 $.post( "",user)
                 .done(function( res ) {
-                    console.log(res);
+                    if(res.success){
+                        $(".addDepartment .alert").removeClass("alert-danger")
+                        $(".addDepartment .alert").addClass("alert-success")
+                        $(".addDepartment .alert").text(res.mess)
+                        $('.addDepartment #myCollapsible').collapse('show')
+                        $('.addDepartment input').val("")
+                    }else{
+                        $(".addDepartment .alert").removeClass("alert-success")
+                        $(".addDepartment .alert").addClass("alert-danger")
+                        $(".addDepartment .alert").text(res.mess)
+                        $('.addDepartment #myCollapsible').collapse('show')
+                    }
                 });
+                $('.addDepartment input').on("keypress change ",()=>{
+                    $('.addDepartment #myCollapsible').collapse('hide')
+                })
             })
         })
     </script>

@@ -10,8 +10,9 @@ var mongoose = require('mongoose');
 const { type } = require('os');
 /* GET login page. */
 router.get('/', async function (req, res, next) {
-	const data = fs.readFileSync(path.join(__dirname, '..','/views/partial/showDepartment.ejs'))
-	res.render('dashboardDepartment',{user: req.user, content:data});
+	let user = await User.find()
+	let department = user.filter(user =>  user.type !== "admin" && user.type !== 'student' )
+	res.render('dashboardDepartment',{user: req.user, department:department});
 });
 
 //post
@@ -40,7 +41,7 @@ router.post('/add', addDepartmentValidator, async function (req, res, next) {
 			if (user) {
                 return res.json({success:false,mess:"Đã tồn tại mã phòng hoặc username"})
 			}
-			// await User.create(newUser)
+			await User.create(newUser)
 			return res.status(200).json({success:true,mess:"Thêm phòng ban thành công"})
 		} catch (error) {
 			return res.json({success:false,mess:"da xay ra loi"})
@@ -53,7 +54,7 @@ router.post('/add', addDepartmentValidator, async function (req, res, next) {
             message = messages[m]
             break
         }
-        return res.json({success:false,mess:message})
+        return res.json({success:false,mess:message.msg})
     }
 });
 

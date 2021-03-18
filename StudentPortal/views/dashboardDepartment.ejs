@@ -1,23 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phòng ban</title>
     <%- include partial/cdn.ejs %>
     <style>
-        .dashboardDepartment{
+        .dashboardDepartment {
             background-color: #ECEDF1;
         }
-        .dashboardDepartment .breadcrumb{
+
+        .dashboardDepartment .breadcrumb {
             background-color: #fff;
         }
-        .dashboardDepartment .breadcrumb a{
+
+        .dashboardDepartment .breadcrumb a {
             color: #007bff;
         }
-        .dashboardDepartment .breadcrumb a:hover{
+
+        .dashboardDepartment .breadcrumb a:hover {
             text-decoration: underline;
         }
+
         .dashboardDepartment .card {
             position: relative;
             display: flex;
@@ -28,32 +33,101 @@
             background-clip: border-box;
             border: 1px solid #e3e6f0;
             border-radius: .35rem;
-            transition:all .15s ease-in;
+            transition: all .15s ease-in;
         }
-        .dashboardDepartment .card:hover{
+
+        .dashboardDepartment .card:hover {
             box-shadow: 8px 8px 8px blue;
-            transform:scale(1.05);
+            transform: scale(1.05);
         }
+
         .dashboardDepartment .card:hover p {
             color: red !important
         }
-        .dashboardDepartment .card:hover{
-            border-left: .25rem solid #28a745!important;
+
+        .dashboardDepartment .card:hover {
+            border-left: .25rem solid #28a745 !important;
         }
 
-        .dashboardDepartment .border-left-primary{
-            border-left: .25rem solid #4e73df!important;
+        .dashboardDepartment .border-left-primary {
+            border-left: .25rem solid #4e73df !important;
         }
-        .dashboardDepartment .row a{
+
+        .dashboardDepartment .row a {
             text-decoration: none;
+        }
+        .dashboardDepartment .card img {
+            width:100%;
+            height:100%;
+            object-fit: cover;
+        }
+        .dashboardDepartment .card-img{
+            height: 100%;
+            position: relative;
+            
+        }
+        
+        .dashboardDepartment .card-img .loading{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
+            top: 0;
+            left: 0;
+            display: none;
         }
     </style>
 </head>
 
 <body class="dashboardDepartment">
     <%- include partial/header-leftbar.ejs %>
-    <%- content %>
-    
+    <div class="container mx-auto">
+        <div class="gap2 pr-2 pl-2">
+            <div aria-label="breadcrumb" class="mt-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="./">Trang chủ</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh sách phòng ban <a
+                            href="/department/add"><i class="fas fa-plus-circle"></i></a></li>
+                </ol>
+            </div>
+            <div class="row pt-4 mt-0">
+                <% department.forEach(function(item){ %>
+                    <a href="#" class="col-xl-3 col-md-4 mb-4">
+                        <div class="card border-left-primary shadow h-100 pb-0 mb-0">
+                            <div class="card-img">
+                                <img class="card-img-top" src="<%= item.image %>" 
+                                alt="<%= item.name %>">
+                                <div class="loading d-flex justify-content-center align-items-center">
+                                    <div class="spinner-border text-primary " role="status">
+                                        <span class="sr-only">Loading...</span>
+                                      </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer">
+                                <p class="card-text text-center"><%= item.name %></p>
+                            </div>
+                        </div>
+                    </a>
+                <% }) %>
+            </div>
+        </div>
+    </div>
     <script src="/javascripts/main.js"></script>
+    <script>
+        $(document).ready(function(){
+            //onload image
+            $(".row img ").each(function (k, v) {
+                $(this).attr('display','none')
+                v.onload = function () {
+                    $(this).parent().children('.loading').attr('display','none')
+                    $(this).parent().children('.loading').removeClass('d-flex')
+                    $(this).fadeIn(300)
+                };
+                v.src = v.src;
+            });
+        })
+    </script>
 </body>
+
 </html>
