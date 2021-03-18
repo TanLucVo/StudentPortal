@@ -117,7 +117,7 @@
     <script>
         $(document).ready(function(){
             //onload image
-            $(".row img ").each(function (k, v) {
+            $(".dashboardDepartment .row img ").each(function (k, v) {
                 $(this).attr('display','none')
                 v.onload = function () {
                     $(this).parent().children('.loading').attr('display','none')
