@@ -912,7 +912,7 @@ body {
     font-family: "Time New Roman", sans-serif;
     font-weight: 300
 }
-.row{
+.index-page .row{
 	margin-top: 15px
 }
 .card {
@@ -5307,7 +5307,7 @@ canvas {
 }
 
 
-.index-page .page-name a { 
+.page-name a { 
     color: #fff;
     text-decoration: none;
 }

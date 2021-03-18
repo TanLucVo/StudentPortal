@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phòng ban</title>
+    <%- include partial/cdn.ejs %>
+    <style>
+        .addDepartment {
+            background-color: #ECEDF1;
+        }
+
+        .addDepartment .breadcrumb {
+            background-color: #fff;
+        }
+
+        .addDepartment .breadcrumb a {
+            color: #007bff;
+        }
+
+        .addDepartment .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .addDepartment .signup-content {
+            box-shadow: 0 15px 16.83px 0.17px rgb(0 0 0 / 5%);
+            -moz-box-shadow: 0 15px 16.83px .17px rgba(0, 0, 0, .05);
+            -webkit-box-shadow: 0 15px 16.83px 0.17px rgb(0 0 0 / 5%);
+            padding: 75px 0;
+            background-color: #fff;
+            border-radius: 15px;
+            display: flex;
+            min-width: 150px;
+
+        }
+        .addDepartment .signup-content .row{
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+        input{
+            width: 100%;
+            display: block;
+            border: none;
+            border-bottom: 1px solid #999;
+            padding: 6px 30px;
+            font-family: Poppins;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .signup-form {
+            
+        }
+        .signup-image img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .form-submit {
+            display: inline-block;
+            background: #6dabe4;
+            color: #fff;
+            border-bottom: none;
+            width: auto;
+            padding: 15px 39px;
+            border-radius: 5px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -o-border-radius: 5px;
+            -ms-border-radius: 5px;
+            margin-top: 25px;
+            cursor: pointer;
+        }
+        .signup-image figure{
+            width: 100%;
+            height: 100%;
+            padding: 20px 0;;
+        }
+        .form-group{
+            position: relative;
+        }
+        /* .form-group label{
+            position: absolute;
+            bottom: 0;
+        } */
+
+    </style>
+</head>
+
+<body class="addDepartment">
+    <%- include partial/header-leftbar.ejs %>
+    <div class="container mx-auto">
+        <div class="gap2 pr-2 pl-2">
+            <div aria-label="breadcrumb" class="mt-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="../">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="../department">Danh sách phòng ban</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Thêm phòng ban</li>
+                </ol>
+            </div>
+            <div class="signup-content">
+                <div class="row">
+                    <div class="signup-image col-sm-5 ">
+                        <figure><img src="/images/pexels-mateusz-dach-2811648.jpg" alt="sing up image"></figure>
+                    </div>
+                    <div class="signup-form col-sm-7 pr-5 pl-5">
+                        <h2 class="form-title">Tạo mới phòng ban</h2>
+                        <form method="POST" class="register-form" id="register-form" autocomplete="off">
+                            <div class="form-group">
+                                <label for="username"><i class="far fa-user"></i></label>
+                                <input type="text" name="username" id="username" placeholder="Tên đăng nhập">
+                            </div>
+                            <div class="form-group">
+                                <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+                                <input type="password" name="pass" id="pass" placeholder="Mật khẩu">
+                            </div>
+                            <div class="form-group">
+                                <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                                <input type="password" name="re_pass" id="re_pass" placeholder="Xác nhận mật khẩu">
+                            </div>
+                            <div class="form-group">
+                                <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                                <input type="text" name="name" id="name" placeholder="Tên phòng">
+                            </div>
+                            <div class="form-group">
+                                <label for="email"><i class="zmdi zmdi-email"></i></label>
+                                <input type="text" name="maphong" id="maphong" placeholder="Mã phòng">
+                            </div>
+                            <div class="form-group form-button">
+                                <input type="submit" name="signup" id="signup" class="form-submit" value="Register">
+                            </div>
+                        </form>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/javascripts/main.js"></script>
+</body>
+
+</html>
