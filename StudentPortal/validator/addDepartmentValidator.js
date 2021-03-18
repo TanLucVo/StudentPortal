@@ -21,4 +21,7 @@ module.exports = [
                 throw new Error('Xác nhận mật khẩu không chính xác') 
             } 
         }), 
+    check('urlImage').exists().withMessage('Phải có ảnh đại diện')
+        .notEmpty().withMessage('Phải có ảnh đại diện'),
+    
 ]

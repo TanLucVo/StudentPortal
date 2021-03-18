@@ -138,7 +138,7 @@
 
                             <div id="drag-drop-area"></div>
                             
-                            <input type="hidden" name="url-image"  id="url-image"/>
+                            <input type="hidden" name="urlImage"  id="urlImage"/>
                             <div class="row">
                                 <h4 class="col-sm-12 p-0 pt-2 pb-2">Permission</h4>
                                 <% department.forEach(function(item){ %>
@@ -165,7 +165,16 @@
     <script src="https://transloadit.edgly.net/releases/uppy/v1.6.0/uppy.min.js"></script>
     <script>
         $(document).ready(function(){
-            var uppy = Uppy.Core()
+            $.ajaxSetup({traditional: true});
+
+            var uppy = Uppy.Core({
+                restrictions: {
+                    maxFileSize: 10000000,
+                    maxNumberOfFiles:1,
+                    minNumberOfFiles: 1,
+                    allowedFileTypes: ["image/*"]
+                }
+            })
             .use(Uppy.Dashboard, {
                 inline: true,
                 target: '#drag-drop-area',
@@ -175,9 +184,30 @@
     
             uppy.on('complete', (result) => {
                 result.successful.map(e =>{
-                    $('#url-image').val(e.uploadURL)
+                    $('#urlImage').val(e.uploadURL)
                 })
                 
+            })
+            $(".addDepartment .register-form").submit(e=>{
+                e.preventDefault();
+                let department =[]
+                $("input:checkbox:checked").each(function() { 
+                    department.push($(this).val()); 
+                }); 
+                let user ={
+                    username:$('#username').val(),
+                    pass:$('#pass').val(),
+                    re_pass:$('#re_pass').val(),
+                    name:$('#name').val(),
+                    maphong:$('#maphong').val(),
+                    urlImage:$('#urlImage').val(),
+                    department: department
+                }
+                console.log(user)
+                $.post( "",user)
+                .done(function( res ) {
+                    console.log(res);
+                });
             })
         })
     </script>
