@@ -1,28 +1,27 @@
 const mongoose = require('mongoose')
 var passportLocalMongoose = require('passport-local-mongoose');
-var crypto = require('crypto'); 
+var crypto = require('crypto');
 const UserSchema = mongoose.Schema({
-    userId: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    image: {
-
-      type: String,
-    },
-    type: {
-	  type: String,
-	  required: true,
-	},
-	username:{
+	userId: {
 		type: String,
-	  	required: true,
+		required: true,
 	},
-	password:{
+	name: {
+		type: String,
+		required: true,
+	},
+	image: {
+		type: String,
+	},
+	type: {
+		type: String,
+		required: true,
+	},
+	username: {
+		type: String,
+		required: true,
+	},
+	password: {
 		type: String,
 	},
 
