@@ -17,7 +17,7 @@ router.post('/',createStatus, authenticateToken)
 
 // PUT
 
-router.put('/:ida',updateStatusId ,authenticateToken)
+router.put('/:id',updateStatusId ,authenticateToken)
 
 // DELETE
 
