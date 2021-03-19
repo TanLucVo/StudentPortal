@@ -13,7 +13,10 @@ router.get('/:id', async function (req, res, next) {
 	if (!phong) {
 		return next(createError(404));
 	}
-	res.render('notificationPage',{user: req.user, departmentName:phong.name});
+	let user = await User.find()
+	let department = user.filter(user =>  user.type !== "admin" && user.type !== 'student' )
+	if(req.user.type !=="admin") return res.send('Access dineid')
+	res.render('notificationPage',{user: req.user, departmentName:phong.name, department: department});
 });
 
 
