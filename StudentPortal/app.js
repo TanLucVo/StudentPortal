@@ -16,7 +16,6 @@ const app = express();
 const notificationRouter = require('./routes/notification')
 const fs = require('fs')
 const bodyParser = require('body-parser')
-const multer = require('multer')
 //database
 const mongoose = require('mongoose')
 
@@ -68,6 +67,7 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+
 app.use(flash());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'), options));

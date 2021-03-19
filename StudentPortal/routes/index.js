@@ -2,6 +2,15 @@ var express = require('express');
 const passport = require('passport');
 var router = express.Router();
 const {authenticateToken} = require('../config/token')
+const multer = require('multer')
+const fs = require('fs')
+const bodyParser = require('body-parser')
+
+// express.static middleware -> ảnh từ phía client ko thể lấy qua server được cần thiết lập express.static
+// `/uploads` sẽ lấy ảnh từ server thông qua url: http://localhost:4200/uploads, còn uploads là folder bên server lưu ảnh được upload
+router.use('/uploads',express.static('uploads'))
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({extended: false}));
 
 const upload = multer({dest:'uploads',
     fileFilter:  (req, file, callback ) => {
@@ -22,31 +31,34 @@ const upload = multer({dest:'uploads',
 
 /* GET users listing. */
 router.get('/' , authenticateToken, function(req, res) {
-  res.render('index',{user: req.user});
+    res.render('index',{user: req.user});
 });
 
 router.post('/', authenticateToken, upload.single('imageStatus'), function(req, res, next) {
-  const statusTitle = JSON.stringify(req.body.statusTitle) // form fields
-  const image = req.file // form files
-  const error = ""
+    const statusTitle = JSON.stringify(req.body.statusTitle) // form fields
+    const image = req.file // form files
+    const error = ""
 
-  if (!statusTitle) {
-      error = "Hãy nhập tiêu đề cho bài viết của bạn"
-  }
-  if (error.length > 0) {
-      res.render('/', {errorMessage: error})
-  }
-  else {
-    //   rename file upload
+//   if (!statusTitle) {
+//       error = "Hãy nhập tiêu đề cho bài viết của bạn"
+//   }
+//   if (error.length > 0) {
+//       res.render('/', {errorMessage: error})
+//   }
+//   else {
+//     //   rename file upload
+
+//   }
+
     fs.renameSync(image.path, `uploads/${image.originalname}`)
-   
+    
     let status = {
         comment: statusTitle,
-        image: 'not found hehe',
+        image: `uploads/${image.originalname}`,
         userId: req.user.userId
     }
+    console.log(statusTitle)
     console.log(JSON.stringify(status))
-  }
 });
 
 module.exports = router;
