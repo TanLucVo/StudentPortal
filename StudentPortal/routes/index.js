@@ -3,10 +3,6 @@ const passport = require('passport');
 var router = express.Router();
 const {authenticateToken} = require('../config/token')
 
-const fs = require('fs')
-const bodyParser = require('body-parser') // body-parser xử lý url-encoded (html body)
-const multer = require('multer')
-
 const upload = multer({dest:'uploads',
     fileFilter:  (req, file, callback ) => {
         // xác định file được upload có phải là ảnh hay không đựa vào cơ chế mimetype: 'image/*'
@@ -30,7 +26,27 @@ router.get('/' , authenticateToken, function(req, res) {
 });
 
 router.post('/', authenticateToken, upload.single('imageStatus'), function(req, res, next) {
-  console.log(req.file)
+  const statusTitle = JSON.stringify(req.body.statusTitle) // form fields
+  const image = req.file // form files
+  const error = ""
+
+  if (!statusTitle) {
+      error = "Hãy nhập tiêu đề cho bài viết của bạn"
+  }
+  if (error.length > 0) {
+      res.render('/', {errorMessage: error})
+  }
+  else {
+    //   rename file upload
+    fs.renameSync(image.path, `uploads/${image.originalname}`)
+   
+    let status = {
+        comment: statusTitle,
+        image: 'not found hehe',
+        userId: req.user.userId
+    }
+    console.log(JSON.stringify(status))
+  }
 });
 
 module.exports = router;

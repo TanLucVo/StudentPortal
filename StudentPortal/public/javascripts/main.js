@@ -70,12 +70,15 @@ $(document).ready(function () {
         });
     }
 
+    // fetch api - status
     $(".post-btn").click(function () {
         var file_data = $('#imageUpload').prop('files')[0];
-        console.log(file_data)
+        var statusTitle = $('textarea.statusTitle').val()
+        console.log(statusTitle)
 
         var form_data = new FormData();
         form_data.append('imageStatus', file_data);
+        form_data.append('statusTitle', statusTitle);
 
         uploadImage(form_data)
 

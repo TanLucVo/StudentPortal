@@ -3,6 +3,8 @@ const passport = require('passport')
 const router = express.Router()
 const {createStatus, getAllStatus, getStatusId, deleteStatusId, updateStatusId} = require('../controllers/statusController')
 const {authenticateToken} = require('../config/token')
+
+
 // api status: GET POST PUT DELETE
 
 // GET

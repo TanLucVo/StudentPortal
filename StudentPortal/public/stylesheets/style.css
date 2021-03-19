@@ -756,10 +756,6 @@ html [type="button"] {
     cursor: pointer;
 }
 
-textarea {
-    resize: none;
-}
-
 a:hover.facebook {
     background: #516eab;
 }
@@ -2097,12 +2093,14 @@ body {
     float: left;
     width: 100%;
     border: none;
+    resize: none;
 }
 
 .newpst-input textarea:focus,
 .newpst-input textarea:active {
     outline: medium none;
     border: none;
+    resize: none;
 }
 
 .create-post {
