@@ -6,94 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phòng ban</title>
     <%- include partial/cdn.ejs %>
-    <style>
-        .dashboardDepartment {
-            background-color: #ECEDF1;
-        }
-
-        .dashboardDepartment .breadcrumb {
-            background-color: #fff;
-        }
-
-        .dashboardDepartment .breadcrumb a {
-            color: #007bff;
-        }
-
-        .dashboardDepartment .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-
-        .dashboardDepartment .card {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            word-wrap: break-word;
-            background-color: #fff;
-            background-clip: border-box;
-            border: 1px solid #e3e6f0;
-            border-radius: .35rem;
-            transition: transform .15s ease-in;
-        }
-
-        .dashboardDepartment .card:hover {
-            box-shadow: 8px 8px 8px blue;
-            transform: scale(1.05);
-        }
-
-        .dashboardDepartment .card:hover p {
-            color: red !important
-        }
-
-        .dashboardDepartment .card:hover {
-            border-left: .25rem solid #28a745 !important;
-        }
-
-        .dashboardDepartment .border-left-primary {
-            border-left: .25rem solid #4e73df !important;
-        }
-
-        .dashboardDepartment .row a {
-            text-decoration: none;
-        }
-        .dashboardDepartment .card img {
-            width:100%;
-            height:100%;
-            object-fit: cover;
-            
-        }
-        .dashboardDepartment .card-img{
-            height: 100%;
-            position: relative;
-            
-        }
-        .dashboardDepartment .show-image{
-            opacity: 1 !important;
-            
-        }
-        .dashboardDepartment .card-img-top{
-            opacity: 0;
-            transition:opacity .3s ease-in;
-        }
-        
-        .dashboardDepartment .card-img .loading{
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: white;
-            top: 0;
-            left: 0;
-            display: none;
-        }
-        @media only screen and (max-width: 767px) {
-            .dashboardDepartment .card img {
-                width:100%;
-                height:275px;
-                object-fit: cover;
-                
-            }
-        }
-    </style>
 </head>
 
 <body class="dashboardDepartment">
@@ -104,12 +16,16 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="./">Trang chủ</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Danh sách phòng ban <a
-                            href="/department/add"><i class="fas fa-plus-circle"></i></a></li>
+                            href="/department/add">
+                        <%if(user.type === "admin"){ %>
+                            <i class="fas fa-plus-circle"></i>
+                        <% } %>
+                        </a></li>
                 </ol>
             </div>
             <div class="row pt-4 mt-0">
                 <% department.forEach(function(item){ %>
-                    <a href="#" class="col-xl-3 col-md-4 mb-4">
+                    <a href="/department/<%= item.type %>" class="col-xl-3 col-md-4 mb-4">
                         <div class="card border-left-primary shadow h-100 pb-0 mb-0">
                             <div class="card-img">
                                 <img class="card-img-top" src="<%= item.image %>" 
@@ -131,19 +47,6 @@
         </div>
     </div>
     <script src="/javascripts/main.js"></script>
-    <script>
-        $(document).ready(function(){
-            //onload image
-            $(".dashboardDepartment .row img ").each(function (k, v) {
-                v.onload = function () {
-                    $(this).parent().children('.loading').attr('display','none')
-                    $(this).parent().children('.loading').removeClass('d-flex')
-                    $(this).addClass('show-image')
-                };
-                v.src = v.src;
-            });
-        })
-    </script>
 </body>
 
 </html>

@@ -13,6 +13,7 @@ const User = require('../models/user')
 
 /* GET login page. */
 router.get('/', ensureGuest, async function (req, res, next) {
+	res.setHeader('Cache-Control', "max-age=86400")
 	res.render('login', {
 		error: req.flash('loginMessage')
 	});
