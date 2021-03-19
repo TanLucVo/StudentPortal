@@ -65,6 +65,28 @@ $(document).ready(function() {
             $('#menu').mmenu();
         });
     }
+
+    $(".post-btn").click(function() {
+        var file_data = $('#imageUpload').prop('files')[0];
+        console.log(file_data)
+
+        var form_data = new FormData();
+        form_data.append('imageStatus', file_data);
+
+        uploadImage(form_data)
+
+        function uploadImage(form_data) {
+            fetch('http://localhost:3000/', {
+                method: 'POST',
+                body: form_data
+            })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+            })
+            .catch(e =>console.log(e))
+            }
+    });
 });
 
 
