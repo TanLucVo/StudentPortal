@@ -85,7 +85,7 @@ $(document).ready(function() {
                 console.log(json)
             })
             .catch(e =>console.log(e))
-            }
+        }
     });
 });
 
