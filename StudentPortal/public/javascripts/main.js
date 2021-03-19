@@ -3,7 +3,12 @@
 
 // widget
 // ------------------
-
+// var link = document.createElement('link');
+// link.setAttribute("rel", "stylesheet");
+// link.setAttribute("type", "text/css");
+// link.onload = ()=> console.log("onload css");
+// link.setAttribute("href", '/stylesheets/style.css');
+// document.getElementsByTagName("head")[0].appendChild(link);
 $(document).ready(function () {
     /*--- left menu full ---*/
     $(' .menu-small').on("click", function () {

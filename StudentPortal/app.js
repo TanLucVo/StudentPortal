@@ -13,23 +13,39 @@ const departmentRouter = require("./routes/department");
 require('dotenv').config()
 const {ensureAuth, ensureGuest} = require('./middleware/auth')
 const app = express();
+const notificationRouter = require('./routes/notification')
 //database
 const mongoose = require('mongoose')
 
 //session
 const session = require('express-session')
+var options = {
+    etag: true,
+    //maxAge: 3600000, //in ms i.e 1 hr in this case
+    redirect: true,
+    setHeaders: function (res, path, stat) {
+      //any other header in response
+      res.set({
+          'x-timestamp': Date.now(),
+          'joseph' : 'hi',
+          'Cache-Control' : (path.includes('index.html')) ? 'no-store' : 'public, max-age=3600000'
+        });
+    }
+}
+
 app.use(
 	session({
 	  secret: 'keyboard cat',
 	  resave: false,
-	  saveUninitialized: false,
+		saveUninitialized: false,
+	  cookie:{maxAge: 3600000}
 	})
 )
 
-app.use(express.static('public'))
 
 //passport
-const passport = require('passport')
+const passport = require('passport');
+const notification = require("./models/notification");
 // Passport config
 require('./config/passport')(passport)
 // Passport middleware
@@ -49,7 +65,7 @@ app.use(
 );
 app.use(flash());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public'), options));
 //upload-image
 app.use('/upload-image', uploadImage)
 
@@ -62,7 +78,8 @@ app.use('/api', api)
 app.use(ensureAuth)
 app.use("/status",statusRouter)
 app.use("/",indexRouter);
-app.use("/department",departmentRouter);
+app.use("/department", departmentRouter);
+app.use("/notification",notificationRouter)
 
 
 

@@ -21,7 +21,7 @@
             </div>
             <div class="row pt-4 mt-0">
                 <% department.forEach(function(item){ %>
-                    <a href="#" class="col-xl-3 col-md-4 mb-4">
+                    <a href="/department/<%= item.type %>" class="col-xl-3 col-md-4 mb-4">
                         <div class="card border-left-primary shadow h-100 pb-0 mb-0">
                             <div class="card-img">
                                 <img class="card-img-top" src="<%= item.image %>" 
@@ -43,7 +43,6 @@
         </div>
     </div>
     <script src="/javascripts/main.js"></script>
-
 </body>
 
 </html>

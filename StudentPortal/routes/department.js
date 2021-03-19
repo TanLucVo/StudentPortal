@@ -1,4 +1,5 @@
 var express = require('express');
+const createError = require("http-errors");
 var router = express.Router();
 var path = require('path');
 const fs = require('fs'); 
@@ -65,6 +66,19 @@ router.post('/add', addDepartmentValidator, async function (req, res, next) {
         return res.json({success:false,mess:message.msg})
     }
 });
+
+router.get('/:id', async function (req, res, next) {
+	let maphong = req.params.id
+	if (maphong === "admin" || maphong === "student") {
+		next(createError(404));
+	}
+	console.log(maphong)
+	let user = await User.find({type : maphong})
+	console.log(user)
+	res.send('trang chinh');
+});
+
+
 
 
 module.exports = router
