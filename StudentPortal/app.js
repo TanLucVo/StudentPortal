@@ -8,6 +8,7 @@ const loginRouter = require("./routes/login");
 const indexRouter = require("./routes/index");
 const statusRouter = require("./routes/status");
 const api = require("./routes/API");
+const uploadImage = require('./api/upLoadImageAPI')
 const departmentRouter = require("./routes/department");
 require('dotenv').config()
 const {ensureAuth, ensureGuest} = require('./middleware/auth')
@@ -49,10 +50,13 @@ app.use(
 app.use(flash());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+//upload-image
+app.use('/upload-image', uploadImage)
 
 app.use("/auth", loginRouter);
 //api push thong bao
 app.use('/api', api)
+
 
 
 app.use(ensureAuth)

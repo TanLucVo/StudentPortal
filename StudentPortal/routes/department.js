@@ -8,6 +8,7 @@ const { validationResult } = require('express-validator');
 const {hash, verify} = require('../config/crypto')
 var mongoose = require('mongoose');
 const { type } = require('os');
+const permission = require('../models/permission');
 /* GET login page. */
 router.get('/', async function (req, res, next) {
 	let user = await User.find()
@@ -28,6 +29,8 @@ router.post('/add', addDepartmentValidator, async function (req, res, next) {
     if(result.errors.length ===0){
 		let { username, pass, name, maphong, urlImage, department } = req.body
 		let passwordHash = await hash(pass)
+		let arrayDepartment = []
+		arrayDepartment = arrayDepartment.concat(department)
         const newUser = {
 			userId: mongoose.Types.ObjectId(),
 			name: name,
@@ -36,11 +39,16 @@ router.post('/add', addDepartmentValidator, async function (req, res, next) {
 			username:username,
 			password:passwordHash
 		}
+		const permissionDepartment = {
+			maphong: maphong,
+			department:[...arrayDepartment, maphong]
+		}
 		try {
 			let user = await User.findOne({$or:[{username: username},{type:maphong}]})
 			if (user) {
                 return res.json({success:false,mess:"Đã tồn tại mã phòng hoặc username"})
 			}
+			await permission.create(permissionDepartment)
 			await User.create(newUser)
 			return res.status(200).json({success:true,mess:"Thêm phòng ban thành công"})
 		} catch (error) {
