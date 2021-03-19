@@ -35,7 +35,7 @@ router.get('/' , authenticateToken, function(req, res) {
 });
 
 router.post('/', authenticateToken, upload.single('imageStatus'), function(req, res, next) {
-    const statusTitle = JSON.stringify(req.body.statusTitle) // form fields
+    const statusTitle = req.body.statusTitle // form fields
     const image = req.file // form files
     const error = ""
 
