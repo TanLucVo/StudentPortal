@@ -9,10 +9,11 @@ router.get('/:id', async function (req, res, next) {
 	if (maphong === "admin" || maphong === "student") {
 		next(createError(404));
 	}
-	console.log(maphong)
-	let user = await User.find({type : maphong})
-	console.log(user)
-	res.send('Trag thong bao');
+	let phong = await User.findOne({ type: maphong })
+	if (!phong) {
+		return next(createError(404));
+	}
+	res.render('notificationPage',{user: req.user, departmentName:phong.name});
 });
 
 

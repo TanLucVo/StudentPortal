@@ -72,9 +72,11 @@ router.get('/:id', async function (req, res, next) {
 	if (maphong === "admin" || maphong === "student") {
 		next(createError(404));
 	}
-	console.log(maphong)
-	let user = await User.find({type : maphong})
-	console.log(user)
+	if (req.user.type === "student") {
+		return res.redirect('/notification/'+maphong)
+	}
+	let user = await User.find({ type: maphong })
+
 	res.send('trang chinh');
 });
 

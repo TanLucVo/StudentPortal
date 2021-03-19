@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phòng ban</title>
+    <%- include partial/cdn.ejs %>
+    <style>
+        .notificationPage {
+            background-color: #ECEDF1;
+        }
+
+        .notificationPage .list-group {
+            max-height: 750px;
+            margin-bottom: 10px;
+            overflow-y: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        ul::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        /* Track */
+        ul::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        ul::-webkit-scrollbar-thumb {
+            border-radius: 1rem;
+            background-color: #aa00ff;
+            background-image: linear-gradient(to top, #aa00ff 0%, #3a73d5 100%);
+
+        }
+
+        /* Handle on hover */
+        ul::-webkit-scrollbar-thumb:hover {
+            background: #aa00ff;
+        }
+
+        .filter {
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: 10px;
+            height: 50%;
+        }
+
+        .jzdbox1 {
+            width: 315px;
+            background: #332f2e;
+            border-radius: 5px;
+            overflow: hidden;
+            display: block;
+            margin-bottom: 10px;
+            box-shadow: 0 0 10px #201d1c;
+            margin: 0 auto;
+            margin-top: 100px;
+        }
+
+        .jzdcal {
+            padding: 0 10px 10px 10px;
+            box-sizing: border-box !important;
+            background: #749d9e;
+            background: -webkit-linear-gradient(#749d9e, #b3a68b) !important;
+            background: -o-linear-gradient(#749d9e, #b3a68b) !important;
+            background: -moz-linear-gradient(#749d9e, #b3a68b) !important;
+            background: linear-gradient(#749d9e, #b3a68b) !important;
+        }
+
+        .jzdcalt {
+            font: 18px 'Roboto';
+            font-weight: 700;
+            color: #f7f3eb;
+            display: block;
+            margin: 18px 0 0 0;
+            text-transform: uppercase;
+            text-align: center;
+            letter-spacing: 1px;
+            position: relative;
+        }
+
+        .jzdcal span {
+            font: 11px 'Roboto';
+            font-weight: 400;
+            color: #f7f3eb;
+            text-align: center;
+            width: 42px;
+            height: 42px;
+            display: inline-block;
+            float: left;
+            overflow: hidden;
+            line-height: 40px;
+        }
+
+        .jzdcal .jzdb:before {
+            opacity: 0.3;
+            content: 'o';
+        }
+
+        .circle {
+            border: 1px solid #f7f3eb;
+            box-sizing: border-box !important;
+            border-radius: 200px !important;
+        }
+
+        span[data-title]:hover:after,
+        div[data-title]:hover:after {
+            font: 11px 'Roboto';
+            font-weight: 400;
+            content: attr(data-title);
+            position: absolute;
+            margin: 0 0 100px;
+            background: #282423;
+            border: 1px solid #f7f3eb;
+            color: #f7f3eb;
+            padding: 5px;
+            z-index: 9999;
+            min-width: 150px;
+            max-width: 150px;
+        }
+        .fa-arrow-left{
+            position: absolute;
+            left:10px;
+            cursor: pointer;
+            top:0
+        }
+        .fa-arrow-right{
+            position: absolute;
+            right:10px;
+            cursor: pointer;
+            top:0
+        }
+        @import url(https://fonts.googleapis.com/css?family=Fjalla+One:400|Roboto:400,400italic,700);
+    </style>
+</head>
+
+<body class="notificationPage">
+
+    <%- include partial/header-leftbar.ejs %>
+    <div class="container mx-auto">
+        <div class="gap2 pr-2 pl-2">
+            <div aria-label="breadcrumb " class="mt-4">
+                <ol class="breadcrumb bg-white">
+                    <li class="breadcrumb-item"><a href="../">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="../department">Danh sách phòng ban</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"><%= departmentName %></li>
+                    <li class="breadcrumb-item active" aria-current="page">Danh sách thông báo </li>
+                </ol>
+            </div>
+            <div class="row pt-1">
+                <div class="col-lg-8 col-lg-8 col-sm-12">
+                    <ul class="list-group rounded">
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                        <li class="list-group-item">
+                            <a class="font-weight-bold" href="#">Thông báo nhận đơn phúc khảo HK1/20-21 từ ngày
+                                15/3/2021 đến ngày 19/3/2021</a>
+                            <p class="font-italic">[Phòng Khảo thí và KĐCL] - 12/03/2021</p>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <div class="filter p-4 bg-white">
+                        <h4>Lọc thông báo</h4>
+                    </div>
+                    <div class="mt-3">
+                        <div class="jzdbox1 jzdbasf jzdcal mt-0">
+
+                            <div class="jzdcalt">
+                                <i class="fas fa-arrow-left"></i>
+                                <div class="month">asdsd</div>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+
+                            <span>Su</span>
+                            <span>Mo</span>
+                            <span>Tu</span>
+                            <span>We</span>
+                            <span>Th</span>
+                            <span>Fr</span>
+                            <span>Sa</span>
+
+
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                            <span>1</span>
+                            <span class="circle" data-title="My 25th birthday!">2</span>
+                            <span>3</span>
+                            <span>4</span>
+                            <span>5</span>
+                            <span>6</span>
+                            <span>7</span>
+                            <span>8</span>
+                            <span>9</span>
+                            <span>10</span>
+                            <span>11</span>
+                            <span class="circle" data-title="2 month anniversary!">12</span>
+                            <span>13</span>
+                            <span>14</span>
+                            <span>15</span>
+                            <span>16</span>
+                            <span>17</span>
+                            <span>18</span>
+                            <span>19</span>
+                            <span>20</span>
+                            <span>21</span>
+                            <span class="circle" data-title="#MusicMonday - share your favorite song!">22</span>
+                            <span>23</span>
+                            <span>24</span>
+                            <span>25</span>
+                            <span>26</span>
+                            <span>27</span>
+                            <span>28</span>
+                            <span>29</span>
+                            <span>30</span>
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                            <span class="jzdb">
+                                <!--BLANK--></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/javascripts/main.js"></script>
+    <script>
+        $(document).ready(function(){
+            let months = ['January', 'February','March', 'April','May', 'June','July', 'August','September', 'October','November', 'December']
+            let now =new Date();
+            let indexMonth = now.getMonth()
+            var thisMonthString = months[indexMonth];
+            var thisyear =now.getFullYear()
+            $('.notificationPage .month').text(thisMonthString+" "+thisyear)
+
+            $('.notificationPage .fa-arrow-left').click(()=>{
+                indexMonth = indexMonth-1
+                if(indexMonth < 0){
+                    indexMonth = 11;
+                    thisyear = thisyear -1;
+                }
+                thisMonthString = months[indexMonth]
+                $('.notificationPage .month').text(thisMonthString+" "+thisyear)
+            })
+            $('.notificationPage .fa-arrow-right').click(()=>{
+                indexMonth = indexMonth+1
+                if(indexMonth >= 12){
+                    indexMonth = 0;
+                    thisyear = thisyear + 1;
+                }
+                thisMonthString = months[indexMonth]
+                $('.notificationPage .month').text(thisMonthString+" "+thisyear)
+            })
+        })
+    </script>
+</body>
+
+</html>
