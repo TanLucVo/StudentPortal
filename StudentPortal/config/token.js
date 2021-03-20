@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken')
 function authenticateTokenAPI(req, res, next) {
     // Gather the jwt access token from the request header
-    const authHeader = req.cookies.token
+  const authHeader = req.cookies.token
+  console.log(req.cookies)
     const token = authHeader
     if (token == null) return res.status(401).json({message:"Missing token"}); // if there isn't any token
-  
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET , (err, user) => {
       if (err) return res.status(203).json({message:"Non-Authoritative Information"});
       next() // pass the execution off to whatever request the client intended

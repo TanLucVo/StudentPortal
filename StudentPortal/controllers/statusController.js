@@ -3,6 +3,7 @@ const statusModel = require('../models/status')
 
 async function createStatus(req, res) {
   if (!req.body) {
+
     return res.status(500).json({
           success: false,
           message: 'data error. Please try again.',
@@ -17,7 +18,6 @@ async function createStatus(req, res) {
       image: data.image,
       userId: data.userId
     })
-
     await status
     .save()
     .then((newStatus) => {

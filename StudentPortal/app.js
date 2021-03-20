@@ -77,11 +77,12 @@ app.use('/upload-image', uploadImage)
 app.use("/auth", loginRouter);
 //api push thong bao
 app.use('/api', api)
+app.use("/status",statusRouter)
+
 
 
 
 app.use(ensureAuth)
-app.use("/status",statusRouter)
 app.use("/",indexRouter);
 app.use("/department", departmentRouter);
 app.use("/notification",notificationRouter)

@@ -71,21 +71,21 @@ $(document).ready(function () {
     }
 
     // fetch api - status
-    $(".post-btn").click(function () {
-        var file_data = $('#imageUpload').prop('files')[0];
-        var statusTitle = $('textarea.statusTitle').val()
+    $(".index-page .post-btn").click(function () {
+        var file_data = $('.index-page #imageUpload').prop('files')[0];
+        var statusTitle = $('.index-page textarea.statusTitle').val()
         console.log(statusTitle)
-
+        console.log(file_data)
         var form_data = new FormData();
         form_data.append('imageStatus', file_data);
         form_data.append('statusTitle', statusTitle);
-
         uploadImage(form_data)
 
         function uploadImage(form_data) {
-            fetch('http://localhost:3000/', {
+           fetch('http://localhost:3000/', { // Your POST endpoint
                     method: 'POST',
-                    body: form_data
+
+                    body: form_data // This is your file object
                 })
                 .then(res => res.json())
                 .then(json => {

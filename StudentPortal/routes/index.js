@@ -5,13 +5,12 @@ const {authenticateToken} = require('../config/token')
 const multer = require('multer')
 const fs = require('fs')
 const bodyParser = require('body-parser')
-
 // express.static middleware -> ảnh từ phía client ko thể lấy qua server được cần thiết lập express.static
 // `/uploads` sẽ lấy ảnh từ server thông qua url: http://localhost:4200/uploads, còn uploads là folder bên server lưu ảnh được upload
 router.use('/uploads',express.static('uploads'))
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({extended: false}));
-
+var request = require("request");
 const upload = multer({dest:'uploads',
     fileFilter:  (req, file, callback ) => {
         // xác định file được upload có phải là ảnh hay không đựa vào cơ chế mimetype: 'image/*'
@@ -34,7 +33,7 @@ router.get('/' , authenticateToken, function(req, res) {
     res.render('index',{user: req.user});
 });
 
-router.post('/', authenticateToken, upload.single('imageStatus'), function(req, res, next) {
+router.post('/', authenticateToken, upload.single('imageStatus'), async function(req, res, next) {
     const statusTitle = req.body.statusTitle // form fields
     const image = req.file // form files
     const error = ""
@@ -49,28 +48,36 @@ router.post('/', authenticateToken, upload.single('imageStatus'), function(req, 
 //     //   rename file upload
 
 //   }
+    try {
+        fs.renameSync(image.path, `uploads/${image.originalname}`)
 
-    fs.renameSync(image.path, `uploads/${image.originalname}`)
-    const tokenJWT = req.cookies.token
-    let status = {
-        comment: statusTitle,
-        image: `uploads/${image.originalname}`,
-        userId: req.user.userId,
-        cookie: `token=${tokenJWT}`
-    }
-    console.log(JSON.stringify(status))
-    fetch('http://localhost:3000/status', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
+        const cookie = req.cookies
+        let status = {
+            comment: statusTitle,
+            image: `uploads/${image.originalname}`,
+            userId: req.user.userId,
+        }
+        var options = {
+        'method': 'GET',
+        'url': 'http://localhost:3000/status',
+        'headers': {
+             'Cookie': "connect.sid="+cookie['connect.sid'] +";token="+cookie.token
         },
-        body: JSON.stringify(status)
-    })
-    .then(res => res.json())
-    .then(json => {
-        console.log(json)
-    })
-    .catch(e => console.log(e))
+        formData: {
+            'comment': 'asdasd',
+            'image': 'asdasdasd'
+        }
+        };
+        request(options, function (error, response) {
+        if (error) throw new Error(error);
+            console.log(response.body);
+        });
+
+    } catch (error) {
+        console.log(error)
+    }
+   
+    
 });
 
 module.exports = router;
