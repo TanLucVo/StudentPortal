@@ -90,7 +90,7 @@ $(document).ready(function () {
                 .then(res => res.json())
                 .then(json => {
                     if (json.success) {
-                        console.log("Đăng bài viết thành công")
+                        $(".multi-card")
                     }
                 })
                 .catch(e => console.log(e))
