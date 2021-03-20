@@ -15,7 +15,7 @@ router.get('/:id',getStatusId ,authenticateToken)
 
 // POST
 
-router.post('/',createStatus, authenticateToken)
+router.post('/', createStatus, authenticateToken)
 
 // PUT
 

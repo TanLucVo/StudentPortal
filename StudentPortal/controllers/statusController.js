@@ -2,30 +2,40 @@ const mongoose = require('mongoose')
 const statusModel = require('../models/status')
 
 async function createStatus(req, res) {
-  const status = new statusModel({
+  if (!req.body) {
+    return res.status(500).json({
+          success: false,
+          message: 'data error. Please try again.',
+          error: error.message,
+    });
+  }
+  else {
+    const data = req.body
+    const status = new statusModel({
       statusId: mongoose.Types.ObjectId(),
-      comment: req.body.comment,
-      image: req.body.image,
-      userId: req.body.userId
-  })
+      comment: data.comment,
+      image: data.image,
+      userId: data.userId
+    })
 
-  await status
-  .save()
-  .then((newStatus) => {
-    return res.status(201).json({
-      success: true,
-      message: 'New status created successfully',
-      Status: newStatus,
+    await status
+    .save()
+    .then((newStatus) => {
+      return res.status(201).json({
+        success: true,
+        message: 'New status created successfully',
+        Status: newStatus,
+      });
+    })
+    .catch((error) => {
+        console.log(error);
+      res.status(500).json({
+        success: false,
+        message: 'Server error. Please try again.',
+        error: error.message,
+      });
     });
-  })
-  .catch((error) => {
-      console.log(error);
-    res.status(500).json({
-      success: false,
-      message: 'Server error. Please try again.',
-      error: error.message,
-    });
-  });
+  }
 }
 
 async function getAllStatus(req, res) {

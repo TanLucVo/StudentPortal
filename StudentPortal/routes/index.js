@@ -51,14 +51,26 @@ router.post('/', authenticateToken, upload.single('imageStatus'), function(req, 
 //   }
 
     fs.renameSync(image.path, `uploads/${image.originalname}`)
-    
+    const tokenJWT = req.cookies.token
     let status = {
         comment: statusTitle,
         image: `uploads/${image.originalname}`,
-        userId: req.user.userId
+        userId: req.user.userId,
+        cookie: `token=${tokenJWT}`
     }
-    console.log(statusTitle)
     console.log(JSON.stringify(status))
+    fetch('http://localhost:3000/status', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(status)
+    })
+    .then(res => res.json())
+    .then(json => {
+        console.log(json)
+    })
+    .catch(e => console.log(e))
 });
 
 module.exports = router;
