@@ -4,8 +4,12 @@ const StatusSchema = mongoose.Schema({
         type: String,
         require: true,
     },
-    comment: {
+    statusTitle: {
         type: String,
+        require: true,
+    },
+    dateModified: {
+        type: Date,
         require: true,
     },
     image: {

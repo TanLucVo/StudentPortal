@@ -74,8 +74,8 @@ $(document).ready(function () {
     $(".index-page .post-btn").click(function () {
         var file_data = $('.index-page #imageUpload').prop('files')[0];
         var statusTitle = $('.index-page textarea.statusTitle').val()
-        console.log(statusTitle)
-        console.log(file_data)
+        // console.log(statusTitle)
+        // console.log(file_data)
         var form_data = new FormData();
         form_data.append('imageStatus', file_data);
         form_data.append('statusTitle', statusTitle);
@@ -87,9 +87,11 @@ $(document).ready(function () {
 
                     body: form_data // This is your file object
                 })
-                .then(res => res.text())
+                .then(res => res.json())
                 .then(json => {
-                    console.log(json)
+                    if (json.success) {
+                        console.log("Đăng bài viết thành công")
+                    }
                 })
                 .catch(e => console.log(e))
         }

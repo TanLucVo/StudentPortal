@@ -41,7 +41,7 @@ router.post('/', authenticateToken, upload.single('imageStatus'), async function
 
     cookie = req.cookies
     let status = {
-        comment: statusTitle,
+        statusTitle: statusTitle,
         image: `uploads/${image.originalname}`,
         userId: req.user.userId
     }
@@ -55,10 +55,11 @@ router.post('/', authenticateToken, upload.single('imageStatus'), async function
         },
         body: JSON.stringify(status)
     })
-    .then(res => res.text())
+    .then(res => res.json())
     .then(json => {
         // console bên node server
         console.log(json)
+        return res.json(json)
     })
     .catch(e => {
         console.log(e)

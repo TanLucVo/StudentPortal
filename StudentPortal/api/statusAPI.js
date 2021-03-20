@@ -62,7 +62,8 @@ router.post('/', authenticateToken,async function(req, res, next) {
         const data = req.body
         const status = new statusModel({
             statusId: mongoose.Types.ObjectId(),
-            comment: data.comment,
+            statusTitle: data.statusTitle,
+            dateModified: new Date(),
             image: data.image,
             userId: data.userId
         })
@@ -92,7 +93,7 @@ router.put('/:id' ,authenticateToken,async function(req, res, next) {
     const log =  await statusModel.findOneAndUpdate(
         {_id: req.params.id},
         {
-            comment: req.body.comment
+            statusTitle: req.body.statusTitle
         },
         {
             useFindAndModify: false,
