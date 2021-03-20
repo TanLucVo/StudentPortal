@@ -1,25 +1,31 @@
+// MIDDLEWARE
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const flash = require('connect-flash');
+
+// API
+const statusAPI = require("./api/statusAPI");
+const api = require("./routes/API");
+const uploadImageAPI = require('./api/upLoadImageAPI')
+
+// ROUTES
+const departmentRouter = require("./routes/department");
 const loginRouter = require("./routes/login");
 const indexRouter = require("./routes/index");
-const statusRouter = require("./routes/status");
-const api = require("./routes/API");
-const uploadImage = require('./api/upLoadImageAPI')
-const departmentRouter = require("./routes/department");
+const notificationRouter = require('./routes/notification')
+
 require('dotenv').config()
 const {ensureAuth, ensureGuest} = require('./middleware/auth')
 const app = express();
-const notificationRouter = require('./routes/notification')
 const fs = require('fs')
-const bodyParser = require('body-parser')
-//database
+
+// DATABASE
 const mongoose = require('mongoose')
 
-//session
+// SESSION
 const session = require('express-session')
 var options = {
     etag: true,
@@ -45,16 +51,18 @@ app.use(
 )
 
 
-//passport
+// PASSPORT
 const passport = require('passport');
 const notification = require("./models/notification");
-// Passport config
+
+// PASSPORT CONFIG
 require('./config/passport')(passport)
-// Passport middleware
+
+// PASSPORT MIDDLEWARE
 app.use(passport.initialize())
 app.use(passport.session())
 
-// view engine setup
+// VIEW ENGINE SETUP
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
@@ -65,19 +73,22 @@ app.use(
 		extended: false,
 	})
 );
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(flash());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public'), options));
-//upload-image
-app.use('/upload-image', uploadImage)
+
 
 app.use("/auth", loginRouter);
-//api push thong bao
+
+// API---
+
+//UPLOAD IMAGE
+app.use('/upload-image', uploadImageAPI)
+
+//API NOTIFICATION
 app.use('/api', api)
-app.use("/status",statusRouter)
+app.use("/status",statusAPI)
 
 
 
@@ -89,12 +100,12 @@ app.use("/notification",notificationRouter)
 
 
 
-// catch 404 and forward to error handler
+// CATCH ERROR AND FORWARD TO HANDLE
 app.use(function (req, res, next) {
 	next(createError(404));
 });
 
-// error handler
+// ERROR HANDLE
 app.use(function (err, req, res, next) {
 	// set locals, only providing error in development
 	res.locals.message = err.message;
@@ -106,7 +117,7 @@ app.use(function (err, req, res, next) {
 });
 
 
-//connect db
+//CONNECT DATABASE: MONGO ATLAS
 mongoose.connect(process.env.DB_CONNECTION,
 	{
 		useNewUrlParser:true,

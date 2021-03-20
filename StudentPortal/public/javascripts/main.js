@@ -87,7 +87,7 @@ $(document).ready(function () {
 
                     body: form_data // This is your file object
                 })
-                .then(res => res.json())
+                .then(res => res.text())
                 .then(json => {
                     console.log(json)
                 })
