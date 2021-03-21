@@ -6,7 +6,7 @@ const User = require('../models/user')
 /* GET login page. */
 
 router.get('/:id', async function (req, res, next) {
-	let maphong = req.params.id
+	let maphong = req.params.id.toUpperCase()
 	if (maphong === "admin" || maphong === "student") {
 		next(createError(404));
 	}
@@ -17,10 +17,15 @@ router.get('/:id', async function (req, res, next) {
 	let user = await User.find()
 	let department = user.filter(user =>  user.type !== "admin" && user.type !== 'student' )
 	
-	let permissionToAdd =await Permission.find({maphong: req.user.type})
-	console.log(permissionToAdd)
+	let permissionToAdd =await Permission.findOne({maphong: req.user.type})
+	let isAdd;
+	if(permissionToAdd && permissionToAdd.maphong.includes(maphong)){
+		isAdd = true
+	}else{
+		isAdd= false
+	}
 	
-	res.render('notificationPage',{user: req.user, departmentName:phong.name, department: department});
+	res.render('notificationPage',{user: req.user, departmentName:phong, department: department, isAdd});
 });
 
 

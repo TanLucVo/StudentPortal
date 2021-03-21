@@ -14,6 +14,7 @@ io.on("connection", function (client) {
         client.id = socketId
         client.broadcast.emit('register-id', { socketId: socketId.id, userId: userId })
         users.push({ socketId: socketId, userId: userId })
+        console.log("log nay o socketIO.js")
         console.log(users)
     })
     client.emit('list-users', users)

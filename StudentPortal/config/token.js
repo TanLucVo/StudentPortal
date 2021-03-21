@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken')
 function authenticateTokenAPI(req, res, next) {
     // Gather the jwt access token from the request header
   const authHeader = req.cookies.token
-  console.log(req.cookies)
     const token = authHeader
     if (token == null) return res.status(401).json({message:"Missing token"}); // if there isn't any token
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET , (err, user) => {
@@ -20,7 +19,7 @@ function authenticateTokenAPIAdmin(req, res, next) {
   
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET , (err, user) => {
       if (err) return res.status(203).json({message:"Non-Authoritative Information"});
-      if(user.type !=="admin") return res.status(203).json({message:"Access denied"});
+      if(user.type !=="student" ) return res.status(203).json({message:"Access denied"});
       next() // pass the execution off to whatever request the client intended
     })
 }

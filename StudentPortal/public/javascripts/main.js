@@ -10,6 +10,26 @@
 // link.setAttribute("href", '/stylesheets/style.css');
 // document.getElementsByTagName("head")[0].appendChild(link);
 $(document).ready(function () {
+    const socket =io()
+    socket.on('connect', handleConnectionSuccess);
+    socket.on('disconnect', () => {
+        console.log("Mat ket noi voi server");
+    });
+    socket.on('list-users', handleUserList);
+    socket.on('add-notification', (data)=> {
+        $("#getNotification strong").text(data.department +" Đã đăng một thông báo")
+        $("#getNotification small").text(Math.floor((Date.now() - data.createAt) / 1000) +" giây trước")
+        $("#getNotification .toast-body").text(data.title)
+        $(".toast").toast('show')
+    });
+    function handleUserList(user){
+        console.log(user)
+    }
+    function handleConnectionSuccess(){
+        console.log("da ket noi thanh cong voi id"+socket.id);
+        let userId = '<%= user.id %>'
+        socket.emit('register-id', {socketId:socket.id,userId:userId }) //gui id qua cho server
+    }
     /*--- left menu full ---*/
     $(' .menu-small').on("click", function () {
         $(".fixed-sidebar.left").addClass("open");
@@ -279,6 +299,7 @@ $(document).ready(function () {
             })
         })
     })
+
    
 });
 
