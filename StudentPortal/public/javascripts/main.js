@@ -162,7 +162,7 @@ $(document).ready(function () {
                                 </div>
                             </div>
                         </div>`
-                        console.log(htmlString)
+                        // console.log(htmlString)
                         $(".multi-card").prepend(htmlString)
                     }
                 })

@@ -39,9 +39,9 @@ router.get('/' , authenticateToken, function(req, res) {
         }
     })
     .then(res => res.text())
-    .then(allStatus => {
-        // console.log(json)
-        return res.render('index',{user: req.user, status: allStatus});
+    .then(json => {
+        // console.log(JSON.parse(json))
+        return res.render('index',{user: req.user, allStatus: JSON.parse(json).Status});
     })
     .catch(e => {
         console.log(e)
@@ -50,7 +50,6 @@ router.get('/' , authenticateToken, function(req, res) {
 });
 
 router.post('/', authenticateToken, upload.single('imageStatus'), async function(req, res, next) {
-    console.log(req.file)
     const statusTitle = req.body.statusTitle // form fields
     const image = req.file // form files
     const author = req.body.author
