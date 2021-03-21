@@ -57,37 +57,45 @@ router.get('/' , authenticateToken, function(req, res) {
 
 router.post('/', authenticateToken, upload.single('imageStatus'), async function(req, res, next) {
     const statusTitle = req.body.statusTitle // form fields
-    const image = req.file // form files
+    let image = req.file // form files
     const author = req.body.author
     // console.log(author)
-   
-    fs.renameSync(image.path, `uploads/${image.originalname}`)
 
     cookie = req.cookies
-    let status = {
-        statusTitle: statusTitle,
-        image: `uploads/${image.originalname}`,
-        author: author
+    let status
+    if (!image) {
+        image = undefined
+        status = {
+            statusTitle: statusTitle,
+            image: image,
+            author: author
+        }
     }
-    // console.log(statusTitle)
-    // console.log(JSON.stringify(status))
+    else {
+        fs.renameSync(image.path, `uploads/${image.originalname}`)
+        status = {
+            statusTitle: statusTitle,
+            image: `uploads/${image.originalname}`,
+            author: author
+        }
+    }
     fetch('http://localhost:3000/status', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Cookie': `connect.sid=${cookie['connect.sid']};token=${cookie.token}`
-        },
-        body: JSON.stringify(status)
-    })
-    .then(res => res.json())
-    .then(json => {
-        // console bên node server
-        // console.log(json)
-        return res.json(json)
-    })
-    .catch(e => {
-        console.log(e)
-    })
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie': `connect.sid=${cookie['connect.sid']};token=${cookie.token}`
+            },
+            body: JSON.stringify(status)
+        })
+        .then(res => res.json())
+        .then(json => {
+            // console bên node server
+            // console.log(json)
+            return res.json(json)
+        })
+        .catch(e => {
+            console.log(e)
+        })
 });
 
 module.exports = router;
