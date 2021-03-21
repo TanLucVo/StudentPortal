@@ -1,5 +1,6 @@
 var express = require('express');
 const createError = require("http-errors");
+const Permission = require('../models/permission');
 var router = express.Router();
 const User = require('../models/user')
 /* GET login page. */
@@ -15,11 +16,12 @@ router.get('/:id', async function (req, res, next) {
 	}
 	let user = await User.find()
 	let department = user.filter(user =>  user.type !== "admin" && user.type !== 'student' )
-	if(req.user.type !=="admin") return res.send('Access dineid')
+	
+	let permissionToAdd =await Permission.find({maphong: req.user.type})
+	console.log(permissionToAdd)
+	
 	res.render('notificationPage',{user: req.user, departmentName:phong.name, department: department});
 });
-
-
 
 
 module.exports = router

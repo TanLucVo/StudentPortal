@@ -25,13 +25,14 @@ router.get('/',authenticateTokenAPIAdmin ,async (req,res)=>{
 router.post('/',authenticateTokenAPIAdmin, postNofiticationValidator ,(req,res)=>{
     let result = validationResult(req)
     if(result.errors.length ===0){
-        let {title, content, department} = req.body
+        let {title, content, department,author} = req.body
         
         const newNofication = new Notification ({
             title: title,
             createAt: new Date().getTime(),
             content: content,
             department: department,
+            author:author
         })
 
         newNofication.save(function(err,data){ 
@@ -39,7 +40,7 @@ router.post('/',authenticateTokenAPIAdmin, postNofiticationValidator ,(req,res)=
                 return res.status(403).json({message:err})
             } 
             else { 
-                io.emit('add-notification',{title : title, id:data._id})
+                io.emit('add-notification',{title : title, id:data._id, department:department})
                 return res.status(200).json({message:"Thêm thành công", data: data})
             } 
         }) 
