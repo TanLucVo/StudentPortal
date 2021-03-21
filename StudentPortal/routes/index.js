@@ -40,8 +40,14 @@ router.get('/' , authenticateToken, function(req, res) {
     })
     .then(res => res.text())
     .then(json => {
-        // console.log(JSON.parse(json))
-        return res.render('index',{user: req.user, allStatus: JSON.parse(json).Status});
+        // JSON.parse(json).sort(function(a,b){
+        //     return new Date(b.date) - new Date(a.date);
+        // });
+        arraySortStatus = JSON.parse(json).Status
+        arraySortStatus.sort(function(a,b){
+            return new Date(b.dateModified) - new Date(a.dateModified);
+        });
+        return res.render('index',{user: req.user, allStatus: arraySortStatus});
     })
     .catch(e => {
         console.log(e)
