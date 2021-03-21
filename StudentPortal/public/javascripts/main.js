@@ -85,11 +85,15 @@ $(document).ready(function () {
             image: image,
             fullName: fullName
         }
-        form_data.append('imageStatus', file_data);
-        form_data.append('statusTitle', statusTitle);
-        form_data.append('author', JSON.stringify(user))
-        uploadImage(form_data)
-
+        if (statusTitle.length === 0) {
+            alert("Vui lòng nhập tiêu đề bài đăng")
+        }
+        else {
+            form_data.append('imageStatus', file_data);
+            form_data.append('statusTitle', statusTitle);
+            form_data.append('author', JSON.stringify(user))
+            uploadImage(form_data)
+        }
         function uploadImage(form_data) {
            fetch('http://localhost:3000/', { // Your POST endpoint
                     method: 'POST',
