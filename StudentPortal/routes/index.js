@@ -30,10 +30,27 @@ const upload = multer({dest:'uploads',
 
 /* GET users listing. */
 router.get('/' , authenticateToken, function(req, res) {
-    res.render('index',{user: req.user});
+    cookie = req.cookies
+    fetch('http://localhost:3000/status', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Cookie': `connect.sid=${cookie['connect.sid']};token=${cookie.token}`
+        }
+    })
+    .then(res => res.text())
+    .then(allStatus => {
+        // console.log(json)
+        return res.render('index',{user: req.user, status: allStatus});
+    })
+    .catch(e => {
+        console.log(e)
+        return res.render('index',{user: req.user});
+    })
 });
 
 router.post('/', authenticateToken, upload.single('imageStatus'), async function(req, res, next) {
+    console.log(req.file)
     const statusTitle = req.body.statusTitle // form fields
     const image = req.file // form files
     const author = req.body.author

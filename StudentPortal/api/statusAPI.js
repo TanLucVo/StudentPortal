@@ -36,7 +36,7 @@ router.get('/:id' ,authenticateToken,async function(req, res, next) {
         res.status(200).json({
         success: true,
         message: `More on ${singleStatus.statusId}`,
-        Course: singleStatus,
+        Status: singleStatus,
         });
     })
     .catch((err) => {
