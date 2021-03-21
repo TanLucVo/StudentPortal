@@ -76,7 +76,7 @@ app.use(
 
 app.use(flash());
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public'), options));
+app.use(express.static(path.join(__dirname, 'public/'), options));
 
 
 app.use("/auth", loginRouter);

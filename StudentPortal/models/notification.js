@@ -15,6 +15,10 @@ const notificationSchema = mongoose.Schema({
     department:{
         require: true,
         type: String
-    }
+    },
+    author:{
+        require: true,
+        type: String
+    },
 })
 module.exports = mongoose.model('notification', notificationSchema)
