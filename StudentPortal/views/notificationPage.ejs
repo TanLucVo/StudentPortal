@@ -474,7 +474,7 @@
                             console.log(data)
                         if(!data.message.msg){
                             $("#formAddNotification input").val("")
-                            $("#formAddNotification #editor").val("")
+                            $("#formAddNotification #editor").html(`<p><br data-cke-filler="true"></p>`)
                             $(".messageAddNotification").addClass('text-success').removeClass('text-danger').text("Thêm thông báo thành công ")
                             
                         }else{
