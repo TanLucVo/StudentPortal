@@ -4,6 +4,10 @@ const StatusSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+    author: {
+        type: String,
+        require: true,
+    },
     statusTitle: {
         type: String,
         require: true,
@@ -14,10 +18,6 @@ const StatusSchema = mongoose.Schema({
     },
     image: {
         type: String,
-    },
-    userId: {
-        type: String,
-        require: true,
     }
 })
 module.exports = mongoose.model('status', StatusSchema)
