@@ -3,7 +3,22 @@
 
 // getLikeStatus
 function getLikeStatus(element) {
-    console.log(element.dataset.id)
+    const idStatus = element.dataset.id
+    $(document).ready(function () {
+        fetch(`http://localhost:3000/status/${idStatus}`,{
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.Status)
+            if (data.Status.like === undefined) {
+
+            }
+            else {
+                
+            }
+        })
+    })
 }
 
 $(document).ready(function () {
@@ -154,7 +169,7 @@ $(document).ready(function () {
                             <hr>
                             <!--Interative-->
                             <div class="d-flex justify-content-between align-items-centerl mx-5">
-                                <div class="like" onclick="getLikeStatus(this)" data-idStatus="${json.Status._id}">
+                                <div class="like" onclick="getLikeStatus(this)" data-id="${json.Status._id}">
                                     <i class="fa fa-thumbs-up"></i> <span>Thích</span>
                                 </div>
                                 <div class="cmts">

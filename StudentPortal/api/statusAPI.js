@@ -63,6 +63,7 @@ router.post('/', authenticateToken,async function(req, res, next) {
         const status = new statusModel({
             statusId: mongoose.Types.ObjectId(),
             author: data.author,
+            like: undefined,
             statusTitle: data.statusTitle,
             dateModified: new Date(),
             image: data.image
