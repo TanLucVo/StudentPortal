@@ -8,6 +8,9 @@ const StatusSchema = mongoose.Schema({
         type: String,
         require: true,
     },
+    like: {
+        type: String,
+    },
     statusTitle: {
         type: String,
         require: true,
