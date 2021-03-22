@@ -7,27 +7,73 @@ function getLikeStatus(element) {
     const userImage = element.dataset.image
     const userId = element.dataset.userid
     const name = element.dataset.name
+    let myLike = undefined
     $(document).ready(function () {
         fetch(`http://localhost:3000/status/${idStatus}`,{
             method: 'GET'
         })
         .then(res => res.json())
         .then(data => {
-            if (data.Status.like === undefined) {
-                like = []
+            if (data.Status.like === undefined || data.Status.like === null) {
+                $(`.${idStatus}`).css('color','yellow');
+                likes = []
                 myLike = {
                     image : userImage,
                     _id : userId,
                     name : name
                 }
-                like.push(myLike)
-                console.log(like)
-                data.Status.like = JSON.stringify(like)
-                console.log(data.Status)
+                likes.push(myLike)
+                // console.log(like)
+                data.Status.like = (JSON.stringify(likes))
             }
             else {
-                
+                $(`.${idStatus}`).css('color','black');
+                likes = JSON.parse(data.Status.like)
+                // console.log(idStatus)
+                // kiểm tra user đã like bài viết hay chưa
+                let new_likes = []
+                let check_user_like = false
+                console.log("old likes:",likes.length)
+                likes.forEach((like,index) => {
+                    if (like._id === userId) {
+                        check_user_like = true
+                    }
+                    else {
+                        new_likes.push(like)
+                    }
+                });
+                console.log("new likes:",new_likes.length)
+                if (check_user_like) {
+                    // gỡ lượt thích bài viết của user
+                    data.Status.like = (JSON.stringify(new_likes))
+                }
+                else {
+                    $(`.${idStatus}`).css('color','yellow');
+                    // tạo lượt thích bài viết cho user
+                    myLike = {
+                        image : userImage,
+                        _id : userId,
+                        name : name
+                    }
+                    likes.push(myLike)
+
+                    console.log("likes new:",likes.length)
+                    data.Status.like = (JSON.stringify(likes))
+                }
             }
+            fetch(`http://localhost:3000/status/${idStatus}`,{
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data.Status)
+            })
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    console.log(json)
+                }
+            }).catch(e => console.log(e))
         })
     })
 }
@@ -180,7 +226,7 @@ $(document).ready(function () {
                             <hr>
                             <!--Interative-->
                             <div class="d-flex justify-content-between align-items-centerl mx-5">
-                                <div class="like" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${json.Status._id}">
+                                <div class="like ${json.Status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${json.Status._id}">
                                     <i class="fa fa-thumbs-up"></i> <span>Thích</span>
                                 </div>
                                 <div class="cmts">

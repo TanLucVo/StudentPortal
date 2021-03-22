@@ -1113,6 +1113,9 @@ body {
     height: 50px;
     width: 50px
 }
+.index-page .like .change-like {
+    color: blue;
+}
 
 .nameOfUser {
     font-weight: 600

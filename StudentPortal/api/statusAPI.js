@@ -7,7 +7,7 @@ const statusModel = require('../models/status')
 
 
 // api status: GET POST PUT DELETE
-
+// TẤT CẢ ĐỀU SÀI _id của mongodb tự động tạo để sử dụng CRUD
 // GET
 
 router.get('/', authenticateToken,async function(req, res, next) {
@@ -57,68 +57,79 @@ router.post('/', authenticateToken,async function(req, res, next) {
                 message: 'data error. Please try again.',
                 error: error.message,
         });
-        }
-        else {
-        const data = req.body
-        const status = new statusModel({
-            statusId: mongoose.Types.ObjectId(),
-            author: data.author,
-            like: undefined,
-            statusTitle: data.statusTitle,
-            dateModified: new Date(),
-            image: data.image
-        })
-        await status
-        .save()
-        .then((newStatus) => {
-            return res.status(201).json({
-            success: true,
-            message: 'New status created successfully',
-            Status: newStatus,
-            });
-        })
-        .catch((error) => {
-            console.log(error);
-            res.status(500).json({
-            success: false,
-            message: 'Server error. Please try again.',
-            error: error.message,
-            });
+    }
+    else {
+    const data = req.body
+    const status = new statusModel({
+        statusId: mongoose.Types.ObjectId(),
+        author: data.author,
+        like: undefined,
+        statusTitle: data.statusTitle,
+        dateModified: new Date(),
+        image: data.image
+    })
+    await status
+    .save()
+    .then((newStatus) => {
+        return res.status(201).json({
+        success: true,
+        message: 'New status created successfully',
+        Status: newStatus,
         });
-        }
+    })
+    .catch((error) => {
+        console.log(error);
+        res.status(500).json({
+        success: false,
+        message: 'Server error. Please try again.',
+        error: error.message,
+        });
+    });
+    }
 })
 
 // PUT
 
 router.put('/:id' ,authenticateToken,async function(req, res, next) {
-    const log =  await statusModel.findOneAndUpdate(
-        {_id: req.params.id},
-        {
-            author: req.body.author,
-            statusTitle: req.body.statusTitle,
-            image: req.body.image
-        },
-        {
-            useFindAndModify: false,
-            upsert: false,
-            new: true
-        }
-    )
-    .exec()
-    .then((oldStatus) => {
-        return res.status(200).json({
-            success: true,
-            message: 'this status was updated successfully',
-            Status: oldStatus,
+    if (!req.body) {
+        return res.status(500).json({
+                success: false,
+                message: 'data error. Please try again.',
+                error: error.message,
         });
-    })
-    .catch((err) => {
-        res.status(500).json({
-            success: false,
-            message: 'Server error. Please try again.',
-            error: err.message,
+    }
+    else {
+        const log =  await statusModel.findOneAndUpdate(
+            {_id: req.params.id},
+            {
+                author: req.body.author,
+                statusTitle: req.body.statusTitle,
+                image: req.body.image,
+                like: req.body.like,
+                dateModified: req.body.dateModified
+            },
+            {
+                useFindAndModify: false,
+                upsert: false,
+                new: true
+            }
+        )
+        .exec()
+        .then((oldStatus) => {
+            return res.status(200).json({
+                success: true,
+                message: 'this status was updated successfully',
+                Status: oldStatus,
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                success: false,
+                message: 'Server error. Please try again.',
+                error: err.message,
+            });
         });
-    });
+    }
 })
 
 // DELETE
