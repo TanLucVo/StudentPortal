@@ -136,7 +136,7 @@
         }
         #editor {
             min-height: 10em !important;
-            max-height: 40em !important;
+            max-height: 35em !important;
             border: 1px solid rgba(0, 0, 0, .125);;
         }
         #editor:focus {
@@ -452,7 +452,7 @@
                     
                 })
             })
-            DecoupledEditor
+            var editorNotification = DecoupledEditor
             .create( document.querySelector( '.notificationPage #editor' ) )
             .then( editor => {
                 const toolbarContainer = document.querySelector( '.notificationPage #toolbar-container' );
@@ -472,13 +472,14 @@
                     try {
                         $.post( "/api/notification",{title:title, content:content, department:department, author:author}, function( data, status ) {
                             console.log(data)
-                        if(!data.message.msg){
+                        if(data.data){
                             $("#formAddNotification input").val("")
                             $("#formAddNotification #editor").html(`<p><br data-cke-filler="true"></p>`)
                             $(".messageAddNotification").addClass('text-success').removeClass('text-danger').text("Thêm thông báo thành công ")
                             
                         }else{
-                            let errmessage = data.message.msg || "Không xác định lỗi"
+
+                            let errmessage = data.message.msg || data.message
                             $(".messageAddNotification").addClass('text-danger').removeClass('text-success').text("Thêm thông báo thất bại: "+ errmessage)
                         }
                     });
