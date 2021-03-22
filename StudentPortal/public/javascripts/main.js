@@ -16,6 +16,7 @@ function getLikeStatus(element) {
         .then(data => {
             if (data.Status.like === undefined || data.Status.like === null) {
                 $(`.${idStatus}`).addClass("liked");
+                
                 likes = []
                 myLike = {
                     image : userImage,
@@ -23,6 +24,7 @@ function getLikeStatus(element) {
                     name : name
                 }
                 likes.push(myLike)
+                $('.viewed-like-user').text(likes.length)
                 // console.log(like)
                 data.Status.like = (JSON.stringify(likes))
             }
@@ -44,6 +46,7 @@ function getLikeStatus(element) {
                 // console.log("new likes:",new_likes.length)
                 if (check_user_like) {
                     $(`.${idStatus}`).removeClass("liked");
+                    $('.viewed-like-user').text(new_likes.length)
                     // gỡ lượt thích bài viết của user
                     data.Status.like = (JSON.stringify(new_likes))
                 }
@@ -56,7 +59,7 @@ function getLikeStatus(element) {
                         name : name
                     }
                     likes.push(myLike)
-
+                    $('.viewed-like-user').text(likes.length)
                     // console.log("likes new:",likes.length)
                     data.Status.like = (JSON.stringify(likes))
                 }
@@ -197,6 +200,12 @@ $(document).ready(function () {
                 .then(json => {
                     if (json.success) {
                         author = JSON.parse(json.Status.author)
+                        if (json.Status.like) {
+                            like = JSON.parse(json.Status.like)
+                        }
+                        else{
+                            like = 0
+                        }
                         var htmlString =
                         `<div class="card">
                             <!--Information of post's user-->
@@ -220,7 +229,7 @@ $(document).ready(function () {
                             <!-- Number of Comment and Interactive-->
                             <div class="d-flex justify-content-between align-items-centerl">
                                 <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
-                                    <span><i class="fa fa-thumbs-up"></i><a href=""> nam,loi,link,...</a> </span>
+                                    <span><i class="fa fa-thumbs-up"></i><a href=""> ${like}</a> </span>
                                 </div>
                                 <div class="d-flex flex-row interactive_color m-3">
                                     <span class="mr-3 cmt">Bình luận</span>
