@@ -136,8 +136,8 @@ $(document).ready(function () {
                                     </div>
                                 </div>
                                 <!--Time and more-->
-                                <div class="d-flex flex-row mt-2 time">
-                                    <small class="mr-2">30 mins</small><i class="fa fa-ellipsis-h mr-4"></i>
+                                <div class="time-and-more d-flex flex-row mt-2">
+                                <small class="mr-2">${json.Status.currentTime}</small><i class="fas fa-ellipsis-v"></i>
                                 </div>
                             </div>
                             <!--Area of post-->

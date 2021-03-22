@@ -93,7 +93,9 @@ router.put('/:id' ,authenticateToken,async function(req, res, next) {
     const log =  await statusModel.findOneAndUpdate(
         {_id: req.params.id},
         {
-            statusTitle: req.body.statusTitle
+            author: req.body.author,
+            statusTitle: req.body.statusTitle,
+            image: req.body.image
         },
         {
             useFindAndModify: false,

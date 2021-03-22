@@ -5,6 +5,7 @@ const {authenticateToken} = require('../config/token')
 const multer = require('multer')
 const fs = require('fs')
 const fetch = require("node-fetch");
+const {getCurrentTime} = require('../config/currentTime')
 
 
 // express.static middleware -> ảnh từ phía client ko thể lấy qua server được cần thiết lập express.static
@@ -46,6 +47,13 @@ router.get('/' , authenticateToken, function(req, res) {
         arraySortStatus = JSON.parse(json).Status
         arraySortStatus.sort(function(a,b){
             return new Date(b.dateModified) - new Date(a.dateModified);
+        });
+        arraySortStatus.forEach(status => {
+
+            startTime = new Date(status.dateModified)
+            endTime = new Date()
+            const currentTime = getCurrentTime(startTime, endTime)
+            status["currentTime"] = currentTime
         });
         return res.render('index',{user: req.user, allStatus: arraySortStatus});
     })
@@ -90,7 +98,10 @@ router.post('/', authenticateToken, upload.single('imageStatus'), async function
         .then(res => res.json())
         .then(json => {
             // console bên node server
-            // console.log(json)
+            startTime = new Date(json.Status.dateModified)
+            endTime = new Date()
+            const currentTime = getCurrentTime(startTime, endTime)
+            json.Status["currentTime"] = currentTime
             return res.json(json)
         })
         .catch(e => {

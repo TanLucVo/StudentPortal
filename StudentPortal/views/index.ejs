@@ -75,20 +75,20 @@
                                                 <!--Information of post's user-->
                                                 <div class="d-flex justify-content-between p-2 px-2">
                                                     <div class="d-flex flex-row align-items-center">
-                                                        <img src="<%= JSON.parse(status.author).image %>" alt="" class="rounded-circle" width="52">
+                                                        <img src="<%= JSON.parse(status.author).image %>" alt="" class="image-user rounded-circle" width="52">
                                                         <div class="d-flex flex-column ml-2">
                                                             <span class="font-weight-bold"><%= JSON.parse(status.author).fullName %></span>
                                                             <small class="text-primary">Thông tin</small>
                                                         </div>
                                                     </div>
                                                     <!--Time and more-->
-                                                    <div class="d-flex flex-row mt-2 time">
-                                                        <small class="mr-2">30 mins</small><i class="fa fa-ellipsis-h mr-4"></i>
+                                                    <div class="time-and-more d-flex flex-row mt-2">
+                                                        <small class="mr-2"><%= status.currentTime %></small><i class="fas fa-ellipsis-v"></i>
                                                     </div>
                                                 </div>
                                                 <!--Area of post-->
                                                 <hr style="border: none;">
-                                                <p class="text-justify ml-3"><%= status.statusTitle %> </p>
+                                                <p class="text-justify ml-3 statusId"><%= status.statusTitle %> </p>
                                                 <img src="<%= status.image %>" alt="" class="img-fluid">
                                                 <!-- Number of Comment and Interactive-->
                                                 <div class="d-flex justify-content-between align-items-centerl">

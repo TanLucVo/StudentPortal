@@ -1057,6 +1057,10 @@ body {
     font-family: "Time New Roman", sans-serif;
     font-weight: 300
 }
+.index-page .image-user {
+    width: 45px;
+    height: 45px;
+}
 
 .index-page .row {
     margin-top: 15px
@@ -1066,8 +1070,11 @@ body {
     border: none
 }
 
-.time {
-    color: #a09c9c
+.time-and-more {
+    color: #a09c9c;
+}
+.time-and-more:hover {
+    cursor: pointer;
 }
 
 .interactive_color {
@@ -4342,6 +4349,10 @@ nav.breadcrumb {
     border: medium none;
     border-radius: 0;
     margin-bottom: 5px;
+}
+
+.text-justify {
+    margin-right: 15px;
 }
 
 .accordion .card h5 button {
