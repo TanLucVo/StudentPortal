@@ -1,14 +1,11 @@
 // -------------------------------------------------------------------------------------------- //
 // Index Page
 
-// widget
-// ------------------
-// var link = document.createElement('link');
-// link.setAttribute("rel", "stylesheet");
-// link.setAttribute("type", "text/css");
-// link.onload = ()=> console.log("onload css");
-// link.setAttribute("href", '/stylesheets/style.css');
-// document.getElementsByTagName("head")[0].appendChild(link);
+// getLikeStatus
+function getLikeStatus(element) {
+    console.log(element.dataset.id)
+}
+
 $(document).ready(function () {
     const socket =io()
     socket.on('connect', handleConnectionSuccess);
@@ -157,7 +154,7 @@ $(document).ready(function () {
                             <hr>
                             <!--Interative-->
                             <div class="d-flex justify-content-between align-items-centerl mx-5">
-                                <div class="like">
+                                <div class="like" onclick="getLikeStatus(this)" data-idStatus="${json.Status._id}">
                                     <i class="fa fa-thumbs-up"></i> <span>Thích</span>
                                 </div>
                                 <div class="cmts">
@@ -193,6 +190,7 @@ $(document).ready(function () {
                 .catch(e => console.log(e))
         }
     });
+
     //dashboardDepartment
     $(".dashboardDepartment .row img ").each(function (k, v) {
         v.onload = function () {
