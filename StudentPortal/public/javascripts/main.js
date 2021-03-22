@@ -4,15 +4,26 @@
 // getLikeStatus
 function getLikeStatus(element) {
     const idStatus = element.dataset.id
+    const userImage = element.dataset.image
+    const userId = element.dataset.userid
+    const name = element.dataset.name
     $(document).ready(function () {
         fetch(`http://localhost:3000/status/${idStatus}`,{
             method: 'GET'
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data.Status)
             if (data.Status.like === undefined) {
-
+                like = []
+                myLike = {
+                    image : userImage,
+                    _id : userId,
+                    name : name
+                }
+                like.push(myLike)
+                console.log(like)
+                data.Status.like = JSON.stringify(like)
+                console.log(data.Status)
             }
             else {
                 
@@ -109,7 +120,7 @@ $(document).ready(function () {
         // console.log(statusTitle)
         // console.log(file_data)
         var form_data = new FormData();
-        userId = e.target.dataset.userId
+        userId = e.target.dataset.id
         image = e.target.dataset.image
         fullName = e.target.dataset.name
         var user = {
@@ -169,7 +180,7 @@ $(document).ready(function () {
                             <hr>
                             <!--Interative-->
                             <div class="d-flex justify-content-between align-items-centerl mx-5">
-                                <div class="like" onclick="getLikeStatus(this)" data-id="${json.Status._id}">
+                                <div class="like" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${json.Status._id}">
                                     <i class="fa fa-thumbs-up"></i> <span>Thích</span>
                                 </div>
                                 <div class="cmts">
