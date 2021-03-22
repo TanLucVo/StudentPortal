@@ -3,7 +3,6 @@
 
 // getLikeStatus
 function getLikeStatus(element) {
-    $()
     const idStatus = element.dataset.id
     const userImage = element.dataset.image
     const userId = element.dataset.userid
