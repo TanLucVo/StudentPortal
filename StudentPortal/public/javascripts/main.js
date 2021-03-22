@@ -85,11 +85,15 @@ $(document).ready(function () {
         console.log("Mat ket noi voi server");
     });
     socket.on('list-users', handleUserList);
-    socket.on('add-notification', (data)=> {
+    socket.on('add-notification', (data) => {
+        
+        $("#getNotification").fadeIn()
+        
         $("#getNotification strong").text(data.department +" Đã đăng một thông báo")
         $("#getNotification small").text(Math.floor((Date.now() - data.createAt) / 1000) +" giây trước")
         $("#getNotification .toast-body").text(data.title)
         $(".toast").toast('show')
+        $("#getNotification").delay(5000).fadeOut()
     });
     function handleUserList(user){
         console.log(user)

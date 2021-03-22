@@ -8,6 +8,7 @@ body {
     min-height:100vh;
 }
 #getNotification{
+    display: none;
     position: fixed;
     z-index: 100000;
     min-width: 30%;
