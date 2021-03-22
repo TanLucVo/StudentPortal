@@ -55,6 +55,18 @@ router.get('/' , authenticateToken, function(req, res) {
             const currentTime = getCurrentTime(startTime, endTime)
             status["currentTime"] = currentTime
         });
+        // parse array like - json
+        checkLike = false
+        arraySortStatus.forEach(status => {
+            status.like = JSON.parse(status.like)
+            status.like.forEach(l => {
+                if (req.user._id == l._id) {
+                    checkLike = true
+                }
+            });
+            status.checkLike = checkLike
+        });
+        console.log(arraySortStatus)
         return res.render('index',{user: req.user, allStatus: arraySortStatus});
     })
     .catch(e => {

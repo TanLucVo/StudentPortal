@@ -15,7 +15,7 @@ function getLikeStatus(element) {
         .then(res => res.json())
         .then(data => {
             if (data.Status.like === undefined || data.Status.like === null) {
-                $(`.${idStatus}`).css('color','yellow');
+                $(`.${idStatus}`).addClass("liked");
                 likes = []
                 myLike = {
                     image : userImage,
@@ -27,13 +27,12 @@ function getLikeStatus(element) {
                 data.Status.like = (JSON.stringify(likes))
             }
             else {
-                $(`.${idStatus}`).css('color','black');
                 likes = JSON.parse(data.Status.like)
                 // console.log(idStatus)
                 // kiểm tra user đã like bài viết hay chưa
                 let new_likes = []
                 let check_user_like = false
-                console.log("old likes:",likes.length)
+                // console.log("old likes:",likes.length)
                 likes.forEach((like,index) => {
                     if (like._id === userId) {
                         check_user_like = true
@@ -42,13 +41,14 @@ function getLikeStatus(element) {
                         new_likes.push(like)
                     }
                 });
-                console.log("new likes:",new_likes.length)
+                // console.log("new likes:",new_likes.length)
                 if (check_user_like) {
+                    $(`.${idStatus}`).removeClass("liked");
                     // gỡ lượt thích bài viết của user
                     data.Status.like = (JSON.stringify(new_likes))
                 }
                 else {
-                    $(`.${idStatus}`).css('color','yellow');
+                    $(`.${idStatus}`).addClass("liked");
                     // tạo lượt thích bài viết cho user
                     myLike = {
                         image : userImage,
@@ -57,7 +57,7 @@ function getLikeStatus(element) {
                     }
                     likes.push(myLike)
 
-                    console.log("likes new:",likes.length)
+                    // console.log("likes new:",likes.length)
                     data.Status.like = (JSON.stringify(likes))
                 }
             }
@@ -71,7 +71,7 @@ function getLikeStatus(element) {
             .then(res => res.json())
             .then(json => {
                 if (json.success) {
-                    console.log(json)
+                    // console.log(json)
                 }
             }).catch(e => console.log(e))
         })

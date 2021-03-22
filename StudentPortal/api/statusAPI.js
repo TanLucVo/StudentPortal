@@ -12,7 +12,7 @@ const statusModel = require('../models/status')
 
 router.get('/', authenticateToken,async function(req, res, next) {
     await statusModel.find()
-    .select('_id author statusTitle statusId dateModified image')
+    .select('_id author statusTitle statusId dateModified like image')
     .then((allStatus) => {
       return res.status(200).json({
         success: true,
