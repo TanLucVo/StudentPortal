@@ -56,17 +56,32 @@ router.get('/' , authenticateToken, function(req, res) {
             status["currentTime"] = currentTime
         });
         // parse array like - json
-        checkLike = false
-        arraySortStatus.forEach(status => {
-            status.like = JSON.parse(status.like)
-            status.like.forEach(l => {
-                if (req.user._id == l._id) {
-                    checkLike = true
-                }
-            });
-            status.checkLike = checkLike
-        });
+        let checkLike = false
         console.log(arraySortStatus)
+        // console.log(arraySortStatus)
+        arraySortStatus.forEach(status => {
+            // parse thành json
+            // lúc khởi tạo status.like chưa có trong model vì vậy ta phải kiểm tra tính xác thức của nó
+            if (!status.like) {
+                status.like = []
+                status.checkLike = false
+            }
+            else {
+                status.like = JSON.parse(status.like)
+                status.like.forEach(l => {
+                    if (req.user._id == l._id) {
+                        checkLike = true
+                    }
+                });
+                status.checkLike = checkLike
+                // gắn lại giá trị default cho biến checkLike để sử dụng cho element vòng lặp kế tiếp
+                checkLike = false
+            }
+        });
+        // console.log("check_like old",checkLike)
+
+        // console.log("check_like old",checkLike)
+
         return res.render('index',{user: req.user, allStatus: arraySortStatus});
     })
     .catch(e => {
