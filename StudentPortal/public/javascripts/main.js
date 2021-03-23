@@ -385,6 +385,9 @@ $(document).ready(function () {
 
    
 });
+$(".notificationPage").ready(()=>{
+    console.log("notificationPage ready")
+})
 
 
 

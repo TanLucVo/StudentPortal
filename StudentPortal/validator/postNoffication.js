@@ -9,6 +9,4 @@ module.exports = [
     check('department').exists().withMessage('Thiếu mã phòng khoa')
     .notEmpty().withMessage('Mã phòng khoa không được để trống'),
 
-    check('author').exists().withMessage('Thiếu tác giả')
-    .notEmpty().withMessage('Tác giả không được để trống')
 ]
