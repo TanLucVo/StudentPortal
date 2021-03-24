@@ -100,7 +100,7 @@ $(document).ready(function () {
         <div class="vertical-timeline-item vertical-timeline-element">
             <div>
                 <span class="vertical-timeline-element-icon bounce-in">
-                    <i class="badge badge-dot badge-dot-xl badge-success"></i>
+                    <i class="far fa-dot-circle"></i>
                 </span>
                 <div class="vertical-timeline-element-content bounce-in">
                     <h4 class="timeline-title">${data.departmentName}</h4>
@@ -435,7 +435,7 @@ if($(".index-page")[0]){
                 <div class="vertical-timeline-item vertical-timeline-element">
                     <div>
                         <span class="vertical-timeline-element-icon bounce-in">
-                            <i class="badge badge-dot badge-dot-xl badge-success"></i>
+                            <i class="far fa-dot-circle"></i>
                         </span>
                         <div class="vertical-timeline-element-content bounce-in">
                             <h4 class="timeline-title">${i.author}</h4>
@@ -482,7 +482,7 @@ if($(".index-page")[0]){
                         <div class="vertical-timeline-item vertical-timeline-element">
                             <div>
                                 <span class="vertical-timeline-element-icon bounce-in">
-                                    <i class="badge badge-dot badge-dot-xl badge-success"></i>
+                                    <i class="far fa-dot-circle"></i>
                                 </span>
                                 <div class="vertical-timeline-element-content bounce-in">
                                     <h4 class="timeline-title">${i.author}</h4>
