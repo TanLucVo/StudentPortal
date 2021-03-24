@@ -106,7 +106,7 @@ $(document).ready(function () {
                     <h4 class="timeline-title">${data.departmentName}</h4>
                     <p>${data.title}</p>
                     <a href="/notification/${data.department}/${data.id}">Xem chi tiết</a>
-                    <span class="vertical-timeline-element-date">${getPassedTime(data.createAt,Date.now())}</span>
+                    <span class="vertical-timeline-element-date" data-time=${data.createAt}>${getPassedTime(data.createAt,Date.now())}</span>
                 </div>
             </div>
         </div>
@@ -307,99 +307,7 @@ $(document).ready(function () {
         v.src = v.src;
     });
 
-    // addDepartment
-    $(".addDepartment").ready(()=>{
-        $.ajaxSetup({
-            traditional: true
-        });
-    
-        var uppyDepartment = Uppy.Core({
-                restrictions: {
-                    maxFileSize: 3145728,
-                    maxNumberOfFiles: 1,
-                    minNumberOfFiles: 1,
-                    allowedFileTypes: ["image/*"]
-                }
-            })
-            .use(Dashboard, {
-                trigger: '.addDepartment #register',
-                inline: true,
-                target: '.addDepartment #drag-drop-area',
-                replaceTargetContent: true,
-                showProgressDetails: true,
-                note: 'Images and video only 1 file, up to 3MB',
-                height: 300,
-                metaFields: [{
-                    id: 'caption',
-                    name: 'Caption',
-                    placeholder: 'describe what the image is about'
-                }],
-                hideUploadButton: true
-            })
-        uppyDepartment.on('file-added', (file) => {
-            console.log(file);
-            uppy.setFileMeta(file.meta.id, {
-                caption: file.name
-            });
-        });
-    
-        uppyDepartment.use(Uppy.XHRUpload, {
-    
-            id: 'XHRUpload',
-            endpoint: 'http://localhost:3000/upload-image',
-            method: 'POST',
-            formData: true,
-            fieldName: 'my_fieldName',
-            metaFields: ['caption'],
-    
-        });
-    
-        uppyDepartment.on('upload-success', (file, response) => {
-            $('.addDepartment #urlImage').val(response.uploadURL)
-            $(".addDepartment .register-form").submit()
-        });
-        $(".addDepartment #register").click(function () {
-            uppyDepartment.upload()
-        })
-        $(".addDepartment .register-form").submit(e => {
-            e.preventDefault();
-            let department = []
-            $(".addDepartment input:checkbox:checked").each(function () {
-                department.push($(this).val());
-            });
-            let user = {
-                username: $('.addDepartment #username').val(),
-                pass: $('.addDepartment #pass').val(),
-                re_pass: $('.addDepartment #re_pass').val(),
-                name: $('.addDepartment #name').val(),
-                maphong: $('.addDepartment #maphong').val(),
-                urlImage: $('.addDepartment #urlImage').val(),
-                department: department
-            }
-            $.post("", user)
-                .done(function (res) {
-                    if (res.success) {
-                        $(".addDepartment .alert").removeClass("alert-danger")
-                        $(".addDepartment .alert").addClass("alert-success")
-                        $(".addDepartment .alert").text(res.mess)
-                        $('.addDepartment #myCollapsible').collapse('show')
-                        $('.addDepartment input').val("")
-                        uppyDepartment.reset()
-                    } else {
-                        $(".addDepartment .alert").removeClass("alert-success")
-                        $(".addDepartment .alert").addClass("alert-danger")
-                        $(".addDepartment .alert").text(res.mess)
-                        $('.addDepartment #myCollapsible').collapse('show')
-    
-                    }
-                });
-            $('.addDepartment input').on("keypress change ", () => {
-                $('.addDepartment #myCollapsible').collapse('hide')
-            })
-        })
-    })
-
-   
+ 
 });
 $(".notificationPage").ready(()=>{
     console.log("notificationPage ready")
@@ -421,6 +329,17 @@ const getPassedTime = (startTime, endTime) => {
 }
 
 if($(".index-page")[0]){
+
+    var myVar = setInterval(myTimer, 60000);
+
+    function myTimer() {
+        let a= $('.vertical-timeline-element-content .vertical-timeline-element-date');
+        
+        $.each(a,(i,item)=>{
+            item.innerHTML = getPassedTime(parseInt(item.dataset.time),Date.now())
+        })
+    }
+    
     let page =1
     $(".loading").show()
     fetch('/api/notification', {
@@ -441,7 +360,7 @@ if($(".index-page")[0]){
                             <h4 class="timeline-title">${i.author}</h4>
                             <p>${i.title}</p>
                             <a href="/notification/${i.department}/${i._id}">Xem chi tiết</a>
-                            <span class="vertical-timeline-element-date">${getPassedTime(i.createAt,Date.now())}</span>
+                            <span class="vertical-timeline-element-date" data-time=${i.createAt}>${getPassedTime(i.createAt,Date.now())}</span>
                         </div>
                     </div>
                 </div>
@@ -449,6 +368,7 @@ if($(".index-page")[0]){
         }
         $('.vertical-timeline').append($('.spinerLoadingNotification'))
         $('.spinerLoadingNotification').hide()
+        
 
     })
     .catch((error) => {
@@ -488,7 +408,7 @@ if($(".index-page")[0]){
                                     <h4 class="timeline-title">${i.author}</h4>
                                     <p>${i.title}</p>
                                     <a href="/notification/${i.department}/${i._id}">Xem chi tiết</a>
-                                    <span class="vertical-timeline-element-date">${getPassedTime(i.createAt,Date.now())}</span>
+                                    <span class="vertical-timeline-element-date" data-time=${i.createAt}>${getPassedTime(i.createAt,Date.now())}</span>
                                 </div>
                             </div>
                         </div>
@@ -509,6 +429,96 @@ if($(".index-page")[0]){
 
 }
 
+
+   // addDepartment
+if($(".addDepartment")[0]){
+    $.ajaxSetup({
+        traditional: true
+    });
+    var uppyDepartment = Uppy.Core({
+            restrictions: {
+                maxFileSize: 3145728,
+                maxNumberOfFiles: 1,
+                minNumberOfFiles: 1,
+                allowedFileTypes: ["image/*"]
+            }
+        })
+        .use(Uppy.Dashboard, {
+            trigger: '#register',
+            inline: true,
+            target: '#drag-drop-area',
+            replaceTargetContent: true,
+            showProgressDetails: true,
+            note: 'Images and video only 1 file, up to 3MB',
+            height: 300,
+            metaFields: [{
+                id: 'caption',
+                name: 'Caption',
+                placeholder: 'describe what the image is about'
+            }],
+            hideUploadButton: true
+        })
+    uppyDepartment.on('file-added', (file) => {
+        console.log(file);
+        uppy.setFileMeta(file.meta.id, {
+            caption: file.name
+        });
+    });
+    uppyDepartment.use(Uppy.XHRUpload, {
+
+        id: 'XHRUpload',
+        endpoint: 'http://localhost:3000/upload-image',
+        method: 'POST',
+        formData: true,
+        fieldName: 'my_fieldName',
+        metaFields: ['caption'],
+
+    });
+
+    uppyDepartment.on('upload-success', (file, response) => {
+        $('.addDepartment #urlImage').val(response.uploadURL)
+        $(".addDepartment .register-form").submit()
+    });
+    $(".addDepartment #register").click(function () {
+        uppyDepartment.upload()
+    })
+    $(".addDepartment .register-form").submit(e => {
+        e.preventDefault();
+        let department = []
+        $(".addDepartment input:checkbox:checked").each(function () {
+            department.push($(this).val());
+        });
+        let user = {
+            username: $('.addDepartment #username').val(),
+            pass: $('.addDepartment #pass').val(),
+            re_pass: $('.addDepartment #re_pass').val(),
+            name: $('.addDepartment #name').val(),
+            maphong: $('.addDepartment #maphong').val(),
+            urlImage: $('.addDepartment #urlImage').val(),
+            department: department
+        }
+        $.post("", user)
+            .done(function (res) {
+                if (res.success) {
+                    $(".addDepartment .alert").removeClass("alert-danger")
+                    $(".addDepartment .alert").addClass("alert-success")
+                    $(".addDepartment .alert").text(res.mess)
+                    $('.addDepartment #myCollapsible').collapse('show')
+                    $('.addDepartment input').val("")
+                    uppyDepartment.reset()
+                } else {
+                    $(".addDepartment .alert").removeClass("alert-success")
+                    $(".addDepartment .alert").addClass("alert-danger")
+                    $(".addDepartment .alert").text(res.mess)
+                    $('.addDepartment #myCollapsible').collapse('show')
+
+                }
+            });
+        $('.addDepartment input').on("keypress change ", () => {
+            $('.addDepartment #myCollapsible').collapse('hide')
+        })
+    })
+}
 
 
 // -------------------------------------------------------------------------------------------- //

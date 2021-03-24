@@ -383,7 +383,8 @@
                     
                 })
             })
-            DecoupledEditor
+            if($(".notificationPage #editor")[0]){
+                DecoupledEditor
             .create( document.querySelector( '.notificationPage #editor' ) )
             .then( editor => {
                 const toolbarContainer = document.querySelector( '.notificationPage #toolbar-container' );
@@ -419,6 +420,8 @@
                     }
                    
             })
+            }
+            
         })
     </script>
 </body>
