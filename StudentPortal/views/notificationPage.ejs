@@ -208,7 +208,7 @@
                     <ul class="list-group rounded">
                         <% notification.forEach( item => { %>
                             <li class="list-group-item">
-                                <a class="font-weight-bold" href="#"><%=item.title %></a>
+                                <a class="font-weight-bold" href="/notification/<%= maphong%>/<%= item._id %>"><%=item.title %></a>
                                 <p class="font-italic">[<%=item.author %>] - <%=item.createAt %></p>
                             </li>
                         <% }) %>
