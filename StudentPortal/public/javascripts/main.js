@@ -92,11 +92,27 @@ $(document).ready(function () {
         
         $("#getNotification").fadeIn()
         
-        $("#getNotification strong").text(data.department +" Đã đăng một thông báo")
+        $("#getNotification strong").text(data.departmentName +" Đã đăng một thông báo")
         $("#getNotification small").text(Math.floor((Date.now() - data.createAt) / 1000) +" giây trước")
         $("#getNotification .toast-body").text(data.title)
         $(".toast").toast('show')
+        $(".vertical-timeline").prepend(`
+        <div class="vertical-timeline-item vertical-timeline-element">
+            <div>
+                <span class="vertical-timeline-element-icon bounce-in">
+                    <i class="badge badge-dot badge-dot-xl badge-success"></i>
+                </span>
+                <div class="vertical-timeline-element-content bounce-in">
+                    <h4 class="timeline-title">${data.departmentName}</h4>
+                    <p>${data.title}</p>
+                    <a href="/notification/${data.department}/${data.id}">Xem chi tiết</a>
+                    <span class="vertical-timeline-element-date">${getPassedTime(data.createAt,Date.now())}</span>
+                </div>
+            </div>
+        </div>
+    `)
         $("#getNotification").delay(5000).fadeOut()
+
     });
     function handleUserList(user){
         console.log(user)
@@ -388,6 +404,110 @@ $(document).ready(function () {
 $(".notificationPage").ready(()=>{
     console.log("notificationPage ready")
 })
+const getPassedTime = (startTime, endTime) => {
+    let passTime = Math.floor((endTime - startTime) / 1000)
+    let outputTime = ""
+    if (passTime < 60)
+        outputTime = passTime + " giây trước"
+    else if (passTime < (60 * 60))
+        outputTime = Math.floor(passTime / 60) + " phút trước"
+    else if (passTime < (60 * 60 * 60))
+        outputTime = Math.floor(passTime / (60 * 60)) + " giờ trước"
+    else if (passTime < (60 * 60 * 60 * 24))
+        outputTime = Math.floor(passTime / (60 * 60 * 24)) + " ngày trước"
+    else if (passTime < (60 * 60 * 60 * 24 * 30))
+        outputTime = Math.floor(passTime / (60 * 60 * 24 * 30)) + " tháng trước"
+    return outputTime
+}
+
+if($(".index-page")[0]){
+    let page =1
+    $(".loading").show()
+    fetch('/api/notification', {
+        method: 'GET', // or 'PUT'
+    })
+    .then(response => response.json())
+    .then(data => {
+        $(".loading").hide()
+        
+        for(let i of data.data){
+            $(".vertical-timeline").append(`
+                <div class="vertical-timeline-item vertical-timeline-element">
+                    <div>
+                        <span class="vertical-timeline-element-icon bounce-in">
+                            <i class="badge badge-dot badge-dot-xl badge-success"></i>
+                        </span>
+                        <div class="vertical-timeline-element-content bounce-in">
+                            <h4 class="timeline-title">${i.author}</h4>
+                            <p>${i.title}</p>
+                            <a href="/notification/${i.department}/${i._id}">Xem chi tiết</a>
+                            <span class="vertical-timeline-element-date">${getPassedTime(i.createAt,Date.now())}</span>
+                        </div>
+                    </div>
+                </div>
+            `)
+        }
+        $('.vertical-timeline').append($('.spinerLoadingNotification'))
+        $('.spinerLoadingNotification').hide()
+
+    })
+    .catch((error) => {
+        $(".loading").hide()
+        $('.spinerLoadingNotification').hide()
+        console.log('Error:', error);
+    });
+    $(".card-body").scroll(function() {
+        
+        if($('.card-body')[0].scrollHeight - $('.main-card').height() === $(".card-body").scrollTop()) {
+            console.log(`Loading....`);
+            $(".spinerLoadingNotification .spinner-border").show();
+            $(".spinerLoadingNotification p").hide()
+            $('.vertical-timeline').append($('.spinerLoadingNotification'))
+            $('.spinerLoadingNotification').show()
+            page +=1
+            fetch('/api/notification?page='+page, {
+                method: 'GET', // or 'PUT'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.data.length ===0){
+                    $(".spinerLoadingNotification .spinner-border").hide();
+                    $(".spinerLoadingNotification p").show()
+                    return 
+                }
+                $(".spinerLoadingNotification").hide()
+                let stringdata =''
+                for(let i of data.data){
+                    stringdata +=`
+                        <div class="vertical-timeline-item vertical-timeline-element">
+                            <div>
+                                <span class="vertical-timeline-element-icon bounce-in">
+                                    <i class="badge badge-dot badge-dot-xl badge-success"></i>
+                                </span>
+                                <div class="vertical-timeline-element-content bounce-in">
+                                    <h4 class="timeline-title">${i.author}</h4>
+                                    <p>${i.title}</p>
+                                    <a href="/notification/${i.department}/${i._id}">Xem chi tiết</a>
+                                    <span class="vertical-timeline-element-date">${getPassedTime(i.createAt,Date.now())}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+                $(".vertical-timeline").append(stringdata)
+                $('.vertical-timeline').append($('.spinerLoadingNotification'))
+                $(".spinerLoadingNotification").hide()
+        
+            })
+            .catch((error) => {
+                $('.vertical-timeline').append($('.spinerLoadingNotification'))
+                $(".spinerLoadingNotification").hide()
+                console.log('Error:', error);
+            });
+        }
+    });
+
+}
 
 
 

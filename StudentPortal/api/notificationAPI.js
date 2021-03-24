@@ -51,7 +51,7 @@ router.post('/',authenticateTokenAPI, postNofiticationValidator ,async (req,res)
                 return res.json({message:err})
             } 
             else { 
-                io.emit('add-notification',{title : title, id:data._id, department:department, createAt: newNofication.createAt})
+                io.emit('add-notification',{title : title, id:data._id, department:department, createAt: newNofication.createAt, departmentName:author})
                 return res.status(200).json({message:"Thêm thành công", data: data})
             } 
         }) 

@@ -21847,3 +21847,8 @@ a.btn2:hover,
 
     }
 }
+@media only screen and (max-width: 991px) {
+    .index-page .notification {
+       display:none
+    }
+}
