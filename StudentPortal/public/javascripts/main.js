@@ -141,12 +141,17 @@ $(document).ready(function () {
         $('.user-setting').removeClass("active");
         $(".fixed-sidebar.left").removeClass("open");
         $(".top-area > .setting-area > li > a").removeClass('active');
+        $('.index-page .side-panel').removeClass('active');
     });
 
     // top menu list
     $('.main-menu > span').on('click', function () {
         // slideToggle(): Hiển thị và ẩn các thành phần phù hợp với hiệu ứng chuyển động trượt (slide).
         $('.nav-list').slideToggle(300);
+    });
+
+    $('.index-page .setting-all').on('click', function() {
+        $('.index-page .side-panel').toggleClass('active');
     });
 
     //------- Notifications Dropdowns

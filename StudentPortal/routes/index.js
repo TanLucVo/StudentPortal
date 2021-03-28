@@ -57,7 +57,6 @@ router.get('/' , authenticateToken, function(req, res) {
         });
         // parse array like - json
         let checkLike = false
-        console.log(arraySortStatus)
         // console.log(arraySortStatus)
         arraySortStatus.forEach(status => {
             // parse thành json

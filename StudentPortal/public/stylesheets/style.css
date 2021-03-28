@@ -3816,7 +3816,7 @@ footer .widget .colla-apps>li a {
     top: 60px;
     width: 280px;
     z-index: 9999;
-    transition: all 0.3s linear 0s;
+    transition: all 1s linear 0s;
     border: 1px solid #dfdfdf;
 }
 
