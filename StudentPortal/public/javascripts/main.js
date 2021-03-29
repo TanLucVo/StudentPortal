@@ -154,6 +154,10 @@ $(document).ready(function () {
         $('.index-page .side-panel').toggleClass('active');
     });
 
+    $('.index-page .post-btn-preview').on('click', function() {
+        $('.index-page .preview-image-upload').toggleClass('active');
+    });
+
     //------- Notifications Dropdowns
     // $('.top-area > .setting-area > li > a > ').on("click",function(){
     //     var $parent = $(this).parent('li');

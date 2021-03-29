@@ -1084,6 +1084,15 @@ body {
     font-size: 15px
 }
 
+.preview-image-upload {
+    display: none;
+}
+
+.preview-image-upload.active {
+    transform: scaleX(1);
+    display: block;
+}
+
 .icons .fa-thumbs-up {
     color: darkblue;
 }
