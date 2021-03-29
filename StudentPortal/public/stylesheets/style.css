@@ -17371,6 +17371,9 @@ table.adition tbody tr td {
     .top-area {
         width: 86%;
     }
+    .fixed-sidebar {
+        display: none;
+    }
 }
 
 /*--- tablet landscape ---*/
@@ -17379,6 +17382,7 @@ table.adition tbody tr td {
     .user-img h5 {
         display: none;
     }
+
 
     .container {
         max-width: 1000px;
