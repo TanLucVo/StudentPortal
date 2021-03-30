@@ -9,6 +9,7 @@
     <style>
         .notificationPage {
             background-color: #ECEDF1;
+            overflow-y: hidden;
         }
 
         .notificationPage .list-group {
@@ -133,6 +134,11 @@
         }
         .notificationPage a{
             cursor: pointer;
+            word-break: break-all;
+        }
+        .notificationPage .font-italic{
+            text-align: right;
+            margin-bottom: 0;
         }
         #editor {
             min-height: 10em !important;
@@ -142,10 +148,79 @@
         #editor:focus {
             border: 1px solid #0e7fe1
         }
+        @keyframes placeHolderShimmer {
+            0%{ background-position: -468px 0; }
+            100%{ background-position: 468px 0; }
+        }
+        .animated-background {
+            animation-duration: 1.5s;
+            animation-fill-mode: forwards;
+            animation-iteration-count: infinite;
+            animation-timing-function: linear;
+            animation-name: placeHolderShimmer;
+            background: #f6f7f8;
+            background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+            background-size: 800px 104px;
+            height: 76px;
+            position: relative;
+        }
+        .background-masker {
+            background: #fff;
+            position: absolute;
+        }
+        .background-masker.font-weight-bold
+        {
+           top: 0;
+            left: 30%;
+            right: 0;
+            height: 24px;
+            width: 70%;
+        }
+        .background-masker.content{
+            top: 34px;
+            left: 40%;
+            right: 0;
+            height: 20px;
+            width: 60%;
+        }
+        .background-masker.head{
+            top: 24px;
+            left: 0;
+            right: 0;
+            height: 10px;
+            width: 100%;
+        }
+        .background-masker.body{
+            top: 54px;
+            /* left: 0; */
+            right: 30%;
+            height: 22px;
+            width: 70%;
+        }
+
+        .content{
+            text-overflow: ellipsis;
+        }
+        .content *{
+            text-overflow: ellipsis;
+            margin-bottom: 0px;
+        }
+        .tox.tox-silver-sink.tox-tinymce-aux{
+            z-index: 1000000000;
+        }
+        .list-group-item .title{
+            font-size: 16px;
+            color: #0061AD !important;
+            text-transform: uppercase;
+        }
+        .list-group-item .content a{
+            font-size: 14px;
+        }
+
         
         @import url(https://fonts.googleapis.com/css?family=Fjalla+One:400|Roboto:400,400italic,700);
     </style>
-    <script src="https://cdn.ckeditor.com/ckeditor5/26.0.0/decoupled-document/ckeditor.js"></script>
+    <script src="https://cdn.tiny.cloud/1/zxxv1vo3n50itg932q6td23m31i280ao91yke3hvl4ccabl1/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
 
 <body class="notificationPage">
@@ -183,15 +258,14 @@
                                                 <div id="toolbar-container"></div>
 
                                                 <!-- This container will become the editable. -->
-                                                <div  id="editor">
-                                                    <textarea name="content" id="content_editor"></textarea>
+                                                <div id="editor">
                                                 </div>
                                                 <p class="messageAddNotification mb-0"></p>
                                         </div>
 
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                                            <button type="submit"  class="btn btn-primary">Thêm</button>
+                                            <button type="submit"  class="btn btn-primary post_notification_button">Thêm</button>
                                         </div>
                                     </form>
 
@@ -207,7 +281,70 @@
                 <div class="col-lg-7 col-xl-8 col-md-12 col-sm-12">
                     
                     <ul class="list-group rounded list-notification">
-                        
+                        <li class="list-group-item ">
+                            <div class="animated-background">
+                                <a class="background-masker font-weight-bold " href="#"></a>
+                                <p class="background-masker head"></p>
+                                <div class="background-masker content">
+                                </div>
+                                <p class="background-masker body"></p>
+                            </div>
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="animated-background">
+                                <a class="background-masker font-weight-bold " href="#"></a>
+                                <p class="background-masker head"></p>
+                                <div class="background-masker content">
+                                </div>
+                                <p class="background-masker body"></p>
+                            </div>
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="animated-background">
+                                <a class="background-masker font-weight-bold " href="#"></a>
+                                <p class="background-masker head"></p>
+                                <div class="background-masker content">
+                                </div>
+                                <p class="background-masker body"></p>
+                            </div>
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="animated-background">
+                                <a class="background-masker font-weight-bold " href="#"></a>
+                                <p class="background-masker head"></p>
+                                <div class="background-masker content">
+                                </div>
+                                <p class="background-masker body"></p>
+                            </div>
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="animated-background">
+                                <a class="background-masker font-weight-bold " href="#"></a>
+                                <p class="background-masker head"></p>
+                                <div class="background-masker content">
+                                </div>
+                                <p class="background-masker body"></p>
+                            </div>
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="animated-background">
+                                <a class="background-masker font-weight-bold " href="#"></a>
+                                <p class="background-masker head"></p>
+                                <div class="background-masker content">
+                                </div>
+                                <p class="background-masker body"></p>
+                            </div>
+                        </li>
+                        <li class="list-group-item ">
+                            <div class="animated-background">
+                                <a class="background-masker font-weight-bold " href="#"></a>
+                                <p class="background-masker head"></p>
+                                <div class="background-masker content">
+                                </div>
+                                <p class="background-masker body"></p>
+                            </div>
+                        </li>
+
                     </ul>
 
                 </div>
@@ -220,10 +357,15 @@
                                 <div class="form-group">
                                     <label for="selectDepartment">Lọc theo phòng ban</label>
                                     <select name="phongban" class="form-control" id="selectDepartment">
-                                        <option></option>
-                                        <% department.forEach(function(item){ %>
-                                            <option value="<%= item.type %>"><%= item.name %></option>
-                                        <% }) %>
+                                        <%if(locals.maphong) { %>
+                                            <option disabled selected="selected" value="<%=maphong %>"><%=departmentName.name %></option>
+                                        <% }else{ %>
+                                            <option></option>
+                                            <% department.forEach(function(item){ %>
+                                                <option value="<%= item.type %>"><%= item.name %></option>
+                                            <% }) %>
+                                        <% } %>
+                                        
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -331,31 +473,55 @@
 
     <script>
         $(document).ready(async function(){
-            
-            const result = await fetch("../api/notification", {
-                method: "GET",
-                credentials: "same-origin",
+            try {
+                let maphong = $('#selectDepartment :selected').val()
+                console.log(maphong)
+                const result = await fetch("../api/notification?maphong="+maphong, {
+                    method: "GET",
+                    credentials: "same-origin",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+                
+                let data = await result.json();
+                data = data.data
 
-                headers: {
-                    "Content-Type": "application/json",
-                    // Cookie: `connect.sid=${req.cookies["connect.sid"]}; token=${req.cookies.token}`,
-                },
-            });
-            let data = await result.json();
-            data = data.data
-            data.forEach(e =>{
-                let d = new Date(e.createAt);
-                e.createAt = d.toJSON().slice(0,10).split('-').reverse().join('-')
-            })
-            data.forEach(item =>{
-                $(".list-notification").append(`
-                    <li class="list-group-item">
-                                    <a class="font-weight-bold" href="/notification/<%= maphong%>/${item._id}">${item.title}</a>
-                                    <p class="font-italic">[${item.author }] - ${item.createAt}</p>
-                    </li>
-                `)
-               
-            })
+                data.forEach(e =>{
+                    let d = new Date(e.createAt);
+                    e.createAt = d.toJSON().slice(0,10).split('-').reverse().join('-')
+                })
+                let stringdata = ''
+                
+                data.forEach(item =>{
+
+                    stringdata +=`
+                        <li class="list-group-item">
+                            <h4 class="title" >${item.title}</h4>
+                            <div class="content">
+                                <a href="/notification/<%= maphong%>/${item._id}">Chi tiết thông báo</a>
+                            </div>
+                            <p class="font-italic">[${item.author }] - ${item.createAt}</p>
+                        </li>
+                    `
+                })
+                let size =$(".background-masker").parent().parent().length
+                let count = 1
+                $(".background-masker").parent().parent().fadeTo("slow" , 0.7,function() {
+                    $(this).remove();
+                    if(count ===size ){
+
+                        $(".list-notification").append(stringdata)
+                    }
+                    count +=1
+                })
+                
+                
+            } catch (error) {
+                console.log(error)
+               $(".background-masker").parent().parent().fadeOut( function() { $(this).remove(); })
+            }
+            
             let months = ['January', 'February','March', 'April','May', 'June','July', 'August','September', 'October','November', 'December']
             let now =new Date();
             let indexMonth = now.getMonth()
@@ -405,30 +571,43 @@
                 })
             })
             if($(".notificationPage #editor")[0]){
-                DecoupledEditor
-            .create( document.querySelector( '.notificationPage #editor' ) )
-            .then( editor => {
-                const toolbarContainer = document.querySelector( '.notificationPage #toolbar-container' );
-
-                toolbarContainer.appendChild( editor.ui.view.toolbar.element );
-            } )
-            .catch( error => {
-                console.error( error );
-            } );
-            
-            $("#formAddNotification").submit(e=>{
-                e.preventDefault()
-                let title = $("#titleNotification").val()
-                let content = $("#editor").html().replace(`<p><br data-cke-filler="true"></p>`,"")
-                let department =$("#formAddNotification").data('url');
+                $(document).on('focusin', function (e) {
+                    if ($(e.target).closest(".tox-dialog").length) {
+                        e.stopImmediatePropagation();
+                    }
+                });
+                tinymce.init({
+                    selector: '#editor',
+                    height: 400,
+                    plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                    toolbar_mode: 'floating',
+                    plugins: [
+                        'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+                        'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+                        'table emoticons template paste help'
+                    ],
+                    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                    'bullist numlist outdent indent | link image | print preview media fullpage | ' +
+                    'forecolor backcolor emoticons | help',
+                    menu: {
+                        favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+                    },
+                    menubar: 'favs file edit view insert format tools table help',
+                });
+                
+                $(".post_notification_button").click(e=>{
+                    e.preventDefault()
+                    let title = $("#titleNotification").val()
+                    let content = tinyMCE.activeEditor.getContent({format : 'raw'})
+                    let department =$("#formAddNotification").data('url');
+                    console.log(title, content, department)
                     try {
                         $.post( "/api/notification",{title:title, content:content, department:department}, function( data, status ) {
                             console.log(data)
                         if(data.data){
                             $("#formAddNotification input").val("")
-                            $("#formAddNotification #editor").html(`<p><br data-cke-filler="true"></p>`)
+                            tinyMCE.activeEditor.setContent('');
                             $(".messageAddNotification").addClass('text-success').removeClass('text-danger').text("Thêm thông báo thành công ")
-                            
                         }else{
 
                             let errmessage = data.message.msg || data.message
@@ -439,8 +618,8 @@
                         console.log(error)
                         $(".messageAddNotification").addClass('text-danger').removeClass('text-success').text("Thêm thông báo thất bại")
                     }
-                   
-            })
+                    
+                })
             }
             
         })

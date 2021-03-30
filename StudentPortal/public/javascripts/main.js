@@ -90,6 +90,15 @@ $(document).ready(function () {
     socket.on('list-users', handleUserList);
     socket.on('add-notification', (data) => {
         
+        $(".notificationPage .list-notification").prepend(
+            ` <li class="list-group-item">
+                <h4 class="title" >${data.title}</h4>
+                <div class="content">
+                    <a href="/notification/${data.department}/${data.id}">Chi tiết thông báo</a>
+                </div>
+                <p class="font-italic">[${data.departmentName }] - ${new Date(data.createAt).toJSON().slice(0,10).split('-').reverse().join('-')}</p>
+            </li>`)
+
         $("#getNotification").fadeIn()
         
         $("#getNotification strong").text(data.departmentName +" Đã đăng một thông báo")

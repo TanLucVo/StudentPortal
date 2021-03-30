@@ -10,10 +10,16 @@ const Permission = require('../models/permission')
 const io = socketIO.io;
 
 
-router.get('/',authenticateTokenAPI ,async (req,res)=>{
+router.get('/', authenticateTokenAPI, async (req, res) => {
+
+    let {maphong} = req.query
+    let condition = {}
+    if (maphong) {
+        condition = {department: maphong}
+    }
     let {page, start, end, unread} = req.query
-    if(!page) page = 1
-    await Notification.find({}, (err, data) => {
+    if (!page) page = 1
+    await Notification.find(condition, (err, data) => {
         
         if (err){ 
             res.status(403).json({err: err})
@@ -23,7 +29,7 @@ router.get('/',authenticateTokenAPI ,async (req,res)=>{
             if(start && end ){
                 dataFilter = dataFilter.filter(e => e.createAt >= start && e.createAt <= end)
             }
-            dataFilter = dataFilter.slice((page-1)*10, page*10)
+            dataFilter = dataFilter.slice((page - 1) * 10, page * 10)
             res.status(200).json({ data: dataFilter })
         } 
     }).sort( { createAt : -1} )
