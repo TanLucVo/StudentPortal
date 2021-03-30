@@ -4,10 +4,12 @@ body {
     overflow-x: scroll !important;
     min-height: 100vh;
 }
-.mm-slideout{
-    min-height:100vh;
+
+.mm-slideout {
+    min-height: 100vh;
 }
-#getNotification{
+
+#getNotification {
     display: none;
     position: fixed;
     z-index: 100000;
@@ -15,6 +17,7 @@ body {
     bottom: 0;
     margin: 0 0 10px 20px;
 }
+
 .login-page {
     font-family: "Roboto", sans-serif;
     background-color: #f8fafb;
@@ -1059,6 +1062,7 @@ body {
     font-family: "Time New Roman", sans-serif;
     font-weight: 300
 }
+
 .index-page .image-user {
     width: 45px;
     height: 45px;
@@ -1075,6 +1079,7 @@ body {
 .time-and-more {
     color: #a09c9c;
 }
+
 .time-and-more:hover {
     cursor: pointer;
 }
@@ -1123,6 +1128,7 @@ body {
     height: 50px;
     width: 50px
 }
+
 .index-page .like .change-like {
     color: blue;
 }
@@ -4364,6 +4370,7 @@ nav.breadcrumb {
     border-radius: 0;
     margin-bottom: 5px;
 }
+
 .liked {
     color: blue;
 }
@@ -17380,6 +17387,7 @@ table.adition tbody tr td {
     .top-area {
         width: 86%;
     }
+
     .fixed-sidebar {
         display: none;
     }
@@ -21860,8 +21868,67 @@ a.btn2:hover,
 
     }
 }
+
 @media only screen and (max-width: 991px) {
     .index-page .notification {
-       display:none
+        display: none
+    }
+}
+
+.topbar .loader {
+    width: 100vw;;
+    position: absolute;
+    padding: 1px;
+    left: 0;
+    display: none;
+}
+
+.topbar .loader:before {
+    content: '';
+    /* border: 1px solid #fff; */
+    /* border-radius: 10px; */
+    position: absolute;
+    /* top: -4px; */
+    /* right: -4px; */
+    /* bottom: -4px; */
+    /* left: -4px; */
+    width: 100%;
+}
+
+.topbar .loader .loaderBar {
+    position: absolute;
+    border-radius: 10px;
+    top: 0;
+    right: 100%;
+    bottom: 0;
+    left: 0;
+    background: rgb(255, 255, 255);
+    width: 0;
+    animation: borealisBar 2s linear infinite;
+}
+
+@keyframes borealisBar {
+    0% {
+        left: 0%;
+        right: 100%;
+        width: 0%;
+    }
+
+    10% {
+        left: 0%;
+        right: 75%;
+        width: 25%;
+    }
+
+    90% {
+        right: 0%;
+        left: 75%;
+        width: 25%;
+    }
+
+    100% {
+        left: 100%;
+        right: 0%;
+        width: 0%;
     }
 }

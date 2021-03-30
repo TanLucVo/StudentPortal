@@ -33,22 +33,7 @@ router.get("/:id",authenticateToken, async function (req, res, next) {
 			},
 		],
 	});
-	let url = process.env.URL || "http://localhost:3000";
-	const result = await fetch(url + "/api/notification", {
-		method: "GET",
-		credentials: "same-origin",
-
-		headers: {
-			"Content-Type": "application/json",
-			Cookie: `connect.sid=${req.cookies["connect.sid"]}; token=${req.cookies.token}`,
-		},
-	});
-	let data = await result.json();
-	data = data.data
-	data.forEach(e =>{
-		let d = new Date(e.createAt);
-		e.createAt = d.toJSON().slice(0,10).split('-').reverse().join('-')
-	})
+	
 	let permissionToAdd = await Permission.findOne({
 		maphong: req.user.type,
 	});
@@ -67,7 +52,6 @@ router.get("/:id",authenticateToken, async function (req, res, next) {
 		departmentName: phong,
 		department: department,
 		isAdd: isAdd,
-		notification: data,
 		maphong:maphong
 	});
 });

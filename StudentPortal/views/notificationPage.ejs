@@ -142,7 +142,7 @@
         #editor:focus {
             border: 1px solid #0e7fe1
         }
-
+        
         @import url(https://fonts.googleapis.com/css?family=Fjalla+One:400|Roboto:400,400italic,700);
     </style>
     <script src="https://cdn.ckeditor.com/ckeditor5/26.0.0/decoupled-document/ckeditor.js"></script>
@@ -205,13 +205,9 @@
            
             <div class="row pt-1">
                 <div class="col-lg-7 col-xl-8 col-md-12 col-sm-12">
-                    <ul class="list-group rounded">
-                        <% notification.forEach( item => { %>
-                            <li class="list-group-item">
-                                <a class="font-weight-bold" href="/notification/<%= maphong%>/<%= item._id %>"><%=item.title %></a>
-                                <p class="font-italic">[<%=item.author %>] - <%=item.createAt %></p>
-                            </li>
-                        <% }) %>
+                    
+                    <ul class="list-group rounded list-notification">
+                        
                     </ul>
 
                 </div>
@@ -334,7 +330,32 @@
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
 
     <script>
-        $(document).ready(function(){
+        $(document).ready(async function(){
+            
+            const result = await fetch("../api/notification", {
+                method: "GET",
+                credentials: "same-origin",
+
+                headers: {
+                    "Content-Type": "application/json",
+                    // Cookie: `connect.sid=${req.cookies["connect.sid"]}; token=${req.cookies.token}`,
+                },
+            });
+            let data = await result.json();
+            data = data.data
+            data.forEach(e =>{
+                let d = new Date(e.createAt);
+                e.createAt = d.toJSON().slice(0,10).split('-').reverse().join('-')
+            })
+            data.forEach(item =>{
+                $(".list-notification").append(`
+                    <li class="list-group-item">
+                                    <a class="font-weight-bold" href="/notification/<%= maphong%>/${item._id}">${item.title}</a>
+                                    <p class="font-italic">[${item.author }] - ${item.createAt}</p>
+                    </li>
+                `)
+               
+            })
             let months = ['January', 'February','March', 'April','May', 'June','July', 'August','September', 'October','November', 'December']
             let now =new Date();
             let indexMonth = now.getMonth()
