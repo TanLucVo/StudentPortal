@@ -220,6 +220,7 @@
         
         @import url(https://fonts.googleapis.com/css?family=Fjalla+One:400|Roboto:400,400italic,700);
     </style>
+
 </head>
 
 <body class="notificationPage">
@@ -476,30 +477,17 @@
     <script src="/javascripts/main.js"></script>
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
-
+    <script src="https://momentjs.com/downloads/moment.js" type="text/javascript"></script>
     <script>
         $(document).ready(async function(){
             if($(".notificationPage")[0]){
-                try {
-                    let maphong = $('#selectDepartment :selected').val()
-                    console.log(maphong)
-                    const result = await fetch(window.parent.location.origin+"/api/notification?maphong="+maphong, {
-                        method: "GET",
-                        credentials: "same-origin",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    });
+                function displayNotification(data){
                     
-                    let data = await result.json();
-                    data = data.data
-
-                    data.forEach(e =>{
+                     data.forEach(e =>{
                         let d = new Date(e.createAt);
                         e.createAt = d.toJSON().slice(0,10).split('-').reverse().join('-')
                     })
                     let stringdata = ''
-                    console.log(data)
                     data.forEach(item =>{
 
                         stringdata +=`
@@ -522,6 +510,23 @@
                         }
                         count +=1
                     })
+                }
+                try {
+                    let maphong = $('#selectDepartment :selected').val()
+                    console.log(maphong)
+                    const result = await fetch(window.parent.location.origin+"/api/notification?maphong="+maphong, {
+                        method: "GET",
+                        credentials: "same-origin",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    
+                    let data = await result.json();
+                    data = data.data
+                    displayNotification(data)
+
+                   
                     
                     
                 } catch (error) {
@@ -555,29 +560,36 @@
                     $('.notificationPage .month').text(thisMonthString+" "+thisyear)
                 })
                 $(".notificationPage").ready(()=>{
-                    $('#beginDatepicker').datepicker({
+                    let startTimePicker = $('#beginDatepicker').datepicker({
                         uiLibrary: 'bootstrap4',
-                        change: function (e) {
-                            $('#beginDatepicker').attr('data-date',e.timeStamp)
-                        },
                         format: 'dd-mm-yyyy' 
                     });
-                    $('#endDatepicker').datepicker({
+                    let endTimePicker =$('#endDatepicker').datepicker({
                         uiLibrary: 'bootstrap4',
-                        change: function (e) {
-                            $('#endDatepicker').attr('data-date',e.timeStamp)
-                        },
                         format: 'dd-mm-yyyy' 
                     });
                     $(".notificationPage #form_filter").submit(async e=>{
                         e.preventDefault()
+                        $(".list-notification").children().remove()
+                        $(".list-notification").append(` <li class="list-group-item ">
+                                <div class="animated-background">
+                                    <a class="background-masker font-weight-bold " href="#"></a>
+                                    <p class="background-masker head"></p>
+                                    <div class="background-masker content">
+                                    </div>
+                                    <p class="background-masker body"></p>
+                                </div>
+                        </li>`.repeat(7))
                         const phongban = $("#selectDepartment").val()
                         const unread = $("#unread").is(":checked")
-                        const beginDatepicker = $("#beginDatepicker").data('date') || ""
-                        const endDatepicker = $("#endDatepicker").data('date') || ""
-                        console.log(phongban, unread, beginDatepicker, endDatepicker)
+
+                        const beginDatepicker = moment(`${$("#beginDatepicker").val()} 00:00:00`, "DD-MM>-YYYY hh:mm:ss").valueOf()  || 0
+                        const endDatepicker = moment.utc(`${$("#endDatepicker").val()} 23:59:59`, "DD-MM-YYYY hh:mm:ss").valueOf()  || Date.now()
+
+                        //moment
+
                         let url_getNotification = new URL(window.parent.location.origin+'/api/notification')
-                        let params = {page:phongban, unread: unread, start:beginDatepicker, end:endDatepicker}
+                        let params = {maphong:phongban, unread: unread, start:beginDatepicker, end:endDatepicker}
                         url_getNotification.search = new URLSearchParams(params).toString();
                         const getFilterNotification = await fetch(url_getNotification, {
                             method: "GET",
@@ -587,8 +599,8 @@
                             },
                         });
                         let data_notification = await getFilterNotification.json();
-                        // data_notification = data_notification.data_notification
-                        console.log(data_notification)
+                        
+                        displayNotification(data_notification.data)
                         
                     })
                 })
