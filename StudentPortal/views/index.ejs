@@ -239,9 +239,7 @@
         <div class="postoverlay"></div>
 
         <%- include partial/responsiveMenu.ejs %>
-
         <%- include partial/topbar.ejs %>
-
         <%- include partial/header-leftbar.ejs %>
 
         <section>
@@ -299,9 +297,12 @@
                                                     </ul>
 
                                                     <div class="preview-image-upload">
-                                                        <h1>
-                                                            PREVIEW IMAGE UPLOAD MULTI
-                                                        </h1>
+                                                        <div class="card card-outline-danger image-upload-preview" style="display: none">
+                                                            <span class="pull-right clickable close-icon close-preview-image" data-effect="fadeOut"><i class="fa fa-times"></i></span>
+                                                            <div class="card-block">
+                                                                <img id="output" width="200px">
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                     <button data-image="<%= user.image %>" data-name="<%= user.name %>"

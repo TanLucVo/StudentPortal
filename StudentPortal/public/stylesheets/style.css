@@ -1094,6 +1094,7 @@ body {
 }
 
 .preview-image-upload.active {
+    margin-top: 20px;
     transform: scaleX(1);
     display: block;
 }

@@ -2,6 +2,7 @@
 // Index Page
 
 // getLikeStatus
+
 function getLikeStatus(element) {
     const idStatus = element.dataset.id
     const userImage = element.dataset.image
@@ -203,23 +204,24 @@ $(document).ready(function () {
     // -------------------------------------------------------------------------------------------
     // fetch api - status
     // tinyMCE
-    tinymce.init({
-        height: "350",
-        selector: '.index-page #imageUpload',
-        plugins: 'autoresize lists code emoticons media mediaembed pageembed paste powerpaste',
-        toolbar: 'undo redo | styleselect | bold italic | ' +
-            'alignleft aligncenter alignright alignjustify | ' +
-            'outdent indent | numlist bullist | emoticons',
-        emoticons_append: {
-            custom_mind_explode: {
-                keywords: ['brain', 'mind', 'explode', 'blown'],
-                char: '🤯'
-            }
-        },
-        autoresize_max_height: 500,
-        tinycomments_mode: 'embedded',
-        tinycomments_author: 'Author name',
-    });
+    // tinymce.init({
+    //     height: "350",
+    //     selector: '.index-page textarea.statusTitle',
+    //     plugins: 'autoresize lists code emoticons media mediaembed pageembed paste powerpaste',
+    //     toolbar: 'undo redo | styleselect | bold italic | ' +
+    //         'alignleft aligncenter alignright alignjustify | ' +
+    //         'outdent indent | numlist bullist | emoticons',
+    //     emoticons_append: {
+    //         custom_mind_explode: {
+    //             keywords: ['brain', 'mind', 'explode', 'blown'],
+    //             char: '🤯'
+    //         }
+    //     },
+    //     autoresize_max_height: 500,
+    //     tinycomments_mode: 'embedded',
+    //     tinycomments_author: 'Author name',
+    //     inline_boundaries: false,
+    // });
 
     $(".index-page .post-btn").click(e => {
         var file_data = $('.index-page #imageUpload').prop('files')[0];
@@ -330,9 +332,26 @@ $(document).ready(function () {
         }
     });
     // preview image uploaded
+    $(document).delegate('.index-page .image-upload-preview .close-icon', 'click', function () {
+        $('.index-page .image-upload-preview').slideToggle(300, 'swing');
+        $(".index-page #imageUpload").val(null)
+        setTimeout(() => {
+            $("#output").attr("src", null)
+        }, 300);
+    })
 
     $('.index-page #imageUpload').change(e => {
-        console.log("bắt event chọn ảnh")
+        var file = e.target.files[0]
+        console.log(file)
+        
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('output');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+        $(".image-upload-preview").css("display", "block")
+        $('.index-page .preview-image-upload').addClass('active');
     })
 
     // -------------------------------------------------------------------------------------------
