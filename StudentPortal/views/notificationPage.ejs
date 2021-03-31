@@ -233,9 +233,14 @@
                 <ol class="breadcrumb bg-white">
                     <li class="breadcrumb-item"><a href="../">Trang chủ</a></li>
                     <li class="breadcrumb-item"><a href="../department">Danh sách phòng ban</a></li>
-                    <li class="breadcrumb-item active" aria-current="page"><%= departmentName.name %></li>
-                    <li class="breadcrumb-item active" aria-current="page">Danh sách thông báo 
-                        <% if(isAdd){%>
+                    <% if(locals.departmentName){%>
+                        <li class="breadcrumb-item"><a href="../notification">Tất cả thông báo</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Thông báo <%= departmentName.name %>
+                    <% }else{%>
+                        <li class="breadcrumb-item active" aria-current="page">Tất cả thông báo 
+                    <% } %>
+                    
+                     <% if(locals.isAdd){%>
                             <a data-toggle="modal" data-target="#modalAddNotification">
                                 <i class="fas fa-plus-circle text-primary"></i>
                             </a>
@@ -474,155 +479,171 @@
 
     <script>
         $(document).ready(async function(){
-            try {
-                let maphong = $('#selectDepartment :selected').val()
-                console.log(maphong)
-                const result = await fetch("../api/notification?maphong="+maphong, {
-                    method: "GET",
-                    credentials: "same-origin",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                });
-                
-                let data = await result.json();
-                data = data.data
-
-                data.forEach(e =>{
-                    let d = new Date(e.createAt);
-                    e.createAt = d.toJSON().slice(0,10).split('-').reverse().join('-')
-                })
-                let stringdata = ''
-                
-                data.forEach(item =>{
-
-                    stringdata +=`
-                        <li class="list-group-item">
-                            <h4 class="title" >${item.title}</h4>
-                            <div class="content">
-                                <a href="/notification/<%= maphong%>/${item._id}">Chi tiết thông báo</a>
-                            </div>
-                            <p class="font-italic">[${item.author }] - ${item.createAt}</p>
-                        </li>
-                    `
-                })
-                let size =$(".background-masker").parent().parent().length
-                let count = 1
-                $(".background-masker").parent().parent().fadeTo("slow" , 0.7,function() {
-                    $(this).remove();
-                    if(count ===size ){
-
-                        $(".list-notification").append(stringdata)
-                    }
-                    count +=1
-                })
-                
-                
-            } catch (error) {
-                console.log(error)
-               $(".background-masker").parent().parent().fadeOut( function() { $(this).remove(); })
-            }
-            
-            let months = ['January', 'February','March', 'April','May', 'June','July', 'August','September', 'October','November', 'December']
-            let now =new Date();
-            let indexMonth = now.getMonth()
-            var thisMonthString = months[indexMonth];
-            var thisyear =now.getFullYear()
-            $('.notificationPage .month').text(thisMonthString+" "+thisyear)
-
-            $('.notificationPage .fa-arrow-left').click(()=>{
-                indexMonth = indexMonth-1
-                if(indexMonth < 0){
-                    indexMonth = 11;
-                    thisyear = thisyear -1;
-                }
-                thisMonthString = months[indexMonth]
-                $('.notificationPage .month').text(thisMonthString+" "+thisyear)
-            })
-            $('.notificationPage .fa-arrow-right').click(()=>{
-                indexMonth = indexMonth+1
-                if(indexMonth >= 12){
-                    indexMonth = 0;
-                    thisyear = thisyear + 1;
-                }
-                thisMonthString = months[indexMonth]
-                $('.notificationPage .month').text(thisMonthString+" "+thisyear)
-            })
-            $(".notificationPage").ready(()=>{
-                $('#beginDatepicker').datepicker({
-                    uiLibrary: 'bootstrap4',
-                    change: function (e) {
-                        $('#beginDatepicker').attr('data-date',e.timeStamp)
-                    }
-                });
-                $('#endDatepicker').datepicker({
-                    uiLibrary: 'bootstrap4',
-                    change: function (e) {
-                        $('#endDatepicker').attr('data-date',e.timeStamp)
-                    }
-                });
-                $(".notificationPage #form_filter").submit(e=>{
-                    e.preventDefault()
-                    const phongban = $("#selectDepartment").val()
-                    const unread = $("#unread").is(":checked")
-                    const beginDatepicker = $("#beginDatepicker").data('date') || ""
-                    const endDatepicker = $("#endDatepicker").data('date') || ""
-                    console.log(phongban, unread, beginDatepicker, endDatepicker)
+            if($(".notificationPage")[0]){
+                try {
+                    let maphong = $('#selectDepartment :selected').val()
+                    console.log(maphong)
+                    const result = await fetch(window.parent.location.origin+"/api/notification?maphong="+maphong, {
+                        method: "GET",
+                        credentials: "same-origin",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
                     
-                })
-            })
-            if($(".notificationPage #editor")[0]){
-                $(document).on('focusin', function (e) {
-                    if ($(e.target).closest(".tox-dialog").length) {
-                        e.stopImmediatePropagation();
-                    }
-                });
-                tinymce.init({
-                    selector: '#editor',
-                    height: 400,
-                    plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-                    toolbar_mode: 'floating',
-                    plugins: [
-                        'advlist autolink link image lists charmap print preview hr anchor pagebreak',
-                        'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-                        'table emoticons template paste help'
-                    ],
-                    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
-                    'bullist numlist outdent indent | link image | print preview media fullpage | ' +
-                    'forecolor backcolor emoticons | help',
-                    menu: {
-                        favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
-                    },
-                    menubar: 'favs file edit view insert format tools table help',
-                });
-                
-                $(".post_notification_button").click(e=>{
-                    e.preventDefault()
-                    let title = $("#titleNotification").val()
-                    let content = tinyMCE.activeEditor.getContent({format : 'raw'})
-                    let department =$("#formAddNotification").data('url');
-                    console.log(title, content, department)
-                    try {
-                        $.post( "/api/notification",{title:title, content:content, department:department}, function( data, status ) {
-                            console.log(data)
-                        if(data.data){
-                            $("#formAddNotification input").val("")
-                            tinyMCE.activeEditor.setContent('');
-                            $(".messageAddNotification").addClass('text-success').removeClass('text-danger').text("Thêm thông báo thành công ")
-                        }else{
+                    let data = await result.json();
+                    data = data.data
 
-                            let errmessage = data.message.msg || data.message
-                            $(".messageAddNotification").addClass('text-danger').removeClass('text-success').text("Thêm thông báo thất bại: "+ errmessage)
+                    data.forEach(e =>{
+                        let d = new Date(e.createAt);
+                        e.createAt = d.toJSON().slice(0,10).split('-').reverse().join('-')
+                    })
+                    let stringdata = ''
+                    console.log(data)
+                    data.forEach(item =>{
+
+                        stringdata +=`
+                            <li class="list-group-item">
+                                <h4 class="title" >${item.title}</h4>
+                                <div class="content">
+                                    <a href="/notification/${item.department}/${item._id}">Chi tiết thông báo</a>
+                                </div>
+                                <p class="font-italic">[${item.author }] - ${item.createAt}</p>
+                            </li>
+                        `
+                    })
+                    let size =$(".background-masker").parent().parent().length
+                    let count = 1
+                    $(".background-masker").parent().parent().fadeTo("slow" , 0.7,function() {
+                        $(this).remove();
+                        if(count ===size ){
+
+                            $(".list-notification").append(stringdata)
+                        }
+                        count +=1
+                    })
+                    
+                    
+                } catch (error) {
+                    console.log(error)
+                $(".background-masker").parent().parent().fadeOut( function() { $(this).remove(); })
+                }
+                
+                let months = ['January', 'February','March', 'April','May', 'June','July', 'August','September', 'October','November', 'December']
+                let now =new Date();
+                let indexMonth = now.getMonth()
+                var thisMonthString = months[indexMonth];
+                var thisyear =now.getFullYear()
+                $('.notificationPage .month').text(thisMonthString+" "+thisyear)
+
+                $('.notificationPage .fa-arrow-left').click(()=>{
+                    indexMonth = indexMonth-1
+                    if(indexMonth < 0){
+                        indexMonth = 11;
+                        thisyear = thisyear -1;
+                    }
+                    thisMonthString = months[indexMonth]
+                    $('.notificationPage .month').text(thisMonthString+" "+thisyear)
+                })
+                $('.notificationPage .fa-arrow-right').click(()=>{
+                    indexMonth = indexMonth+1
+                    if(indexMonth >= 12){
+                        indexMonth = 0;
+                        thisyear = thisyear + 1;
+                    }
+                    thisMonthString = months[indexMonth]
+                    $('.notificationPage .month').text(thisMonthString+" "+thisyear)
+                })
+                $(".notificationPage").ready(()=>{
+                    $('#beginDatepicker').datepicker({
+                        uiLibrary: 'bootstrap4',
+                        change: function (e) {
+                            $('#beginDatepicker').attr('data-date',e.timeStamp)
+                        },
+                        format: 'dd-mm-yyyy' 
+                    });
+                    $('#endDatepicker').datepicker({
+                        uiLibrary: 'bootstrap4',
+                        change: function (e) {
+                            $('#endDatepicker').attr('data-date',e.timeStamp)
+                        },
+                        format: 'dd-mm-yyyy' 
+                    });
+                    $(".notificationPage #form_filter").submit(async e=>{
+                        e.preventDefault()
+                        const phongban = $("#selectDepartment").val()
+                        const unread = $("#unread").is(":checked")
+                        const beginDatepicker = $("#beginDatepicker").data('date') || ""
+                        const endDatepicker = $("#endDatepicker").data('date') || ""
+                        console.log(phongban, unread, beginDatepicker, endDatepicker)
+                        let url_getNotification = new URL(window.parent.location.origin+'/api/notification')
+                        let params = {page:phongban, unread: unread, start:beginDatepicker, end:endDatepicker}
+                        url_getNotification.search = new URLSearchParams(params).toString();
+                        const getFilterNotification = await fetch(url_getNotification, {
+                            method: "GET",
+                            credentials: "same-origin",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        });
+                        let data_notification = await getFilterNotification.json();
+                        // data_notification = data_notification.data_notification
+                        console.log(data_notification)
+                        
+                    })
+                })
+                if($(".notificationPage #editor")[0]){
+                    $(document).on('focusin', function (e) {
+                        if ($(e.target).closest(".tox-dialog").length) {
+                            e.stopImmediatePropagation();
                         }
                     });
-                    } catch (error) {
-                        console.log(error)
-                        $(".messageAddNotification").addClass('text-danger').removeClass('text-success').text("Thêm thông báo thất bại")
-                    }
+                    tinymce.init({
+                        selector: '#editor',
+                        height: 400,
+                        plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                        toolbar_mode: 'floating',
+                        plugins: [
+                            'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+                            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+                            'table emoticons template paste help'
+                        ],
+                        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                        'bullist numlist outdent indent | link image | print preview media fullpage | ' +
+                        'forecolor backcolor emoticons | help',
+                        menu: {
+                            favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+                        },
+                        menubar: 'favs file edit view insert format tools table help',
+                    });
                     
-                })
+                    $(".post_notification_button").click(e=>{
+                        e.preventDefault()
+                        let title = $("#titleNotification").val()
+                        let content = tinyMCE.activeEditor.getContent({format : 'raw'})
+                        let department =$("#formAddNotification").data('url');
+                        console.log(title, content, department)
+                        try {
+                            $.post( "/api/notification",{title:title, content:content, department:department}, function( data, status ) {
+                                console.log(data)
+                            if(data.data){
+                                $("#formAddNotification input").val("")
+                                tinyMCE.activeEditor.setContent('');
+                                $(".messageAddNotification").addClass('text-success').removeClass('text-danger').text("Thêm thông báo thành công ")
+                            }else{
+
+                                let errmessage = data.message.msg || data.message
+                                $(".messageAddNotification").addClass('text-danger').removeClass('text-success').text("Thêm thông báo thất bại: "+ errmessage)
+                            }
+                        });
+                        } catch (error) {
+                            console.log(error)
+                            $(".messageAddNotification").addClass('text-danger').removeClass('text-success').text("Thêm thông báo thất bại")
+                        }
+                        
+                    })
+                }
             }
-            
         })
     </script>
 </body>

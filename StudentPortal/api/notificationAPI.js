@@ -17,9 +17,10 @@ router.get('/', authenticateTokenAPI, async (req, res) => {
     if (maphong) {
         condition = {department: maphong}
     }
-    let {page, start, end, unread} = req.query
+    let { page, start, end, unread } = req.query
+    if(unread) console.log("unread "+unread)
     if (!page) page = 1
-    await Notification.find(condition, (err, data) => {
+    await Notification.find(condition).sort( { createAt : -1} ).exec( (err, data) => {
         
         if (err){ 
             res.status(403).json({err: err})
@@ -31,8 +32,11 @@ router.get('/', authenticateTokenAPI, async (req, res) => {
             }
             dataFilter = dataFilter.slice((page - 1) * 10, page * 10)
             res.status(200).json({ data: dataFilter })
+            console.log("log nay o notificationAPI")
+            console.log(data)
+            console.log(dataFilter)
         } 
-    }).sort( { createAt : -1} )
+    })
     
 })
 router.post('/',authenticateTokenAPI, postNofiticationValidator ,async (req,res)=>{

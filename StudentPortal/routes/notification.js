@@ -7,6 +7,30 @@ const User = require("../models/user");
 const fetch = require("node-fetch");
 const {authenticateToken} = require("../config/token")
 /* GET login page. */
+router.get("/",authenticateToken, async function (req, res, next) {
+	
+	
+	let department = await User.find({
+		$and: [
+			{
+				type: {
+					$ne: "admin",
+				},
+			},
+			{
+				type: {
+					$ne: "student",
+				},
+			},
+		],
+	});
+
+	res.render("notificationPage", {
+		user: req.user,
+		department: department,
+	});
+});
+
 
 router.get("/:id",authenticateToken, async function (req, res, next) {
 	let maphong = req.params.id;
