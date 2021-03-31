@@ -4,6 +4,9 @@ const router = express.Router()
 const {authenticateToken,authenticateTokenAPI} = require('../config/token')
 const mongoose = require('mongoose')
 const commentsModel = require('../models/comment')
+const socketIO = require("../config/socketIO")
+
+const io = socketIO.io;
 
 
 // api status: GET POST PUT DELETE
@@ -75,6 +78,8 @@ router.post('/', authenticateToken,async function(req, res, next) {
         message: 'New comment created successfully',
         Status: newComment,
         });
+
+        
     })
     .catch((error) => {
         console.log(error);
