@@ -5,6 +5,10 @@ body {
     min-height: 100vh;
 }
 
+.index-page .send-comment:hover {
+    cursor: pointer;
+}
+
 .mm-slideout {
     min-height: 100vh;
 }

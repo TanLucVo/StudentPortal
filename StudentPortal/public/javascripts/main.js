@@ -83,7 +83,7 @@ function getLikeStatus(element) {
 }
 
 $(document).ready(function () {
-    const socket =io()
+    const socket = io()
     socket.on('connect', handleConnectionSuccess);
     socket.on('disconnect', () => {
         console.log("Mat ket noi voi server");
@@ -352,6 +352,20 @@ $(document).ready(function () {
         reader.readAsDataURL(file);
         $(".image-upload-preview").css("display", "block")
         $('.index-page .preview-image-upload').addClass('active');
+    })
+
+    // -------------------------------------------------------------------------------------------
+    // comment
+
+    $('.index-page .send-comment').click(e => {
+        console.log("hello test comment")
+        var temp = $('.index-page .text-content-comment').val()
+        const socket = io()
+        socket.on('connect', handleConnectionSuccess);
+        socket.on('disconnect', () => {
+            console.log("Mat ket noi voi server");
+        });
+        socket.emit('list-users', );
     })
 
     // -------------------------------------------------------------------------------------------
