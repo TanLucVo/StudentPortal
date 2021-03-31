@@ -216,6 +216,31 @@
         .list-group-item .content a{
             font-size: 14px;
         }
+        .notificationPage .pagination{
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            padding-left: 0;
+            list-style: none;
+            border-radius: .25rem;
+        }
+        .notificationPage .pagination>li a{
+            width: auto;
+            height: auto;
+            background-color: #fff;
+            line-height: 20px;
+            outline: none;
+
+        }
+        .notificationPage .pagination>li a:hover{
+            color: #0061AD;
+        }
+        .notificationPage .pagination>li.active a:hover{
+            color: #fff;
+            cursor: default;
+        }
+
+
 
         
         @import url(https://fonts.googleapis.com/css?family=Fjalla+One:400|Roboto:400,400italic,700);
@@ -283,7 +308,11 @@
                     </li>
                 </ol>
             </div>
-           
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                   
+                </ul>
+            </nav>
             <div class="row pt-1">
                 <div class="col-lg-7 col-xl-8 col-md-12 col-sm-12">
                     
@@ -481,14 +510,21 @@
     <script>
         $(document).ready(async function(){
             if($(".notificationPage")[0]){
+                var indexPage = 1
+                var data = []
+
                 function displayNotification(data){
+                    let tempData = [...data]
+                    tempData = splitArrayIntoChunksOfLen(tempData, 10)[indexPage-1]
+                    if(!isNaN(tempData[0].createAt)){
+                        tempData.forEach(e =>{
+                            let d = new Date(e.createAt);
+                            e.createAt = d.toJSON().slice(0,10).split('-').reverse().join('-')
+                        })
+                    }
                     
-                     data.forEach(e =>{
-                        let d = new Date(e.createAt);
-                        e.createAt = d.toJSON().slice(0,10).split('-').reverse().join('-')
-                    })
                     let stringdata = ''
-                    data.forEach(item =>{
+                    tempData.forEach(item =>{
 
                         stringdata +=`
                             <li class="list-group-item">
@@ -511,7 +547,42 @@
                         count +=1
                     })
                 }
+                function splitArrayIntoChunksOfLen(arr1, len) {
+                    let arr = [...arr1]
+                    var chunks = [], i = 0, n = arr.length;
+                    while (i < n) {
+                        chunks.push(arr.slice(i, i += len));
+                    }
+                    return chunks;
+                }
+                function displayPagination(data){
+                    let pagination = Math.ceil(data.length/10)
+                    let stringPagination=`<li class="page-item previous disabled">
+                                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                        </li>`
+                    for(let i = 1;i<= pagination;i++){
+                        
+                        if(i == indexPage){
+                            stringPagination += `<li class="page-item active"><button class="page-link numpage" value=${i} href="">${i}</button></li>`
+                        }else{
+                            stringPagination += `<li class="page-item"><button class="page-link numpage" value=${i} href="">${i}</button></li>`
+                        }
+                    }
+                    stringPagination+=`<li class="page-item next">
+                                            <a class="page-link" href="#" >Next</a>
+                                        </li>`
+                    $(".notificationPage .pagination").children().remove()
+                    if(pagination ===0) return 
+                    $(".notificationPage .pagination").append(stringPagination)
+                    if(indexPage===pagination){
+                        $(".page-item.next").addClass("disabled")
+                    }
+                }
+                function changePagination(num){
+                    indexPage = num
+                }
                 try {
+                    
                     let maphong = $('#selectDepartment :selected').val()
                     console.log(maphong)
                     const result = await fetch(window.parent.location.origin+"/api/notification?maphong="+maphong, {
@@ -522,16 +593,17 @@
                         },
                     });
                     
-                    let data = await result.json();
+                    data = await result.json();
                     data = data.data
                     displayNotification(data)
 
-                   
+                    displayPagination(data)
+                    changePagination(1)
                     
                     
                 } catch (error) {
                     console.log(error)
-                $(".background-masker").parent().parent().fadeOut( function() { $(this).remove(); })
+                    $(".background-masker").parent().parent().fadeOut( function() { $(this).remove(); })
                 }
                 
                 let months = ['January', 'February','March', 'April','May', 'June','July', 'August','September', 'October','November', 'December']
@@ -559,51 +631,74 @@
                     thisMonthString = months[indexMonth]
                     $('.notificationPage .month').text(thisMonthString+" "+thisyear)
                 })
-                $(".notificationPage").ready(()=>{
-                    let startTimePicker = $('#beginDatepicker').datepicker({
-                        uiLibrary: 'bootstrap4',
-                        format: 'dd-mm-yyyy' 
-                    });
-                    let endTimePicker =$('#endDatepicker').datepicker({
-                        uiLibrary: 'bootstrap4',
-                        format: 'dd-mm-yyyy' 
-                    });
-                    $(".notificationPage #form_filter").submit(async e=>{
-                        e.preventDefault()
-                        $(".list-notification").children().remove()
-                        $(".list-notification").append(` <li class="list-group-item ">
-                                <div class="animated-background">
-                                    <a class="background-masker font-weight-bold " href="#"></a>
-                                    <p class="background-masker head"></p>
-                                    <div class="background-masker content">
-                                    </div>
-                                    <p class="background-masker body"></p>
+                let startTimePicker = $('#beginDatepicker').datepicker({
+                    uiLibrary: 'bootstrap4',
+                    format: 'dd-mm-yyyy' 
+                });
+                let endTimePicker =$('#endDatepicker').datepicker({
+                    uiLibrary: 'bootstrap4',
+                    format: 'dd-mm-yyyy' 
+                });
+                $(".numpage").click((e)=>{
+                    indexPage = e.target.value
+                    $(".list-notification").children().remove()
+                    $(".list-notification").append(` <li class="list-group-item ">
+                            <div class="animated-background">
+                                <a class="background-masker font-weight-bold " href="#"></a>
+                                <p class="background-masker head"></p>
+                                <div class="background-masker content">
                                 </div>
-                        </li>`.repeat(7))
-                        const phongban = $("#selectDepartment").val()
-                        const unread = $("#unread").is(":checked")
+                                <p class="background-masker body"></p>
+                            </div>
+                    </li>`.repeat(7))
+                    //page cu~
+                    $('.page-item.active').children().prop('disabled', false);
+                    $(".page-item.active").removeClass("active")
+    
+                    //page moi
+                    e.target.parentNode.classList.add("active")
+                    $('.page-item.active').children().prop('disabled', true);
+                    displayNotification(data)
 
-                        const beginDatepicker = moment(`${$("#beginDatepicker").val()} 00:00:00`, "DD-MM>-YYYY hh:mm:ss").valueOf()  || 0
-                        const endDatepicker = moment.utc(`${$("#endDatepicker").val()} 23:59:59`, "DD-MM-YYYY hh:mm:ss").valueOf()  || Date.now()
-
-                        //moment
-
-                        let url_getNotification = new URL(window.parent.location.origin+'/api/notification')
-                        let params = {maphong:phongban, unread: unread, start:beginDatepicker, end:endDatepicker}
-                        url_getNotification.search = new URLSearchParams(params).toString();
-                        const getFilterNotification = await fetch(url_getNotification, {
-                            method: "GET",
-                            credentials: "same-origin",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                        });
-                        let data_notification = await getFilterNotification.json();
-                        
-                        displayNotification(data_notification.data)
-                        
-                    })
                 })
+                $(".notificationPage #form_filter").submit(async e=>{
+                    e.preventDefault()
+                    $(".list-notification").children().remove()
+                    $(".list-notification").append(` <li class="list-group-item ">
+                            <div class="animated-background">
+                                <a class="background-masker font-weight-bold " href="#"></a>
+                                <p class="background-masker head"></p>
+                                <div class="background-masker content">
+                                </div>
+                                <p class="background-masker body"></p>
+                            </div>
+                    </li>`.repeat(7))
+                    const phongban = $("#selectDepartment").val()
+                    const unread = $("#unread").is(":checked")
+
+                    const beginDatepicker = moment(`${$("#beginDatepicker").val()} 00:00:00`, "DD-MM>-YYYY hh:mm:ss").valueOf()  || 0
+                    const endDatepicker = moment.utc(`${$("#endDatepicker").val()} 23:59:59`, "DD-MM-YYYY hh:mm:ss").valueOf()  || Date.now()
+
+                    //moment
+
+                    let url_getNotification = new URL(window.parent.location.origin+'/api/notification')
+                    let params = {maphong:phongban, unread: unread, start:beginDatepicker, end:endDatepicker}
+                    url_getNotification.search = new URLSearchParams(params).toString();
+                    const getFilterNotification = await fetch(url_getNotification, {
+                        method: "GET",
+                        credentials: "same-origin",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    let data_notification = await getFilterNotification.json();
+                    data = data_notification.data
+                    displayNotification(data)
+                    displayPagination(data)
+                    changePagination(1)
+                })
+                
+                
                 if($(".notificationPage #editor")[0]){
                     $(document).on('focusin', function (e) {
                         if ($(e.target).closest(".tox-dialog").length) {
