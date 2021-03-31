@@ -245,7 +245,7 @@ $(document).ready(function () {
                             <!--Information of post's user-->
                             <div class="d-flex justify-content-between p-2 px-2">
                                 <div class="d-flex flex-row align-items-center">
-                                    <img src="${author.image}" alt="" class="rounded-circle" width="52">
+                                    <img src="${author.image}" alt="" class="image-user rounded-circle" width="52">
                                     <div class="d-flex flex-column ml-2">
                                         <span class="font-weight-bold">${author.fullName}</span>
                                         <small class="text-primary">Thông tin</small>
