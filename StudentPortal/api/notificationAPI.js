@@ -12,29 +12,32 @@ const io = socketIO.io;
 
 router.get('/', authenticateTokenAPI, async (req, res) => {
 
-    let {maphong} = req.query
     let condition = {}
+    let {maphong, page, start, end, unread } = req.query
+
     if (maphong) {
-        condition = {department: maphong}
+        condition.department= maphong
     }
-    let { page, start, end, unread } = req.query
-    if(unread) console.log("unread "+unread)
+
+    if (!start) {
+        start = 0
+    }
+
+    if (!end) {
+        end = Date.now()
+    }
+    console.log("Log nay o notificationAPI")
+    if (unread) console.log("unread " + unread)
+
     if (!page) page = 1
-    await Notification.find(condition).sort( { createAt : -1} ).exec( (err, data) => {
+    await Notification.find({...condition, createAt: { $gte: start, $lte: end}}).sort( { createAt : -1} ).exec( (err, data) => {
         
         if (err){ 
             res.status(403).json({err: err})
         } 
         else { 
-            let dataFilter = data
-            if(start && end ){
-                dataFilter = dataFilter.filter(e => e.createAt >= start && e.createAt <= end)
-            }
-            dataFilter = dataFilter.slice((page - 1) * 10, page * 10)
-            res.status(200).json({ data: dataFilter })
-            console.log("log nay o notificationAPI")
-            console.log(data)
-            console.log(dataFilter)
+          
+            res.status(200).json({ data: data })
         } 
     })
     
