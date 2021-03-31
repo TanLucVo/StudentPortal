@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const StatusSchema = mongoose.Schema({
+const CommentSchema = mongoose.Schema({
     statusId: {
         type: String,
         require: true,
@@ -17,4 +17,4 @@ const StatusSchema = mongoose.Schema({
         require: true,
     }
 })
-module.exports = mongoose.model('comment', StatusSchema)
+module.exports = mongoose.model('comments', CommentSchema)

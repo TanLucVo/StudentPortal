@@ -3,7 +3,7 @@ const passport = require('passport')
 const router = express.Router()
 const {authenticateToken,authenticateTokenAPI} = require('../config/token')
 const mongoose = require('mongoose')
-const statusModel = require('../models/status')
+const commentsModel = require('../models/comment')
 
 
 // api status: GET POST PUT DELETE
@@ -11,13 +11,13 @@ const statusModel = require('../models/status')
 // GET
 
 router.get('/', authenticateToken,async function(req, res, next) {
-    await statusModel.find()
-    .select('_id author statusTitle statusId dateModified like image')
-    .then((allStatus) => {
+    await commentsModel.find()
+    .select('_id statusId author content dateModified')
+    .then((allComment) => {
       return res.status(200).json({
         success: true,
-        message: 'A list of all status',
-        Status: allStatus,
+        message: 'A list of all comment',
+        Status: allComment,
       });
     })
     .catch((err) => {
@@ -31,18 +31,18 @@ router.get('/', authenticateToken,async function(req, res, next) {
 
 router.get('/:id' ,authenticateToken,async function(req, res, next) {
     const id = req.params.id
-    await statusModel.findById(id)
-    .then((singleStatus) => {
+    await commentsModel.findById(id)
+    .then((singleComment) => {
         res.status(200).json({
         success: true,
-        message: `More on ${singleStatus.statusId}`,
-        Status: singleStatus,
+        message: `More on ${singleComment._id}`,
+        Status: singleComment,
         });
     })
     .catch((err) => {
         res.status(500).json({
         success: false,
-        message: 'This status does not exist in database',
+        message: 'This comment does not exist in database',
         error: err.message,
         });
     });
@@ -53,28 +53,27 @@ router.get('/:id' ,authenticateToken,async function(req, res, next) {
 router.post('/', authenticateToken,async function(req, res, next) {
     if (!req.body) {
         return res.status(500).json({
-                success: false,
-                message: 'data error. Please try again.',
-                error: error.message,
+            success: false,
+            message: 'data error. Please try again.',
+            error: error.message,
         });
     }
     else {
     const data = req.body
-    const status = new statusModel({
-        statusId: mongoose.Types.ObjectId(),
+    const comment = new commentsModel({
+        _id: mongoose.Types.ObjectId(),
+        statusId: data.statusId,
         author: data.author,
-        like: undefined,
-        statusTitle: data.statusTitle,
-        dateModified: new Date(),
-        image: data.image
+        content: data.content,
+        dateModified: new Date()
     })
-    await status
+    await comment
     .save()
-    .then((newStatus) => {
+    .then((newComment) => {
         return res.status(201).json({
         success: true,
-        message: 'New status created successfully',
-        Status: newStatus,
+        message: 'New comment created successfully',
+        Status: newComment,
         });
     })
     .catch((error) => {
@@ -93,19 +92,18 @@ router.post('/', authenticateToken,async function(req, res, next) {
 router.put('/:id' ,authenticateToken,async function(req, res, next) {
     if (!req.body) {
         return res.status(500).json({
-                success: false,
-                message: 'data error. Please try again.',
-                error: error.message,
+            success: false,
+            message: 'data error. Please try again.',
+            error: error.message,
         });
     }
     else {
-        const log =  await statusModel.findOneAndUpdate(
+        const log =  await commentsModel.findOneAndUpdate(
             {_id: req.params.id},
             {
+                statusId: req.body.statusId,
                 author: req.body.author,
-                statusTitle: req.body.statusTitle,
-                image: req.body.image,
-                like: req.body.like,
+                content: req.body.content,
                 dateModified: req.body.dateModified
             },
             {
@@ -115,11 +113,11 @@ router.put('/:id' ,authenticateToken,async function(req, res, next) {
             }
         )
         .exec()
-        .then((oldStatus) => {
+        .then((oldComment) => {
             return res.status(200).json({
                 success: true,
-                message: 'this status was updated successfully',
-                Status: oldStatus,
+                message: 'this comment was updated successfully',
+                Status: oldComment,
             });
         })
         .catch((err) => {
@@ -136,7 +134,7 @@ router.put('/:id' ,authenticateToken,async function(req, res, next) {
 
 router.delete('/:id' ,authenticateToken,async function(req, res, next) {
     const id = req.params.id
-    await statusModel.findByIdAndRemove(id)
+    await commentsModel.findByIdAndRemove(id)
     .exec()
     .then(()=> res.status(204).json({
         success: true,

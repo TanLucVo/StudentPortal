@@ -8,6 +8,7 @@ const flash = require('connect-flash');
 
 // API
 const statusAPI = require("./api/statusAPI");
+const commentAPI = require("./api/commentAPI");
 const api = require("./routes/API");
 const uploadImageAPI = require('./api/upLoadImageAPI')
 
@@ -89,6 +90,7 @@ app.use('/upload-image', uploadImageAPI)
 //API NOTIFICATION
 app.use('/api', api)
 app.use("/status",statusAPI)
+app.use("/comment",commentAPI)
 
 
 
