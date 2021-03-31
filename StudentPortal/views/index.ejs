@@ -398,9 +398,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="comment-input"> 
-                                                    <input type="text" class="form-control text-content-comment">
-                                                    <div class="fonts send-comment">
-                                                        <i id="send-comment" class="fas fa-paper-plane"></i>
+                                                    <input type="text" class="form-control" id="text-content-comment">
+                                                    <div class="fonts send-comment" data-author="<%= user._id %>" data-status = "<%= status._id %>" onclick="fetchApiComment(this)">
+                                                        <i class="fas fa-paper-plane"></i>
                                                     </div>
                                                 </div>
                                             </div>

@@ -32,7 +32,7 @@ const upload = multer({dest:'uploads',
 /* GET users listing. */
 router.get('/' , authenticateToken, function(req, res) {
     cookie = req.cookies
-    fetch('http://localhost:3000/status', {
+    fetch(process.env.URL + '/status', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ router.post('/', authenticateToken, upload.single('imageStatus'), async function
             author: author
         }
     }
-    fetch('http://localhost:3000/status', {
+    fetch(process.env.URL + '/status', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

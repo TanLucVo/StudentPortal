@@ -1,6 +1,32 @@
 // -------------------------------------------------------------------------------------------- //
 // Index Page
 
+// window.parent.location.origin = http://localhost:3000
+
+// -------------------------------------------------------------------------------------------
+    // comment
+
+function fetchApiComment(element) {
+    const statusId = element.dataset.status
+    const author = element.dataset.author
+    const content = document.getElementById('text-content-comment').value;
+    console.log(statusId)
+    console.log(author)
+    console.log(content)
+    var form_data = new FormData()
+    form_data.append("statusId",statusId)
+    form_data.append("author",author)
+    form_data.append("content",content)
+    fetch(window.parent.location.origin + '/comment',{
+        method: 'POST',
+        body: form_data
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
+    }).catch(e => console.log(e))
+}
+// -------------------------------------------------------------------------------------------
 // getLikeStatus
 
 function getLikeStatus(element) {
@@ -10,7 +36,7 @@ function getLikeStatus(element) {
     const name = element.dataset.name
     let myLike = undefined
     $(document).ready(function () {
-        fetch(`http://localhost:3000/status/${idStatus}`,{
+        fetch(window.parent.location.origin + `/status/${idStatus}`,{
             method: 'GET'
         })
         .then(res => res.json())
@@ -65,7 +91,7 @@ function getLikeStatus(element) {
                     data.Status.like = (JSON.stringify(likes))
                 }
             }
-            fetch(`http://localhost:3000/status/${idStatus}`,{
+            fetch(window.parent.location.origin + `/status/${idStatus}`,{
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -81,7 +107,7 @@ function getLikeStatus(element) {
         })
     })
 }
-
+// -------------------------------------------------------------------------------------------
 $(document).ready(function () {
     const socket = io()
     socket.on('connect', handleConnectionSuccess);
@@ -244,10 +270,10 @@ $(document).ready(function () {
             form_data.append('imageStatus', file_data);
             form_data.append('statusTitle', statusTitle);
             form_data.append('author', JSON.stringify(user))
-            uploadImage(form_data)
+            uploadImage(form_data, user)
         }
-        function uploadImage(form_data) {
-           fetch('http://localhost:3000/', { // Your POST endpoint
+        function uploadImage(form_data, user) {
+           fetch(window.parent.location.origin, { // Your POST endpoint
                     method: 'POST',
 
                     body: form_data // This is your file object
@@ -318,14 +344,24 @@ $(document).ready(function () {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="comment-input"> <input type="text" class="form-control">
-                                    <div class="fonts"><i class="fas fa-smile-beam"></i> <i class="fa fa-camera"></i>
+                                <div class="comment-input">
+                                    <input type="text" class="form-control" id="text-content-comment">
+                                    <div class="fonts send-comment" data-author="${user.userId}" data-status = "${json.Status._id}" onclick="fetchApiComment(this)">
+                                        <i class="fas fa-paper-plane"></i>
                                     </div>
                                 </div>
                             </div>
                         </div>`
                         // console.log(htmlString)
                         $(".multi-card").prepend(htmlString)
+                        
+                        // set null in content and image upload = null
+                        $('.index-page .image-upload-preview').slideToggle(300, 'swing');
+                        $(".index-page #imageUpload").val(null)
+                        setTimeout(() => {
+                            $("#output").attr("src", null)
+                        }, 300);
+                        $('.index-page textarea.statusTitle').val("");
                     }
                 })
                 .catch(e => console.log(e))
@@ -342,7 +378,7 @@ $(document).ready(function () {
 
     $('.index-page #imageUpload').change(e => {
         var file = e.target.files[0]
-        console.log(file)
+        // console.log(file)
         
         var reader = new FileReader();
         reader.onload = function () {
@@ -352,20 +388,6 @@ $(document).ready(function () {
         reader.readAsDataURL(file);
         $(".image-upload-preview").css("display", "block")
         $('.index-page .preview-image-upload').addClass('active');
-    })
-
-    // -------------------------------------------------------------------------------------------
-    // comment
-
-    $('.index-page .send-comment').click(e => {
-        console.log("hello test comment")
-        var temp = $('.index-page .text-content-comment').val()
-        const socket = io()
-        socket.on('connect', handleConnectionSuccess);
-        socket.on('disconnect', () => {
-            console.log("Mat ket noi voi server");
-        });
-        socket.emit('list-users', );
     })
 
     // -------------------------------------------------------------------------------------------
