@@ -200,6 +200,7 @@ $(document).ready(function () {
         });
     }
 
+    // -------------------------------------------------------------------------------------------
     // fetch api - status
     $(".index-page .post-btn").click(e => {
         var file_data = $('.index-page #imageUpload').prop('files')[0];
@@ -309,6 +310,11 @@ $(document).ready(function () {
                 .catch(e => console.log(e))
         }
     });
+    // preview image uploaded
+
+    
+
+    // -------------------------------------------------------------------------------------------
 
     //dashboardDepartment
     $(".dashboardDepartment .row img ").each(function (k, v) {
