@@ -111,7 +111,7 @@ function getLikeStatus(element) {
     })
 }
 // -------------------------------------------------------------------------------------------
-$(document).ready(function () {
+$(document).ready(async function () {
     const socket = io()
     socket.on('connect', handleConnectionSuccess);
     socket.on('disconnect', () => {
@@ -449,12 +449,275 @@ $(document).ready(function () {
         }
         v.src = v.src;
     });
+    if($(".notificationPage")[0]){
+        var data = []
+        let indexPage=1
+        let numberPage = 1
+        function displayNotification(data){
+            if(data.length ===0){
+                $(".list-notification").children().remove()
+                return
+            } 
+            let tempData = [...data]
 
- 
+            if(!isNaN(tempData[0].createAt)){
+                tempData.forEach(e =>{
+                    let d = new Date(e.createAt);
+                    e.createAt = d.toJSON().slice(0,10).split('-').reverse().join('-')
+                })
+            }
+            
+            let stringdata = ''
+            tempData.forEach(item =>{
+
+                stringdata +=`
+                    <li class="list-group-item">
+                        <h4 class="title" >${item.title}</h4>
+                        <div class="content">
+                            <a href="/notification/${item.department}/${item._id}">Chi tiết thông báo</a>
+                        </div>
+                        <p class="font-italic">[${item.author }] - ${item.createAt}</p>
+                    </li>
+                `
+            })
+            let size =$(".background-masker").parent().parent().length
+            let count = 1
+            $(".background-masker").parent().parent().fadeTo("slow" , 0.7,function() {
+                $(this).remove();
+                
+                if(count ===size ){
+                    $(".list-notification").children().remove()
+                    $(".list-notification").append(stringdata)
+                    count = 1 
+                }
+                count +=1
+            })
+
+        }
+        function splitArrayIntoChunksOfLen(arr1, len) {
+            let arr = [...arr1]
+            var chunks = [], i = 0, n = arr.length;
+            while (i < n) {
+                chunks.push(arr.slice(i, i += len));
+            }
+            return chunks;
+        }
+        function displayPagination(count){
+            let pagination = Math.ceil(count/10)
+            numberPage = pagination
+            let stringPagination=`<li class="page-item previous disabled">
+                                    <button class="page-link" tabindex="-1">Previous</button>
+                                </li>`
+            for(let i = 1;i<= pagination;i++){
+                
+                if(i == 1){
+                    stringPagination += `<li class="page-item active"><button class="page-link numpage" value=${i} >${i}</button></li>`
+                }else{
+                    stringPagination += `<li class="page-item"><button class="page-link numpage" value=${i} >${i}</button></li>`
+                }
+            }
+            stringPagination+=`<li class="page-item next">
+                                    <button class="page-link" >Next</button>
+                                </li>`
+            $(".notificationPage .pagination").children().remove()
+            if(pagination ===0) return 
+            $(".notificationPage .pagination").append(stringPagination)
+            if(1===pagination){
+                $(".page-item.next").addClass("disabled")
+            }
+            $(".numpage").click( async e =>{
+                $(".notificationPage .page-item button").addClass("disabledbutton")
+                $(".page-item.next").addClass("disabled")
+                $(".page-item.previous").addClass("disabled")
+                indexPage = parseInt(e.target.value)
+           
+
+                $.when( $(".list-notification").children().remove()).done(async function() {
+                    $(".list-notification").append(` <li class="list-group-item ">
+                            <div class="animated-background">
+                                <a class="background-masker font-weight-bold " href="#"></a>
+                                <p class="background-masker head"></p>
+                                <div class="background-masker content">
+                                </div>
+                                <p class="background-masker body"></p>
+                            </div>
+                    </li>`.repeat(7))
+                    //page cu~
+                    $('.page-item.active').children().prop('disabled', false);
+                    $(".page-item.active").removeClass("active")
+    
+                    //page moi
+                    e.target.parentNode.classList.add("active")
+                    $('.page-item.active').children().prop('disabled', true);
+
+                        
+                    let [data, count] =await fetchDataNotification(indexPage)
+                    displayNotification(data)
+
+                    $(".notificationPage .page-item button").removeClass("disabledbutton")
+                    $(".notificationPage .page-item").removeClass("disabled")
+                    
+                    if(indexPage === numberPage){
+                        $('.page-item.next').addClass("disabled")
+                    }else{
+                        $('.page-item.next').removeClass("disabled")
+                    }
+
+                    if(indexPage === 1){
+                        $('.page-item.previous').addClass("disabled")
+                    }else{
+                        $('.page-item.previous').removeClass("disabled")
+                    }
+                });
+                
+
+            })
+            $('.page-item.previous').click(()=>{
+                if($(".page-item.previous").hasClass("disabled")) return 
+                
+                if(indexPage === 1)return 
+                indexPage -= 1
+                $(`.page-item button[value=${indexPage}]`).click()                
+            })
+            $('.page-item.next').click(()=>{
+                if($(".page-item.next").hasClass("disabled")) return 
+                if(indexPage === numberPage)return 
+                indexPage += 1
+                $(`.page-item button[value=${indexPage}]`).click()                
+            })
+        }
+        async function fectchDataWithParam(numpage, maphong, unread, start, end){
+            let url_getNotification = new URL(window.parent.location.origin+'/api/notification')
+            let params = {page:numpage,maphong:maphong, unread: unread, start:start, end:end}
+            url_getNotification.search = new URLSearchParams(params).toString();
+            const getFilterNotification = await fetch(url_getNotification, {
+                method: "GET",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            let data_notification = await getFilterNotification.json();
+            data = data_notification.data
+            return [data, data_notification.count]
+        }
+        async function fetchDataNotification(numpage){
+            const phongban =  $('#selectDepartment option:selected').val()
+            const unread = $("#unread").is(":checked")
+
+            const beginDatepicker = moment(`${$("#beginDatepicker").val()} 00:00:00`, "DD-MM>-YYYY hh:mm:ss").valueOf()  || 0
+            const endDatepicker = moment.utc(`${$("#endDatepicker").val()} 23:59:59`, "DD-MM-YYYY hh:mm:ss").valueOf()  || Date.now()
+            //moment
+            let result = await fectchDataWithParam(numpage, phongban, unread, beginDatepicker, endDatepicker)
+            
+            return result
+        }
+
+        try {
+            
+            let maphong = $('#selectDepartment option:selected').val()
+
+            const result = await fetch(window.parent.location.origin+"/api/notification?maphong="+maphong, {
+                method: "GET",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            
+            data = await result.json();
+            displayPagination(data.count)
+            data = data.data
+            displayNotification(data)
+            
+        } catch (error) {
+            console.log(error)
+            $(".background-masker").parent().parent().fadeOut( function() { $(this).remove(); })
+        }
+       
+        let startTimePicker = $('#beginDatepicker').datepicker({
+            uiLibrary: 'bootstrap4',
+            format: 'dd-mm-yyyy' 
+        });
+        let endTimePicker =$('#endDatepicker').datepicker({
+            uiLibrary: 'bootstrap4',
+            format: 'dd-mm-yyyy' 
+        });
+
+        $(".notificationPage #form_filter").submit(async e=>{
+            e.preventDefault()
+            $(".list-notification")
+            $(".list-notification").children().remove()
+            $(".list-notification").append(` <li class="list-group-item ">
+                    <div class="animated-background">
+                        <a class="background-masker font-weight-bold " href="#"></a>
+                        <p class="background-masker head"></p>
+                        <div class="background-masker content">
+                        </div>
+                        <p class="background-masker body"></p>
+                    </div>
+            </li>`.repeat(7))
+            indexPage = 1
+            let [data, count] =await fetchDataNotification(1)
+            displayNotification(data)
+            displayPagination(count)
+        })
+
+        
+        if($(".notificationPage #editor")[0]){
+            $(document).on('focusin', function (e) {
+                if ($(e.target).closest(".tox-dialog").length) {
+                    e.stopImmediatePropagation();
+                }
+            });
+            tinymce.init({
+                selector: '#editor',
+                height: 400,
+                plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                toolbar_mode: 'floating',
+                plugins: [
+                    'advlist autolink link image lists charmap print preview hr anchor pagebreak',
+                    'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+                    'table emoticons template paste help'
+                ],
+                toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | ' +
+                'bullist numlist outdent indent | link image | print preview media fullpage | ' +
+                'forecolor backcolor emoticons | help',
+                menu: {
+                    favs: {title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons'}
+                },
+                menubar: 'favs file edit view insert format tools table help',
+            });
+            
+            $(".post_notification_button").click(e=>{
+                e.preventDefault()
+                let title = $("#titleNotification").val()
+                let content = tinyMCE.activeEditor.getContent({format : 'raw'})
+                let department =$("#formAddNotification").data('url');
+                console.log(title, content, department)
+                try {
+                    $.post( "/api/notification",{title:title, content:content, department:department}, function( data, status ) {
+                        console.log(data)
+                    if(data.data){
+                        $("#formAddNotification input").val("")
+                        tinyMCE.activeEditor.setContent('');
+                        $(".messageAddNotification").addClass('text-success').removeClass('text-danger').text("Thêm thông báo thành công ")
+                    }else{
+
+                        let errmessage = data.message.msg || data.message
+                        $(".messageAddNotification").addClass('text-danger').removeClass('text-success').text("Thêm thông báo thất bại: "+ errmessage)
+                    }
+                });
+                } catch (error) {
+                    console.log(error)
+                    $(".messageAddNotification").addClass('text-danger').removeClass('text-success').text("Thêm thông báo thất bại")
+                }
+                
+            })
+        }
+    }
 });
-$(".notificationPage").ready(()=>{
-    console.log("notificationPage ready")
-})
+
 const getPassedTime = (startTime, endTime) => {
     let passTime = Math.floor((endTime - startTime) / 1000)
     let outputTime = ""
