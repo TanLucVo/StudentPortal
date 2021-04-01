@@ -51,6 +51,25 @@ router.get('/:id' ,authenticateToken,async function(req, res, next) {
     });
 })
 
+router.get('/status/:id' ,authenticateToken,async function(req, res, next) {
+    const id = req.params.id
+    await commentsModel.findOne({statusId : id})
+    .then((singleComment) => {
+        res.status(200).json({
+        success: true,
+        message: `More on ${singleComment._id}`,
+        Comment: singleComment,
+        });
+    })
+    .catch((err) => {
+        res.status(500).json({
+        success: false,
+        message: 'This comment does not exist in database',
+        error: err.message,
+        });
+    });
+})
+
 // POST
 
 router.post('/', authenticateToken,async function(req, res, next) {

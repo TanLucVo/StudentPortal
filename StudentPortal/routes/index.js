@@ -41,24 +41,17 @@ router.get('/' , authenticateToken, function(req, res) {
     })
     .then(res => res.text())
     .then(json => {
-        // JSON.parse(json).sort(function(a,b){
-        //     return new Date(b.date) - new Date(a.date);
-        // });
+
+        let checkLike = false
         arraySortStatus = JSON.parse(json).Status
-        arraySortStatus.sort(function(a,b){
-            return new Date(b.dateModified) - new Date(a.dateModified);
-        });
         arraySortStatus.forEach(status => {
 
             startTime = new Date(status.dateModified)
             endTime = new Date()
             const currentTime = getCurrentTime(startTime, endTime)
             status["currentTime"] = currentTime
-        });
-        // parse array like - json
-        let checkLike = false
-        // console.log(arraySortStatus)
-        arraySortStatus.forEach(status => {
+
+            // parse array like - json
             // parse thành json
             // lúc khởi tạo status.like chưa có trong model vì vậy ta phải kiểm tra tính xác thức của nó
             if (!status.like) {
@@ -77,9 +70,6 @@ router.get('/' , authenticateToken, function(req, res) {
                 checkLike = false
             }
         });
-        // console.log("check_like old",checkLike)
-
-        // console.log("check_like old",checkLike)
 
         return res.render('index',{user: req.user, allStatus: arraySortStatus});
     })
