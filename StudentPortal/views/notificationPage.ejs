@@ -9,14 +9,15 @@
     <style>
         .notificationPage {
             background-color: #ECEDF1;
-            overflow-y: hidden;
+            /* overflow-y: hidden; */
+            padding-bottom: 20px;
         }
 
         .notificationPage .list-group {
             max-height: 750px;
             margin-bottom: 10px;
-            overflow-y: scroll;
-            -webkit-overflow-scrolling: touch;
+            /* overflow-y: scroll;
+            -webkit-overflow-scrolling: touch; */
         }
 
         ul::-webkit-scrollbar {
@@ -238,6 +239,10 @@
         .notificationPage .pagination>li.active a:hover{
             color: #fff;
             cursor: default;
+        }
+        .notificationPage .disabledbutton{
+            cursor: not-allowed !important;
+            pointer-events: none !important;
         }
 
 
@@ -510,12 +515,16 @@
     <script>
         $(document).ready(async function(){
             if($(".notificationPage")[0]){
-                var indexPage = 1
                 var data = []
-
+                let indexPage=1
+                let numberPage = 1
                 function displayNotification(data){
+                    if(data.length ===0){
+                        $(".list-notification").children().remove()
+                        return
+                    } 
                     let tempData = [...data]
-                    tempData = splitArrayIntoChunksOfLen(tempData, 10)[indexPage-1]
+
                     if(!isNaN(tempData[0].createAt)){
                         tempData.forEach(e =>{
                             let d = new Date(e.createAt);
@@ -540,12 +549,15 @@
                     let count = 1
                     $(".background-masker").parent().parent().fadeTo("slow" , 0.7,function() {
                         $(this).remove();
+                        
                         if(count ===size ){
-
+                            $(".list-notification").children().remove()
                             $(".list-notification").append(stringdata)
+                            count = 1 
                         }
                         count +=1
                     })
+
                 }
                 function splitArrayIntoChunksOfLen(arr1, len) {
                     let arr = [...arr1]
@@ -555,36 +567,118 @@
                     }
                     return chunks;
                 }
-                function displayPagination(data){
-                    let pagination = Math.ceil(data.length/10)
+                function displayPagination(count){
+                    let pagination = Math.ceil(count/10)
+                    numberPage = pagination
                     let stringPagination=`<li class="page-item previous disabled">
-                                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                            <button class="page-link" tabindex="-1">Previous</button>
                                         </li>`
                     for(let i = 1;i<= pagination;i++){
                         
-                        if(i == indexPage){
-                            stringPagination += `<li class="page-item active"><button class="page-link numpage" value=${i} href="">${i}</button></li>`
+                        if(i == 1){
+                            stringPagination += `<li class="page-item active"><button class="page-link numpage" value=${i} >${i}</button></li>`
                         }else{
-                            stringPagination += `<li class="page-item"><button class="page-link numpage" value=${i} href="">${i}</button></li>`
+                            stringPagination += `<li class="page-item"><button class="page-link numpage" value=${i} >${i}</button></li>`
                         }
                     }
                     stringPagination+=`<li class="page-item next">
-                                            <a class="page-link" href="#" >Next</a>
+                                            <button class="page-link" >Next</button>
                                         </li>`
                     $(".notificationPage .pagination").children().remove()
                     if(pagination ===0) return 
                     $(".notificationPage .pagination").append(stringPagination)
-                    if(indexPage===pagination){
+                    if(1===pagination){
                         $(".page-item.next").addClass("disabled")
                     }
+                    $(".numpage").click( async e =>{
+                        $(".notificationPage .page-item button").addClass("disabledbutton")
+                        $(".page-item.next").addClass("disabled")
+                        $(".page-item.previous").addClass("disabled")
+                        indexPage = parseInt(e.target.value)
+                   
+    
+                        $.when( $(".list-notification").children().remove()).done(async function() {
+                            $(".list-notification").append(` <li class="list-group-item ">
+                                    <div class="animated-background">
+                                        <a class="background-masker font-weight-bold " href="#"></a>
+                                        <p class="background-masker head"></p>
+                                        <div class="background-masker content">
+                                        </div>
+                                        <p class="background-masker body"></p>
+                                    </div>
+                            </li>`.repeat(7))
+                            //page cu~
+                            $('.page-item.active').children().prop('disabled', false);
+                            $(".page-item.active").removeClass("active")
+            
+                            //page moi
+                            e.target.parentNode.classList.add("active")
+                            $('.page-item.active').children().prop('disabled', true);
+
+                                
+                            let [data, count] =await fetchDataNotification(indexPage)
+                            displayNotification(data)
+
+                            $(".notificationPage .page-item button").removeClass("disabledbutton")
+                            $(".notificationPage .page-item").removeClass("disabled")
+                            
+                            if(indexPage === numberPage){
+                                $('.page-item.next').addClass("disabled")
+                            }else{
+                                $('.page-item.next').removeClass("disabled")
+                            }
+
+                            if(indexPage === 1){
+                                $('.page-item.previous').addClass("disabled")
+                            }else{
+                                $('.page-item.previous').removeClass("disabled")
+                            }
+                        });
+                        
+
+                    })
+                    $('.page-item.previous').click(()=>{
+                        if($(".page-item.previous").hasClass("disabled")) return 
+                        
+                        if(indexPage === 1)return 
+                        indexPage -= 1
+                        $(`.page-item button[value=${indexPage}]`).click()                
+                    })
+                    $('.page-item.next').click(()=>{
+                        if($(".page-item.next").hasClass("disabled")) return 
+                        if(indexPage === numberPage)return 
+                        indexPage += 1
+                        $(`.page-item button[value=${indexPage}]`).click()                
+                    })
                 }
-                function changePagination(num){
-                    indexPage = num
+                async function fetchDataNotification(numpage){
+                    const phongban =  $('#selectDepartment option:selected').val()
+                    const unread = $("#unread").is(":checked")
+
+                    const beginDatepicker = moment(`${$("#beginDatepicker").val()} 00:00:00`, "DD-MM>-YYYY hh:mm:ss").valueOf()  || 0
+                    const endDatepicker = moment.utc(`${$("#endDatepicker").val()} 23:59:59`, "DD-MM-YYYY hh:mm:ss").valueOf()  || Date.now()
+
+                    //moment
+
+                    let url_getNotification = new URL(window.parent.location.origin+'/api/notification')
+                    let params = {page:numpage,maphong:phongban, unread: unread, start:beginDatepicker, end:endDatepicker}
+                    url_getNotification.search = new URLSearchParams(params).toString();
+                    const getFilterNotification = await fetch(url_getNotification, {
+                        method: "GET",
+                        credentials: "same-origin",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    });
+                    let data_notification = await getFilterNotification.json();
+                    data = data_notification.data
+                    return [data, data_notification.count]
                 }
+
                 try {
                     
-                    let maphong = $('#selectDepartment :selected').val()
-                    console.log(maphong)
+                    let maphong = $('#selectDepartment option:selected').val()
+   
                     const result = await fetch(window.parent.location.origin+"/api/notification?maphong="+maphong, {
                         method: "GET",
                         credentials: "same-origin",
@@ -594,12 +688,9 @@
                     });
                     
                     data = await result.json();
+                    displayPagination(data.count)
                     data = data.data
                     displayNotification(data)
-
-                    displayPagination(data)
-                    changePagination(1)
-                    
                     
                 } catch (error) {
                     console.log(error)
@@ -639,30 +730,10 @@
                     uiLibrary: 'bootstrap4',
                     format: 'dd-mm-yyyy' 
                 });
-                $(".numpage").click((e)=>{
-                    indexPage = e.target.value
-                    $(".list-notification").children().remove()
-                    $(".list-notification").append(` <li class="list-group-item ">
-                            <div class="animated-background">
-                                <a class="background-masker font-weight-bold " href="#"></a>
-                                <p class="background-masker head"></p>
-                                <div class="background-masker content">
-                                </div>
-                                <p class="background-masker body"></p>
-                            </div>
-                    </li>`.repeat(7))
-                    //page cu~
-                    $('.page-item.active').children().prop('disabled', false);
-                    $(".page-item.active").removeClass("active")
-    
-                    //page moi
-                    e.target.parentNode.classList.add("active")
-                    $('.page-item.active').children().prop('disabled', true);
-                    displayNotification(data)
 
-                })
                 $(".notificationPage #form_filter").submit(async e=>{
                     e.preventDefault()
+                    $(".list-notification")
                     $(".list-notification").children().remove()
                     $(".list-notification").append(` <li class="list-group-item ">
                             <div class="animated-background">
@@ -673,31 +744,12 @@
                                 <p class="background-masker body"></p>
                             </div>
                     </li>`.repeat(7))
-                    const phongban = $("#selectDepartment").val()
-                    const unread = $("#unread").is(":checked")
-
-                    const beginDatepicker = moment(`${$("#beginDatepicker").val()} 00:00:00`, "DD-MM>-YYYY hh:mm:ss").valueOf()  || 0
-                    const endDatepicker = moment.utc(`${$("#endDatepicker").val()} 23:59:59`, "DD-MM-YYYY hh:mm:ss").valueOf()  || Date.now()
-
-                    //moment
-
-                    let url_getNotification = new URL(window.parent.location.origin+'/api/notification')
-                    let params = {maphong:phongban, unread: unread, start:beginDatepicker, end:endDatepicker}
-                    url_getNotification.search = new URLSearchParams(params).toString();
-                    const getFilterNotification = await fetch(url_getNotification, {
-                        method: "GET",
-                        credentials: "same-origin",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    });
-                    let data_notification = await getFilterNotification.json();
-                    data = data_notification.data
+                    indexPage = 1
+                    let [data, count] =await fetchDataNotification(1)
                     displayNotification(data)
-                    displayPagination(data)
-                    changePagination(1)
+                    displayPagination(count)
                 })
-                
+
                 
                 if($(".notificationPage #editor")[0]){
                     $(document).on('focusin', function (e) {
