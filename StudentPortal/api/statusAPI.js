@@ -13,6 +13,7 @@ const statusModel = require('../models/status')
 router.get('/:page', authenticateToken,async function(req, res, next) {
     const {page} = req.params
     const skip = parseInt(page) - 1
+
     const limit = parseInt(page) * 2
     await statusModel.find().limit(limit).skip(skip)
     .sort({dateModified: 'desc'})

@@ -448,13 +448,27 @@ $(document).ready(async function () {
     })
     // -------------------------------------------------------------------------------------------
     // Scroll load status
-    $(window).on("scroll", function() {
+    var page = 1
+    $(window).on("scroll", () => {
         var scrollHeight = $(document).height();
         var scrollPosition = $(window).height() + $(window).scrollTop();
-        if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+        var check = false
+        if (scrollHeight/Math.floor(scrollPosition) === 1) {
+            page += 1
             console.log("dang scroll............... STATUS")
+            fetch(window.parent.location.origin + `/status/${page}`, {
+                method: 'GET'
+            })
+            .then(res => res.json())
+            .then(json => {
+                if (json.success) {
+                    console.log(json.Status)
+                }
+            }).catch(e => console.log(e))
         }
     });
+    console.log(page)
+
     // -------------------------------------------------------------------------------------------
     //dashboardDepartment
     $(".dashboardDepartment .row img ").each(function (k, v) {
