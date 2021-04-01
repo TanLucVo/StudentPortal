@@ -9,7 +9,8 @@
 function fetchApiComment(element) {
     const statusId = element.dataset.status
     const author = element.dataset.author
-    const content = document.getElementById('text-content-comment').value;
+    console.log(element)
+    const content = document.getElementById(`text-content-comment${statusId}`).value;
     var data = {
         statusId: statusId,
         author: author,
@@ -186,7 +187,7 @@ $(document).ready(async function () {
                 )
 
                 // set input content comment = ""
-                $('.index-page .comment-input #text-content-comment').val("");
+                $(`.index-page .comment-input #text-content-comment${data.statusId}`).val("");
             }
         }).catch(e => console.log(e))
 
@@ -400,7 +401,7 @@ $(document).ready(async function () {
                                     </div>
                                 </div>
                                 <div class="comment-input">
-                                    <input type="text" class="form-control" id="text-content-comment">
+                                    <input type="text" class="form-control" id="text-content-comment${json.Status._id}">
                                     <div class="fonts send-comment" data-author="${user.userId}" data-status = "${json.Status._id}" onclick="fetchApiComment(this)">
                                         <i class="fas fa-paper-plane"></i>
                                     </div>
