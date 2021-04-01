@@ -20,7 +20,7 @@ router.get('/', authenticateToken,async function(req, res, next) {
       return res.status(200).json({
         success: true,
         message: 'A list of all comment',
-        Status: allComment,
+        Comment: allComment,
       });
     })
     .catch((err) => {
@@ -39,7 +39,7 @@ router.get('/:id' ,authenticateToken,async function(req, res, next) {
         res.status(200).json({
         success: true,
         message: `More on ${singleComment._id}`,
-        Status: singleComment,
+        Comment: singleComment,
         });
     })
     .catch((err) => {
@@ -73,13 +73,12 @@ router.post('/', authenticateToken,async function(req, res, next) {
     await comment
     .save()
     .then((newComment) => {
+        io.emit('add-comment',newComment)
         return res.status(201).json({
         success: true,
         message: 'New comment created successfully',
-        Status: newComment,
+        Comment: newComment,
         });
-
-        
     })
     .catch((error) => {
         console.log(error);
@@ -122,7 +121,7 @@ router.put('/:id' ,authenticateToken,async function(req, res, next) {
             return res.status(200).json({
                 success: true,
                 message: 'this comment was updated successfully',
-                Status: oldComment,
+                Comment: oldComment,
             });
         })
         .catch((err) => {

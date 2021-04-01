@@ -9,10 +9,11 @@ const flash = require('connect-flash');
 // API
 const statusAPI = require("./api/statusAPI");
 const commentAPI = require("./api/commentAPI");
-const api = require("./routes/API");
 const uploadImageAPI = require('./api/upLoadImageAPI')
+const userAPI = require('./api/userAPI')
 
 // ROUTES
+const api = require("./routes/API");
 const departmentRouter = require("./routes/department");
 const loginRouter = require("./routes/login");
 const indexRouter = require("./routes/index");
@@ -91,6 +92,7 @@ app.use('/upload-image', uploadImageAPI)
 app.use('/api', api)
 app.use("/status",statusAPI)
 app.use("/comment",commentAPI)
+app.use("/user",userAPI)
 
 
 

@@ -10,21 +10,24 @@ function fetchApiComment(element) {
     const statusId = element.dataset.status
     const author = element.dataset.author
     const content = document.getElementById('text-content-comment').value;
-    console.log(statusId)
-    console.log(author)
-    console.log(content)
-    var form_data = new FormData()
-    form_data.append("statusId",statusId)
-    form_data.append("author",author)
-    form_data.append("content",content)
-    fetch(window.parent.location.origin + '/comment',{
-        method: 'POST',
-        body: form_data
+    var data = {
+        statusId: statusId,
+        author: author,
+        content: content
+    }
+    $(document).ready(function () {
+        fetch(window.parent.location.origin + '/comment',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            // console.log(data)
+        }).catch(e => console.log(e))
     })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data)
-    }).catch(e => console.log(e))
 }
 // -------------------------------------------------------------------------------------------
 // getLikeStatus
@@ -115,6 +118,9 @@ $(document).ready(function () {
         console.log("Mat ket noi voi server");
     });
     socket.on('list-users', handleUserList);
+
+    // socket add notification
+
     socket.on('add-notification', (data) => {
         
         $(".notificationPage .list-notification").prepend(
@@ -150,6 +156,42 @@ $(document).ready(function () {
         $("#getNotification").delay(5000).fadeOut()
 
     });
+
+    // socket add comment
+
+    socket.on('add-comment', (data) => {
+        // console.log("data comment:",data)
+        fetch(window.parent.location.origin + `/user/${data.author}`, {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(json => {
+            console.log('data user:',json)
+            if (json.success) {
+                $(`.index-page .comments${data.statusId}`).prepend(
+                    `<div class="d-flex flex-row mb-2">
+                        <img src="${json.user.image}" width="40" class="round-img">
+                        <div class="d-flex flex-column ml-2"> <span
+                                class="nameOfUser">${json.user.name}</span>
+                                <small class="comment-text">${data.content}</small>
+                            <div
+                                class="d-flex flex-row align-items-center interactive_comment_color">
+                                <small>Thích</small>
+                                <small>Trả lời</small>
+                                <small>Dịch</small>
+                                <small>20 phút</small>
+                            </div>
+                        </div>
+                    </div>`
+                )
+
+                // set input content comment = ""
+                $('.index-page .comment-input #text-content-comment').val("");
+            }
+        }).catch(e => console.log(e))
+
+    })
+
     function handleUserList(user){
         console.log(user)
     }
@@ -333,8 +375,9 @@ $(document).ready(function () {
                             </div>
                             <hr>
                             <!--Comment-->
-                            <div class="comments mx-3">
-                                <div class="d-flex flex-row mb-2"> <img src="/images/avatar-default.jpg" width="40" class="round-img">
+                            <div class="comments mx-3 comments${json.Status._id}">
+                                <div class="d-flex flex-row mb-2">
+                                    <img src="/images/avatar-default.jpg" width="40" class="round-img">
                                     <div class="d-flex flex-column ml-2"> <span class="nameOfUser">User_Name</span> <small class="comment-text">What user was commented appear here</small>
                                         <div class="d-flex flex-row align-items-center interactive_comment_color">
                                             <small>Thích</small>

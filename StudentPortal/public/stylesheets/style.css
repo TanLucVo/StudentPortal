@@ -1125,13 +1125,13 @@ body {
     margin-right: 0;
 }
 
-.round-img {
+.index-page .round-img {
     border-radius: 50% !important;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50px;
-    width: 50px
+    height: 40px;
+    width: 40px
 }
 
 .index-page .like .change-like {

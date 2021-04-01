@@ -30,16 +30,23 @@ router.get('/', authenticateTokenAPI, async (req, res) => {
     if (unread) console.log("unread " + unread)
 
     if (!page) page = 1
-    await Notification.find({...condition, createAt: { $gte: start, $lte: end}}).sort( { createAt : -1} ).exec( (err, data) => {
+    await Notification.find({...condition, createAt: { $gte: start, $lte: end}}).sort( { createAt : -1} ).skip((page-1)*10).limit(10).exec(async (err, data) => {
         
         if (err){ 
             res.status(403).json({err: err})
         } 
         else { 
-          
-            res.status(200).json({ data: data })
+            await Notification.count({...condition, createAt: { $gte: start, $lte: end}}, function(err, result) {
+                if (err) {
+                    console.log(err);
+                } else {
+                   res.status(200).json({ data: data , count : result})
+                }
+            });
+            
         } 
     })
+    
     
 })
 router.post('/',authenticateTokenAPI, postNofiticationValidator ,async (req,res)=>{
