@@ -160,24 +160,36 @@ $(document).ready(function () {
     // socket add comment
 
     socket.on('add-comment', (data) => {
-        // fetch(window.parent.location.origin + '/')
-        $(`.index-page .comments${data.statusId}`).prepend(
-            `<div class="d-flex flex-row mb-2">
-                <img src="/images/avatar-default.jpg" width="40" class="round-img">
-                <div class="d-flex flex-column ml-2"> <span
-                        class="nameOfUser">User_Name</span> <small
-                        class="comment-text">What user was commented appear
-                        here</small>
-                    <div
-                        class="d-flex flex-row align-items-center interactive_comment_color">
-                        <small>Thích</small>
-                        <small>Trả lời</small>
-                        <small>Dịch</small>
-                        <small>20 phút</small>
-                    </div>
-                </div>
-            </div>`
-        )
+        // console.log("data comment:",data)
+        fetch(window.parent.location.origin + `/user/${data.author}`, {
+            method: 'GET'
+        })
+        .then(res => res.json())
+        .then(json => {
+            console.log('data user:',json)
+            if (json.success) {
+                $(`.index-page .comments${data.statusId}`).prepend(
+                    `<div class="d-flex flex-row mb-2">
+                        <img src="${json.user.image}" width="40" class="round-img">
+                        <div class="d-flex flex-column ml-2"> <span
+                                class="nameOfUser">${json.user.name}</span>
+                                <small class="comment-text">${data.content}</small>
+                            <div
+                                class="d-flex flex-row align-items-center interactive_comment_color">
+                                <small>Thích</small>
+                                <small>Trả lời</small>
+                                <small>Dịch</small>
+                                <small>20 phút</small>
+                            </div>
+                        </div>
+                    </div>`
+                )
+
+                // set input content comment = ""
+                $('.index-page .comment-input #text-content-comment').val("");
+            }
+        }).catch(e => console.log(e))
+
     })
 
     function handleUserList(user){
