@@ -54,6 +54,7 @@ router.get('/:id' ,authenticateToken,async function(req, res, next) {
 router.get('/status/:id' ,authenticateToken,async function(req, res, next) {
     const id = req.params.id
     await commentsModel.findOne({statusId : id})
+    .sort({dateModified: 'desc'})
     .then((singleComment) => {
         res.status(200).json({
         success: true,

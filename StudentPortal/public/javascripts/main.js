@@ -118,7 +118,7 @@ $(document).ready(function () {
         console.log("Mat ket noi voi server");
     });
     socket.on('list-users', handleUserList);
-
+    // -------------------------------------------------------------------------------------------
     // socket add notification
 
     socket.on('add-notification', (data) => {
@@ -156,7 +156,7 @@ $(document).ready(function () {
         $("#getNotification").delay(5000).fadeOut()
 
     });
-
+    // -------------------------------------------------------------------------------------------
     // socket add comment
 
     socket.on('add-comment', (data) => {
@@ -200,6 +200,7 @@ $(document).ready(function () {
         let userId = '<%= user.id %>'
         socket.emit('register-id', {socketId:socket.id,userId:userId }) //gui id qua cho server
     }
+    // -------------------------------------------------------------------------------------------
     /*--- left menu full ---*/
     $(' .menu-small').on("click", function () {
         $(".fixed-sidebar.left").addClass("open");
@@ -207,7 +208,7 @@ $(document).ready(function () {
     $('.closd-f-menu').on("click", function () {
         $(".fixed-sidebar.left").removeClass("open");
     });
-
+    // -------------------------------------------------------------------------------------------
     //--- user setting dropdown on topbar
     $('.user-img').on('click', function () {
         // toggleClass(): Thêm hoặc loại bỏ một hoặc nhiều class của thành phần.
@@ -235,7 +236,7 @@ $(document).ready(function () {
     $('.index-page .post-btn-preview').on('click', function() {
         $('.index-page .preview-image-upload').toggleClass('active');
     });
-
+    // -------------------------------------------------------------------------------------------
     //------- Notifications Dropdowns
     // $('.top-area > .setting-area > li > a > ').on("click",function(){
     //     var $parent = $(this).parent('li');
@@ -270,7 +271,6 @@ $(document).ready(function () {
     }
 
     // -------------------------------------------------------------------------------------------
-    // fetch api - status
     // tinyMCE
     // tinymce.init({
     //     height: "350",
@@ -290,7 +290,22 @@ $(document).ready(function () {
     //     tinycomments_author: 'Author name',
     //     inline_boundaries: false,
     // });
-
+    // -------------------------------------------------------------------------------------------
+    // fetch api - status
+    $( ".index-page textarea.statusTitle" ).keyup(function() {
+        if ($('.index-page textarea.statusTitle').val().length !== 0) {
+            $('.index-page .post-btn').prop('disabled', false)
+            $('.index-page .post-btn').css('cursor', 'pointer')
+        }
+        else {
+            $('.index-page .post-btn').prop('disabled', true)
+            $('.index-page .post-btn').css('cursor', 'no-drop')
+        }
+    });
+    if ($('.index-page textarea.statusTitle').val().length === 0) {
+        $('.index-page .post-btn').prop('disabled', true)
+        $('.index-page .post-btn').css('cursor', 'no-drop')
+    }
     $(".index-page .post-btn").click(e => {
         var file_data = $('.index-page #imageUpload').prop('files')[0];
         var statusTitle = $('.index-page textarea.statusTitle').val()
@@ -305,10 +320,7 @@ $(document).ready(function () {
             image: image,
             fullName: fullName
         }
-        if (statusTitle.length === 0) {
-            alert("Vui lòng nhập tiêu đề bài đăng")
-        }
-        else {
+        if (statusTitle.length !== 0) {
             form_data.append('imageStatus', file_data);
             form_data.append('statusTitle', statusTitle);
             form_data.append('author', JSON.stringify(user))
@@ -398,18 +410,21 @@ $(document).ready(function () {
                         // console.log(htmlString)
                         $(".multi-card").prepend(htmlString)
                         
+
                         // set null in content and image upload = null
-                        $('.index-page .image-upload-preview').slideToggle(300, 'swing');
-                        $(".index-page #imageUpload").val(null)
-                        setTimeout(() => {
-                            $("#output").attr("src", null)
-                        }, 300);
+                        if (file_data !== undefined) {
+                            $('.index-page .image-upload-preview .close-icon').trigger('click');
+                        }
                         $('.index-page textarea.statusTitle').val("");
+
+                        $('.index-page .post-btn').prop('disabled', true)
+                        $('.index-page .post-btn').css('cursor', 'no-drop')
                     }
                 })
                 .catch(e => console.log(e))
         }
     });
+    // -------------------------------------------------------------------------------------------
     // preview image uploaded
     $(document).delegate('.index-page .image-upload-preview .close-icon', 'click', function () {
         $('.index-page .image-upload-preview').slideToggle(300, 'swing');
@@ -418,7 +433,6 @@ $(document).ready(function () {
             $("#output").attr("src", null)
         }, 300);
     })
-
     $('.index-page #imageUpload').change(e => {
         var file = e.target.files[0]
         // console.log(file)
@@ -432,9 +446,16 @@ $(document).ready(function () {
         $(".image-upload-preview").css("display", "block")
         $('.index-page .preview-image-upload').addClass('active');
     })
-
     // -------------------------------------------------------------------------------------------
-
+    // Scroll load status
+    $(window).on("scroll", function() {
+        var scrollHeight = $(document).height();
+        var scrollPosition = $(window).height() + $(window).scrollTop();
+        if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+            console.log("dang scroll...............")
+        }
+    });
+    // -------------------------------------------------------------------------------------------
     //dashboardDepartment
     $(".dashboardDepartment .row img ").each(function (k, v) {
         v.onload = function () {
