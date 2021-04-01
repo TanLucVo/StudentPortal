@@ -9,7 +9,6 @@
 function fetchApiComment(element) {
     const statusId = element.dataset.status
     const author = element.dataset.author
-    console.log(element)
     const content = document.getElementById(`text-content-comment${statusId}`).value;
     var data = {
         statusId: statusId,
