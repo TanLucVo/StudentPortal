@@ -10,9 +10,6 @@ function fetchApiComment(element) {
     const statusId = element.dataset.status
     const author = element.dataset.author
     const content = document.getElementById('text-content-comment').value;
-    console.log(statusId)
-    console.log(author)
-    console.log(content)
     var data = {
         statusId: statusId,
         author: author,
@@ -28,7 +25,7 @@ function fetchApiComment(element) {
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data)
+            // console.log(data)
         }).catch(e => console.log(e))
     })
 }
@@ -163,7 +160,24 @@ $(document).ready(function () {
     // socket add comment
 
     socket.on('add-comment', (data) => {
-        console.log(data)
+        // fetch(window.parent.location.origin + '/')
+        $(`.index-page .comments${data.statusId}`).prepend(
+            `<div class="d-flex flex-row mb-2">
+                <img src="/images/avatar-default.jpg" width="40" class="round-img">
+                <div class="d-flex flex-column ml-2"> <span
+                        class="nameOfUser">User_Name</span> <small
+                        class="comment-text">What user was commented appear
+                        here</small>
+                    <div
+                        class="d-flex flex-row align-items-center interactive_comment_color">
+                        <small>Thích</small>
+                        <small>Trả lời</small>
+                        <small>Dịch</small>
+                        <small>20 phút</small>
+                    </div>
+                </div>
+            </div>`
+        )
     })
 
     function handleUserList(user){
@@ -349,8 +363,9 @@ $(document).ready(function () {
                             </div>
                             <hr>
                             <!--Comment-->
-                            <div class="comments mx-3">
-                                <div class="d-flex flex-row mb-2"> <img src="/images/avatar-default.jpg" width="40" class="round-img">
+                            <div class="comments mx-3 comments${json.Status._id}">
+                                <div class="d-flex flex-row mb-2">
+                                    <img src="/images/avatar-default.jpg" width="40" class="round-img">
                                     <div class="d-flex flex-column ml-2"> <span class="nameOfUser">User_Name</span> <small class="comment-text">What user was commented appear here</small>
                                         <div class="d-flex flex-row align-items-center interactive_comment_color">
                                             <small>Thích</small>
