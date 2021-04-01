@@ -803,9 +803,8 @@ if($(".index-page")[0]){
         $('.spinerLoadingNotification').hide()
         console.log('Error:', error);
     });
-    $(".card-body").scroll(function() {
-        
-        if($('.card-body')[0].scrollHeight - $('.main-card').height() === $(".card-body").scrollTop()) {
+    $(".notification-body").scroll(function () {
+        if($('.notification-body')[0].scrollHeight - $('.main-card').height() === $(".notification-body").scrollTop()) {
             console.log(`Loading....`);
             $(".spinerLoadingNotification .spinner-border").show();
             $(".spinerLoadingNotification p").hide()
@@ -816,7 +815,7 @@ if($(".index-page")[0]){
                 method: 'GET', // or 'PUT'
             })
             .then(response => response.json())
-            .then(data => {
+                .then(data => {
                 if(data.data.length ===0){
                     $(".spinerLoadingNotification .spinner-border").hide();
                     $(".spinerLoadingNotification p").show()
