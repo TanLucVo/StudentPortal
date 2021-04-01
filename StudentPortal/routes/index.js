@@ -33,9 +33,8 @@ const upload = multer({dest:'uploads',
 router.get('/' , authenticateToken, function(req, res) {
     cookie = req.cookies
     // khai báo khi vào index mặc định load 3 status
-    const skip = 0
-    const limit = 2
-    fetch(process.env.URL + `/status/${skip}/${limit}`, {
+    const page = 1
+    fetch(process.env.URL + `/status/${page}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -74,7 +73,7 @@ router.get('/' , authenticateToken, function(req, res) {
             }
         });
 
-        return res.render('index',{user: req.user, allStatus: arraySortStatus, skip : skip, limit : limit});
+        return res.render('index',{user: req.user, allStatus: arraySortStatus, page: page});
     })
     .catch(e => {
         console.log(e)

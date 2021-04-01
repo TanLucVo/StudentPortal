@@ -179,7 +179,7 @@ $(document).ready(async function () {
                                 <small>Thích</small>
                                 <small>Trả lời</small>
                                 <small>Dịch</small>
-                                <small>20 phút</small>
+                                <small>${getPassedTime(new Date(data.dateModified),Date.now())}</small>
                             </div>
                         </div>
                     </div>`
@@ -452,7 +452,7 @@ $(document).ready(async function () {
         var scrollHeight = $(document).height();
         var scrollPosition = $(window).height() + $(window).scrollTop();
         if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
-            console.log("dang scroll...............")
+            console.log("dang scroll............... STATUS")
         }
     });
     // -------------------------------------------------------------------------------------------

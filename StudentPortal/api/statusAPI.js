@@ -10,9 +10,11 @@ const statusModel = require('../models/status')
 // TẤT CẢ ĐỀU SÀI _id của mongodb tự động tạo để sử dụng CRUD
 // GET
 
-router.get('/:skip/:limit', authenticateToken,async function(req, res, next) {
-    const {skip,limit} = req.params
-    await statusModel.find().limit(parseInt(limit)).skip(parseInt(skip))
+router.get('/:page', authenticateToken,async function(req, res, next) {
+    const {page} = req.params
+    const skip = parseInt(page) - 1
+    const limit = parseInt(page) * 2
+    await statusModel.find().limit(limit).skip(skip)
     .sort({dateModified: 'desc'})
     .select('_id author statusTitle statusId dateModified like image')
     .then((allStatus) => {
