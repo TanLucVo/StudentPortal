@@ -13,18 +13,24 @@ function fetchApiComment(element) {
     console.log(statusId)
     console.log(author)
     console.log(content)
-    var form_data = new FormData()
-    form_data.append("statusId",statusId)
-    form_data.append("author",author)
-    form_data.append("content",content)
-    fetch(window.parent.location.origin + '/comment',{
-        method: 'POST',
-        body: form_data
+    var data = {
+        statusId: statusId,
+        author: author,
+        content: content
+    }
+    $(document).ready(function () {
+        fetch(window.parent.location.origin + '/comment',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+        }).catch(e => console.log(e))
     })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data)
-    }).catch(e => console.log(e))
 }
 // -------------------------------------------------------------------------------------------
 // getLikeStatus
@@ -115,6 +121,9 @@ $(document).ready(function () {
         console.log("Mat ket noi voi server");
     });
     socket.on('list-users', handleUserList);
+
+    // socket add notification
+
     socket.on('add-notification', (data) => {
         
         $(".notificationPage .list-notification").prepend(
@@ -150,6 +159,13 @@ $(document).ready(function () {
         $("#getNotification").delay(5000).fadeOut()
 
     });
+
+    // socket add comment
+
+    socket.on('add-comment', (data) => {
+        console.log(data)
+    })
+
     function handleUserList(user){
         console.log(user)
     }
