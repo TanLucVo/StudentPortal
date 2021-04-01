@@ -21881,7 +21881,8 @@ a.btn2:hover,
 }
 
 .topbar .loader {
-    width: 100vw;;
+    width: 100vw;
+    ;
     position: absolute;
     padding: 1px;
     left: 0;
@@ -21936,4 +21937,158 @@ a.btn2:hover,
         right: 0%;
         width: 0%;
     }
+}
+
+
+.notificationPage {
+    background-color: #ECEDF1;
+    padding-bottom: 20px;
+}
+
+.notificationPage .list-group {
+    max-height: 750px;
+    margin-bottom: 10px;
+}
+
+
+.notificationPage .filter {
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 10px;
+    height: 55%;
+}
+
+.notificationPage a {
+    cursor: pointer;
+    word-break: break-all;
+}
+
+.notificationPage .font-italic {
+    text-align: right;
+    margin-bottom: 0;
+}
+
+.notificationPage #editor {
+    min-height: 10em !important;
+    max-height: 35em !important;
+    border: 1px solid rgba(0, 0, 0, .125);
+    ;
+}
+
+.notificationPage #editor:focus {
+    border: 1px solid #0e7fe1
+}
+
+@keyframes placeHolderShimmer {
+    0% {
+        background-position: -468px 0;
+    }
+
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+.notificationPage .animated-background {
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-name: placeHolderShimmer;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
+    background-size: 800px 104px;
+    height: 76px;
+    position: relative;
+}
+
+.notificationPage .background-masker {
+    background: #fff;
+    position: absolute;
+}
+
+.notificationPage .background-masker.font-weight-bold {
+    top: 0;
+    left: 30%;
+    right: 0;
+    height: 24px;
+    width: 70%;
+}
+
+.notificationPage .background-masker.content {
+    top: 34px;
+    left: 40%;
+    right: 0;
+    height: 20px;
+    width: 60%;
+}
+
+.notificationPage .background-masker.head {
+    top: 24px;
+    left: 0;
+    right: 0;
+    height: 10px;
+    width: 100%;
+}
+
+.notificationPage .background-masker.body {
+    top: 54px;
+    /* left: 0; */
+    right: 30%;
+    height: 22px;
+    width: 70%;
+}
+
+.notificationPage .content {
+    text-overflow: ellipsis;
+}
+
+.notificationPage .content * {
+    text-overflow: ellipsis;
+    margin-bottom: 0px;
+}
+
+.notificationPage .tox.tox-silver-sink.tox-tinymce-aux {
+    z-index: 1000000000;
+}
+
+.notificationPage .list-group-item .title {
+    font-size: 16px;
+    color: #0061AD !important;
+    text-transform: uppercase;
+}
+
+.notificationPage .list-group-item .content a {
+    font-size: 14px;
+}
+
+.notificationPage .pagination {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: .25rem;
+}
+
+.notificationPage .pagination>li a {
+    width: auto;
+    height: auto;
+    background-color: #fff;
+    line-height: 20px;
+    outline: none;
+
+}
+
+.notificationPage .pagination>li a:hover {
+    color: #0061AD;
+}
+
+.notificationPage .pagination>li.active a:hover {
+    color: #fff;
+    cursor: default;
+}
+
+.notificationPage .disabledbutton {
+    cursor: not-allowed !important;
+    pointer-events: none !important;
 }
