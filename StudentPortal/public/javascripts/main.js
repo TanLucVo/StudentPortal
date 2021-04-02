@@ -462,7 +462,8 @@ $(document).ready(async function () {
         var check = false
         if (scrollHeight/Math.floor(scrollPosition) === 1) {
             page += 1
-            console.log("đây là limit:",page)
+            console.log("đây là skip:",parseInt(page)*2 - 2)
+            console.log("đây là limit:",2)
             console.log("dang scroll............... STATUS")
             fetch(window.parent.location.origin + `/status/page/${page}`, {
                 method: 'GET'
@@ -470,12 +471,11 @@ $(document).ready(async function () {
             .then(res => res.json())
             .then(json => {
                 if (json.success) {
-                    console.log(json.Status)
+                    // console.log(json.Status)
                     data = ""
 
                     const buttonPostBtn = document.querySelector('.index-page .post-btn')
                     userId = buttonPostBtn.dataset.id
-                    console.log(userId)
                     image = buttonPostBtn.dataset.image
                     fullName = buttonPostBtn.dataset.name
                     var user = {
@@ -484,10 +484,40 @@ $(document).ready(async function () {
                         fullName: fullName
                     }
                     // console.log("user: ",user)
-
+                    var checkLike = false
                     json.Status.forEach(status => {
                         author = JSON.parse(status.author)
-                        // console.log(author)
+                        // console.log(status)
+                        if (!status.like) {
+                            status.like = []
+                            checkLike = false
+                        }
+                        else {
+                            status.like = JSON.parse(status.like)
+                            status.like.forEach(l => {
+                                if (user.userId == l._id) {
+                                    checkLike = true
+                                }
+                            });
+                            status.checkLike = checkLike
+                            // gắn lại giá trị default cho biến checkLike để sử dụng cho element vòng lặp kế tiếp
+                            checkLike = false
+                        }
+                        var likeString = ""
+                        if (status.checkLike) {
+                            likeString =
+                            `<div class="like liked ${status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${status._id}">
+                                <i class="fa fa-thumbs-up"></i> <span>Thích</span>
+                            </div>`
+                        }
+                        else {
+                            likeString =
+                            `<div class="like ${status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${status._id}">
+                                <i class="fa fa-thumbs-up"></i> <span>Thích</span>
+                            </div>`
+                        }
+                        console.log(likeString)
+
                         data +=
                         `<div class="card">
                             <!--Information of post's user-->
@@ -501,7 +531,7 @@ $(document).ready(async function () {
                                 </div>
                                 <!--Time and more-->
                                 <div class="time-and-more d-flex flex-row mt-2">
-                                <small class="mr-2">${status.currentTime}</small><i class="fas fa-ellipsis-v"></i>
+                                <small class="mr-2">${getPassedTime(new Date(status.dateModified),Date.now())}</small><i class="fas fa-ellipsis-v"></i>
                                 </div>
                             </div>
                             <!--Area of post-->
@@ -511,7 +541,7 @@ $(document).ready(async function () {
                             <!-- Number of Comment and Interactive-->
                             <div class="d-flex justify-content-between align-items-centerl">
                                 <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
-                                    <span><i class="fa fa-thumbs-up"></i> <a class="view-${status._id}" href=""> like</a> </span>
+                                    <span><i class="fa fa-thumbs-up"></i> <a class="view-${status._id}" href=""> ${status.like.length}</a> </span>
                                 </div>
                                 <div class="d-flex flex-row interactive_color m-3">
                                     <span class="mr-3 cmt">Bình luận</span>
@@ -521,11 +551,11 @@ $(document).ready(async function () {
                             <hr>
                             <!--Interative-->
                             <div class="d-flex justify-content-between align-items-centerl mx-5">
-                                <div class="like ${status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${status._id}">
-                                    <i class="fa fa-thumbs-up"></i> <span>Thích</span>
-                                </div>
+
+                                ${likeString}
+
                                 <div class="cmts">
-                                    <i class="fa fa-comments"></i> <span>Bình  luận</span>
+                                    <i class="fa fa-comments"></i> <span>Bình luận</span>
                                 </div>
                                 <div class="shr">
                                     <i class="fa fa-share-square"></i> <span>Chia sẻ</span>

@@ -43,7 +43,6 @@ router.get('/' , authenticateToken, function(req, res) {
     })
     .then(res => res.text())
     .then(json => {
-        console.log(json.Status)
         let checkLike = false
         arraySortStatus = JSON.parse(json).Status
         arraySortStatus.forEach(status => {
@@ -73,7 +72,7 @@ router.get('/' , authenticateToken, function(req, res) {
             }
         });
 
-        console.log("đổ data thành công")
+        // console.log("đổ data thành công")
 
         return res.render('index',{user: req.user, allStatus: arraySortStatus, page: page});
     })
