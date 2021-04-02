@@ -359,7 +359,7 @@ $(document).ready(async function () {
             page += 1
             // console.log("đây là skip:",parseInt(page)*2 - 2)
             // console.log("đây là limit:",2)
-            // console.log("dang scroll............... STATUS")
+            console.log("dang scroll............... STATUS")
             fetch(window.parent.location.origin + `/status/page/${page}`, {
                 method: 'GET'
             })
