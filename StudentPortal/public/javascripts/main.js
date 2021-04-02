@@ -841,7 +841,7 @@ if($(".index-page")[0]){
     });
     $(".notification-body").scroll(function () {
         console.log($('.notification-body')[0].scrollHeight - $('.main-card').height())
-        console.log(Math.floor($(".notification-body").scrollTop()) + 1)
+        console.log($(".notification-body").scrollTop())
         if($('.notification-body')[0].scrollHeight - $('.main-card').height() === $(".notification-body").scrollTop()) {
             console.log(`Loading....`);
             $(".spinerLoadingNotification .spinner-border").show();
