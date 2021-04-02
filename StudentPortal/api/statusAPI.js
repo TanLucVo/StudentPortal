@@ -10,11 +10,38 @@ const statusModel = require('../models/status')
 // TẤT CẢ ĐỀU SÀI _id của mongodb tự động tạo để sử dụng CRUD
 // GET
 
-router.get('/:page', authenticateToken,async function(req, res, next) {
-    const {page} = req.params
-    const skip = parseInt(page) - 1
+// GET ALL STATUS
+router.get('/', authenticateToken,async function(req, res, next) {
+    await statusModel.find()
+    .sort({dateModified: 'desc'})
+    .select('_id author statusTitle statusId dateModified like image')
+    .then((allStatus) => {
+      return res.status(200).json({
+        success: true,
+        message: 'A list of all status',
+        Status: allStatus,
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: false,
+        message: 'Server error. Please try again.',
+        error: err.message,
+      });
+    });
+})
 
-    const limit = parseInt(page) * 2
+// GET LIMIT STATUS
+router.get('/page/:page', authenticateToken,async function(req, res, next) {
+    const {page} = req.params
+
+    const limit = 2
+    const skip = (parseInt(page) * 2) - 2 // 2n - 2
+
+    console.log("status API --- skip & limit")
+    console.log("đây là limit:",limit)
+    console.log("đây là skip:",skip)
+
     await statusModel.find().limit(limit).skip(skip)
     .sort({dateModified: 'desc'})
     .select('_id author statusTitle statusId dateModified like image')
@@ -26,7 +53,7 @@ router.get('/:page', authenticateToken,async function(req, res, next) {
       });
     })
     .catch((err) => {
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         message: 'Server error. Please try again.',
         error: err.message,
@@ -34,18 +61,19 @@ router.get('/:page', authenticateToken,async function(req, res, next) {
     });
 })
 
+// GET STATUS BY ID
 router.get('/:id' ,authenticateToken,async function(req, res, next) {
     const id = req.params.id
     await statusModel.findById(id)
     .then((singleStatus) => {
-        res.status(200).json({
+        return res.status(200).json({
         success: true,
         message: `More on ${singleStatus.statusId}`,
         Status: singleStatus,
         });
     })
     .catch((err) => {
-        res.status(500).json({
+        return res.status(500).json({
         success: false,
         message: 'This status does not exist in database',
         error: err.message,
@@ -55,6 +83,7 @@ router.get('/:id' ,authenticateToken,async function(req, res, next) {
 
 // POST
 
+// POST STATUS
 router.post('/', authenticateToken,async function(req, res, next) {
     if (!req.body) {
         return res.status(500).json({
@@ -63,7 +92,6 @@ router.post('/', authenticateToken,async function(req, res, next) {
                 error: error.message,
         });
     }
-    else {
     const data = req.body
     const status = new statusModel({
         statusId: mongoose.Types.ObjectId(),
@@ -83,17 +111,15 @@ router.post('/', authenticateToken,async function(req, res, next) {
         });
     })
     .catch((error) => {
-        console.log(error);
-        res.status(500).json({
+        return res.status(500).json({
         success: false,
         message: 'Server error. Please try again.',
         error: error.message,
         });
     });
-    }
 })
 
-// PUT
+// PUT STATUS BY ID
 
 router.put('/:id' ,authenticateToken,async function(req, res, next) {
     if (!req.body) {
@@ -103,51 +129,55 @@ router.put('/:id' ,authenticateToken,async function(req, res, next) {
                 error: error.message,
         });
     }
-    else {
-        const log =  await statusModel.findOneAndUpdate(
-            {_id: req.params.id},
-            {
-                author: req.body.author,
-                statusTitle: req.body.statusTitle,
-                image: req.body.image,
-                like: req.body.like,
-                dateModified: req.body.dateModified
-            },
-            {
-                useFindAndModify: false,
-                upsert: false,
-                new: true
-            }
-        )
-        .exec()
-        .then((oldStatus) => {
-            return res.status(200).json({
-                success: true,
-                message: 'this status was updated successfully',
-                Status: oldStatus,
-            });
-        })
-        .catch((err) => {
-            res.status(500).json({
-                success: false,
-                message: 'Server error. Please try again.',
-                error: err.message,
-            });
+    const log =  await statusModel.findOneAndUpdate(
+        {_id: req.params.id},
+        {
+            author: req.body.author,
+            statusTitle: req.body.statusTitle,
+            image: req.body.image,
+            like: req.body.like,
+            dateModified: req.body.dateModified
+        },
+        {
+            useFindAndModify: false,
+            upsert: false,
+            new: true
+        }
+    )
+    .exec()
+    .then((oldStatus) => {
+        return res.status(200).json({
+            success: true,
+            message: 'this status was updated successfully',
+            Status: oldStatus,
         });
-    }
+    })
+    .catch((err) => {
+        return res.status(500).json({
+            success: false,
+            message: 'Server error. Please try again.',
+            error: err.message,
+        });
+    });
 })
 
-// DELETE
+// DELETE STATUS BY ID
 
 router.delete('/:id' ,authenticateToken,async function(req, res, next) {
     const id = req.params.id
     await statusModel.findByIdAndRemove(id)
     .exec()
-    .then(()=> res.status(204).json({
-        success: true,
-    }))
-    .catch((err) => res.status(500).json({
-        success: false,
-    }));
+    .then(()=> {
+        return res.status(204).json({
+            success: true,
+            message: 'this status was deleted successfully',
+        })
+    })
+    .catch((err) => {
+        return res.status(500).json({
+            success: false,
+            error: err.message,
+        })
+    });
 })
 module.exports = router

@@ -38,12 +38,17 @@ function getLikeStatus(element) {
     const userId = element.dataset.userid
     const name = element.dataset.name
     let myLike = undefined
+    // console.log("id status:",idStatus)
+    // console.log("userImage:", userImage)
+    // console.log("userId:",userId)
+    // console.log("name:",name)
     $(document).ready(function () {
         fetch(window.parent.location.origin + `/status/${idStatus}`,{
             method: 'GET'
         })
         .then(res => res.json())
         .then(data => {
+            // console.log('before:',data.Status)
             if (data.Status.like === undefined || data.Status.like === null) {
                 $(`.${idStatus}`).addClass("liked");
                 
@@ -60,6 +65,7 @@ function getLikeStatus(element) {
             }
             else {
                 likes = JSON.parse(data.Status.like)
+                // console.log(likes)
                 // console.log(idStatus)
                 // kiểm tra user đã like bài viết hay chưa
                 let new_likes = []
@@ -94,6 +100,7 @@ function getLikeStatus(element) {
                     data.Status.like = (JSON.stringify(likes))
                 }
             }
+            // console.log(data.Status)
             fetch(window.parent.location.origin + `/status/${idStatus}`,{
                 method: 'PUT',
                 headers: {
@@ -104,7 +111,7 @@ function getLikeStatus(element) {
             .then(res => res.json())
             .then(json => {
                 if (json.success) {
-                    // console.log(json)
+                    console.log(json.message)
                 }
             }).catch(e => console.log(e))
         })
@@ -408,7 +415,7 @@ $(document).ready(async function () {
                             </div>
                         </div>`
                         // console.log(htmlString)
-                        $(".multi-card").prepend(htmlString)
+                        $(".index-page .multi-card").prepend(htmlString)
                         
 
                         // set null in content and image upload = null
@@ -455,14 +462,100 @@ $(document).ready(async function () {
         var check = false
         if (scrollHeight/Math.floor(scrollPosition) === 1) {
             page += 1
+            console.log("đây là limit:",page)
             console.log("dang scroll............... STATUS")
-            fetch(window.parent.location.origin + `/status/${page}`, {
+            fetch(window.parent.location.origin + `/status/page/${page}`, {
                 method: 'GET'
             })
             .then(res => res.json())
             .then(json => {
                 if (json.success) {
                     console.log(json.Status)
+                    data = ""
+
+                    const buttonPostBtn = document.querySelector('.index-page .post-btn')
+                    userId = buttonPostBtn.dataset.id
+                    console.log(userId)
+                    image = buttonPostBtn.dataset.image
+                    fullName = buttonPostBtn.dataset.name
+                    var user = {
+                        userId: userId,
+                        image: image,
+                        fullName: fullName
+                    }
+                    // console.log("user: ",user)
+
+                    json.Status.forEach(status => {
+                        author = JSON.parse(status.author)
+                        // console.log(author)
+                        data +=
+                        `<div class="card">
+                            <!--Information of post's user-->
+                            <div class="d-flex justify-content-between p-2 px-2">
+                                <div class="d-flex flex-row align-items-center">
+                                    <img src="${author.image}" alt="" class="image-user rounded-circle" width="52">
+                                    <div class="d-flex flex-column ml-2">
+                                        <span class="font-weight-bold">${author.fullName}</span>
+                                        <small class="text-primary">Thông tin</small>
+                                    </div>
+                                </div>
+                                <!--Time and more-->
+                                <div class="time-and-more d-flex flex-row mt-2">
+                                <small class="mr-2">${status.currentTime}</small><i class="fas fa-ellipsis-v"></i>
+                                </div>
+                            </div>
+                            <!--Area of post-->
+                            <hr style="border: none;">
+                            <p class="text-justify ml-3">${ status.statusTitle }</p>
+                            <img src="${ status.image }" alt="" class="img-fluid">
+                            <!-- Number of Comment and Interactive-->
+                            <div class="d-flex justify-content-between align-items-centerl">
+                                <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
+                                    <span><i class="fa fa-thumbs-up"></i> <a class="view-${status._id}" href=""> like</a> </span>
+                                </div>
+                                <div class="d-flex flex-row interactive_color m-3">
+                                    <span class="mr-3 cmt">Bình luận</span>
+                                    <span class="shares">Chia sẻ</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <!--Interative-->
+                            <div class="d-flex justify-content-between align-items-centerl mx-5">
+                                <div class="like ${status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${status._id}">
+                                    <i class="fa fa-thumbs-up"></i> <span>Thích</span>
+                                </div>
+                                <div class="cmts">
+                                    <i class="fa fa-comments"></i> <span>Bình  luận</span>
+                                </div>
+                                <div class="shr">
+                                    <i class="fa fa-share-square"></i> <span>Chia sẻ</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <!--Comment-->
+                            <div class="comments mx-3 comments${status._id}">
+                                <div class="d-flex flex-row mb-2">
+                                    <img src="/images/avatar-default.jpg" width="40" class="round-img">
+                                    <div class="d-flex flex-column ml-2"> <span class="nameOfUser">User_Name</span> <small class="comment-text">What user was commented appear here</small>
+                                        <div class="d-flex flex-row align-items-center interactive_comment_color">
+                                            <small>Thích</small>
+                                            <small>Trả lời</small>
+                                            <small>Dịch</small>
+                                            <small>20 phút</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="comment-input">
+                                    <input type="text" class="form-control" id="text-content-comment${status._id}">
+                                    <div class="fonts send-comment" data-author="${user.userId}" data-status = "${status._id}" onclick="fetchApiComment(this)">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+                    });
+
+                    $(".index-page .multi-card").append(data)
                 }
             }).catch(e => console.log(e))
         }

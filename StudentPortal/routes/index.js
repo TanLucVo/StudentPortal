@@ -34,7 +34,7 @@ router.get('/' , authenticateToken, function(req, res) {
     cookie = req.cookies
     // khai báo khi vào index mặc định load 3 status
     const page = 1
-    fetch(process.env.URL + `/status/${page}`, {
+    fetch(process.env.URL + `/status/page/${page}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ router.get('/' , authenticateToken, function(req, res) {
     })
     .then(res => res.text())
     .then(json => {
-
+        console.log(json.Status)
         let checkLike = false
         arraySortStatus = JSON.parse(json).Status
         arraySortStatus.forEach(status => {
@@ -73,11 +73,13 @@ router.get('/' , authenticateToken, function(req, res) {
             }
         });
 
+        console.log("đổ data thành công")
+
         return res.render('index',{user: req.user, allStatus: arraySortStatus, page: page});
     })
     .catch(e => {
         console.log(e)
-        return res.render('index',{user: req.user});
+        return res.render('index',{user: req.user, allStatus: [], page: page});
     })
 });
 
