@@ -36,11 +36,12 @@ router.get('/', authenticateTokenAPI, async (req, res) => {
             res.status(403).json({err: err})
         } 
         else { 
-            await Notification.count({...condition, createAt: { $gte: start, $lte: end}}, function(err, result) {
+            await Notification.countDocuments({...condition, createAt: { $gte: start, $lte: end}}, function(err, result) {
                 if (err) {
                     console.log(err);
                 } else {
-                   res.status(200).json({ data: data , count : result})
+   
+                    res.status(200).json({ data: data , count : result})
                 }
             });
             

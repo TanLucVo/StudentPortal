@@ -323,138 +323,7 @@ $(document).ready(async function () {
     // });
     // -------------------------------------------------------------------------------------------
     // fetch api - status
-    $( ".index-page textarea.statusTitle" ).keyup(function() {
-        if ($('.index-page textarea.statusTitle').val().length !== 0) {
-            $('.index-page .post-btn').prop('disabled', false)
-            $('.index-page .post-btn').css('cursor', 'pointer')
-        }
-        else {
-            $('.index-page .post-btn').prop('disabled', true)
-            $('.index-page .post-btn').css('cursor', 'no-drop')
-        }
-    });
-    if ($('.index-page textarea.statusTitle').val().length === 0) {
-        $('.index-page .post-btn').prop('disabled', true)
-        $('.index-page .post-btn').css('cursor', 'no-drop')
-    }
-    $(".index-page .post-btn").click(e => {
-        var file_data = $('.index-page #imageUpload').prop('files')[0];
-        var statusTitle = $('.index-page textarea.statusTitle').val()
-        // console.log(statusTitle)
-        // console.log(file_data)
-        var form_data = new FormData();
-        userId = e.target.dataset.id
-        image = e.target.dataset.image
-        fullName = e.target.dataset.name
-        var user = {
-            userId: userId,
-            image: image,
-            fullName: fullName
-        }
-        if (statusTitle.length !== 0) {
-            form_data.append('imageStatus', file_data);
-            form_data.append('statusTitle', statusTitle);
-            form_data.append('author', JSON.stringify(user))
-            uploadImage(form_data, user)
-        }
-        function uploadImage(form_data, user) {
-           fetch(window.parent.location.origin, { // Your POST endpoint
-                    method: 'POST',
-
-                    body: form_data // This is your file object
-                })
-                .then(res => res.json())
-                .then(json => {
-                    if (json.success) {
-                        author = JSON.parse(json.Status.author)
-                        if (json.Status.like) {
-                            like = JSON.parse(json.Status.like)
-                        }
-                        else{
-                            like = 0
-                        }
-                        var htmlString =
-                        `<div class="card">
-                            <!--Information of post's user-->
-                            <div class="d-flex justify-content-between p-2 px-2">
-                                <div class="d-flex flex-row align-items-center">
-                                    <img src="${author.image}" alt="" class="image-user rounded-circle" width="52">
-                                    <div class="d-flex flex-column ml-2">
-                                        <span class="font-weight-bold">${author.fullName}</span>
-                                        <small class="text-primary">Thông tin</small>
-                                    </div>
-                                </div>
-                                <!--Time and more-->
-                                <div class="time-and-more d-flex flex-row mt-2">
-                                <small class="mr-2">${json.Status.currentTime}</small><i class="fas fa-ellipsis-v"></i>
-                                </div>
-                            </div>
-                            <!--Area of post-->
-                            <hr style="border: none;">
-                            <p class="text-justify ml-3">${ json.Status.statusTitle }</p>
-                            <img src="${ json.Status.image }" alt="" class="img-fluid">
-                            <!-- Number of Comment and Interactive-->
-                            <div class="d-flex justify-content-between align-items-centerl">
-                                <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
-                                    <span><i class="fa fa-thumbs-up"></i> <a class="view-${json.Status._id}" href=""> ${like}</a> </span>
-                                </div>
-                                <div class="d-flex flex-row interactive_color m-3">
-                                    <span class="mr-3 cmt">Bình luận</span>
-                                    <span class="shares">Chia sẻ</span>
-                                </div>
-                            </div>
-                            <hr>
-                            <!--Interative-->
-                            <div class="d-flex justify-content-between align-items-centerl mx-5">
-                                <div class="like ${json.Status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${json.Status._id}">
-                                    <i class="fa fa-thumbs-up"></i> <span>Thích</span>
-                                </div>
-                                <div class="cmts">
-                                    <i class="fa fa-comments"></i> <span>Bình  luận</span>
-                                </div>
-                                <div class="shr">
-                                    <i class="fa fa-share-square"></i> <span>Chia sẻ</span>
-                                </div>
-                            </div>
-                            <hr>
-                            <!--Comment-->
-                            <div class="comments mx-3 comments${json.Status._id}">
-                                <div class="d-flex flex-row mb-2">
-                                    <img src="/images/avatar-default.jpg" width="40" class="round-img">
-                                    <div class="d-flex flex-column ml-2"> <span class="nameOfUser">User_Name</span> <small class="comment-text">What user was commented appear here</small>
-                                        <div class="d-flex flex-row align-items-center interactive_comment_color">
-                                            <small>Thích</small>
-                                            <small>Trả lời</small>
-                                            <small>Dịch</small>
-                                            <small>20 phút</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="comment-input">
-                                    <input type="text" class="form-control" id="text-content-comment${json.Status._id}">
-                                    <div class="fonts send-comment" data-author="${user.userId}" data-status = "${json.Status._id}" onclick="fetchApiComment(this)">
-                                        <i class="fas fa-paper-plane"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`
-                        // console.log(htmlString)
-                        $(".index-page .multi-card").prepend(htmlString)
-                        
-
-                        // set null in content and image upload = null
-                        if (file_data !== undefined) {
-                            $('.index-page .image-upload-preview .close-icon').trigger('click');
-                        }
-                        $('.index-page textarea.statusTitle').val("");
-
-                        $('.index-page .post-btn').prop('disabled', true)
-                        $('.index-page .post-btn').css('cursor', 'no-drop')
-                    }
-                })
-                .catch(e => console.log(e))
-        }
-    });
+   
     // -------------------------------------------------------------------------------------------
     // preview image uploaded
     $(document).delegate('.index-page .image-upload-preview .close-icon', 'click', function () {
@@ -635,7 +504,7 @@ $(document).ready(async function () {
         }
         v.src = v.src;
     });
-    if($(".notificationPage")[0]){
+    if ($(".notificationPage")[0]) {
         var data = []
         let indexPage=1
         let numberPage = 1
@@ -1015,6 +884,138 @@ if($(".index-page")[0]){
                 $(".spinerLoadingNotification").hide()
                 console.log('Error:', error);
             });
+        }
+    });
+     $( ".index-page textarea.statusTitle" ).keyup(function() {
+        if ($('.index-page textarea.statusTitle').val().length !== 0) {
+            $('.index-page .post-btn').prop('disabled', false)
+            $('.index-page .post-btn').css('cursor', 'pointer')
+        }
+        else {
+            $('.index-page .post-btn').prop('disabled', true)
+            $('.index-page .post-btn').css('cursor', 'no-drop')
+        }
+    });
+    if ($('.index-page textarea.statusTitle').val().length === 0) {
+        $('.index-page .post-btn').prop('disabled', true)
+        $('.index-page .post-btn').css('cursor', 'no-drop')
+    }
+    $(".index-page .post-btn").click(e => {
+        var file_data = $('.index-page #imageUpload').prop('files')[0];
+        var statusTitle = $('.index-page textarea.statusTitle').val()
+        // console.log(statusTitle)
+        // console.log(file_data)
+        var form_data = new FormData();
+        userId = e.target.dataset.id
+        image = e.target.dataset.image
+        fullName = e.target.dataset.name
+        var user = {
+            userId: userId,
+            image: image,
+            fullName: fullName
+        }
+        if (statusTitle.length !== 0) {
+            form_data.append('imageStatus', file_data);
+            form_data.append('statusTitle', statusTitle);
+            form_data.append('author', JSON.stringify(user))
+            uploadImage(form_data, user)
+        }
+        function uploadImage(form_data, user) {
+           fetch(window.parent.location.origin, { // Your POST endpoint
+                    method: 'POST',
+
+                    body: form_data // This is your file object
+                })
+                .then(res => res.json())
+                .then(json => {
+                    if (json.success) {
+                        author = JSON.parse(json.Status.author)
+                        if (json.Status.like) {
+                            like = JSON.parse(json.Status.like)
+                        }
+                        else{
+                            like = 0
+                        }
+                        var htmlString =
+                        `<div class="card">
+                            <!--Information of post's user-->
+                            <div class="d-flex justify-content-between p-2 px-2">
+                                <div class="d-flex flex-row align-items-center">
+                                    <img src="${author.image}" alt="" class="image-user rounded-circle" width="52">
+                                    <div class="d-flex flex-column ml-2">
+                                        <span class="font-weight-bold">${author.fullName}</span>
+                                        <small class="text-primary">Thông tin</small>
+                                    </div>
+                                </div>
+                                <!--Time and more-->
+                                <div class="time-and-more d-flex flex-row mt-2">
+                                <small class="mr-2">${json.Status.currentTime}</small><i class="fas fa-ellipsis-v"></i>
+                                </div>
+                            </div>
+                            <!--Area of post-->
+                            <hr style="border: none;">
+                            <p class="text-justify ml-3">${ json.Status.statusTitle }</p>
+                            <img src="${ json.Status.image }" alt="" class="img-fluid">
+                            <!-- Number of Comment and Interactive-->
+                            <div class="d-flex justify-content-between align-items-centerl">
+                                <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
+                                    <span><i class="fa fa-thumbs-up"></i> <a class="view-${json.Status._id}" href=""> ${like}</a> </span>
+                                </div>
+                                <div class="d-flex flex-row interactive_color m-3">
+                                    <span class="mr-3 cmt">Bình luận</span>
+                                    <span class="shares">Chia sẻ</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <!--Interative-->
+                            <div class="d-flex justify-content-between align-items-centerl mx-5">
+                                <div class="like ${json.Status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${json.Status._id}">
+                                    <i class="fa fa-thumbs-up"></i> <span>Thích</span>
+                                </div>
+                                <div class="cmts">
+                                    <i class="fa fa-comments"></i> <span>Bình  luận</span>
+                                </div>
+                                <div class="shr">
+                                    <i class="fa fa-share-square"></i> <span>Chia sẻ</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <!--Comment-->
+                            <div class="comments mx-3 comments${json.Status._id}">
+                                <div class="d-flex flex-row mb-2">
+                                    <img src="/images/avatar-default.jpg" width="40" class="round-img">
+                                    <div class="d-flex flex-column ml-2"> <span class="nameOfUser">User_Name</span> <small class="comment-text">What user was commented appear here</small>
+                                        <div class="d-flex flex-row align-items-center interactive_comment_color">
+                                            <small>Thích</small>
+                                            <small>Trả lời</small>
+                                            <small>Dịch</small>
+                                            <small>20 phút</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="comment-input">
+                                    <input type="text" class="form-control" id="text-content-comment${json.Status._id}">
+                                    <div class="fonts send-comment" data-author="${user.userId}" data-status = "${json.Status._id}" onclick="fetchApiComment(this)">
+                                        <i class="fas fa-paper-plane"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+                        // console.log(htmlString)
+                        $(".index-page .multi-card").prepend(htmlString)
+                        
+
+                        // set null in content and image upload = null
+                        if (file_data !== undefined) {
+                            $('.index-page .image-upload-preview .close-icon').trigger('click');
+                        }
+                        $('.index-page textarea.statusTitle').val("");
+
+                        $('.index-page .post-btn').prop('disabled', true)
+                        $('.index-page .post-btn').css('cursor', 'no-drop')
+                    }
+                })
+                .catch(e => console.log(e))
         }
     });
 
