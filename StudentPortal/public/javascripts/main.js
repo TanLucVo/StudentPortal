@@ -353,7 +353,9 @@ $(document).ready(async function () {
         var scrollHeight = $(document).height();
         var scrollPosition = $(window).height() + $(window).scrollTop();
         var check = false
-        if (scrollHeight/Math.floor(scrollPosition) === 1) {
+        // console.log(Math.floor(scrollPosition))
+        // console.log(scrollHeight)
+        if (scrollHeight === Math.floor(scrollPosition) + 1) {
             page += 1
             // console.log("đây là skip:",parseInt(page)*2 - 2)
             // console.log("đây là limit:",2)
