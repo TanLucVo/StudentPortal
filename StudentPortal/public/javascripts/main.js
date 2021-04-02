@@ -840,7 +840,9 @@ if($(".index-page")[0]){
         console.log('Error:', error);
     });
     $(".notification-body").scroll(function () {
-        if($('.notification-body')[0].scrollHeight - $('.main-card').height() === $(".notification-body").scrollTop()) {
+        console.log($('.notification-body')[0].scrollHeight - $('.main-card').height())
+        console.log(Math.floor($(".notification-body").scrollTop()) + 1)
+        if($('.notification-body')[0].scrollHeight - $('.main-card').height() === Math.floor($(".notification-body").scrollTop()) + 1) {
             console.log(`Loading....`);
             $(".spinerLoadingNotification .spinner-border").show();
             $(".spinerLoadingNotification p").hide()
