@@ -294,6 +294,45 @@
             }
         }
     </style>
+
+    <style>
+        .index-page #back-to-top-button {
+            display: inline-block;
+            background-color: #dbd4c9;
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            border-radius: 4px;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            transition: background-color .3s, 
+                opacity .5s, visibility .5s;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+        .index-page #back-to-top-button::after {
+            content: "\f077";
+            font-family: FontAwesome;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 2em;
+            line-height: 50px;
+            color: #fff;
+        }
+        .index-page #back-to-top-button:hover {
+            cursor: pointer;
+            background-color: #333;
+        }
+        .index-page #back-to-top-button:active {
+            background-color: #555;
+        }
+        .index-page #back-to-top-button.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
 </head>
 
 <body>
@@ -515,6 +554,9 @@
         </section>
 
         <%- include partial/header-rightbar.ejs %>
+
+        <!-- Back to top button -->
+        <a id="back-to-top-button"></a>
     </div>
 
     <script src="/javascripts/main.js"></script>

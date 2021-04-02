@@ -1,6 +1,24 @@
 // -------------------------------------------------------------------------------------------- //
 // Index Page
 
+// back to top scroll button
+
+var btn = $('.index-page #back-to-top-button');
+
+$(window).scroll(function() {
+  if ($(window).scrollTop() > 300) {
+    btn.addClass('show');
+  } else {
+    btn.removeClass('show');
+  }
+});
+
+btn.on('click', function(e) {
+  e.preventDefault();
+  $('html, body').animate({scrollTop:0}, '300');
+});
+
+
 // window.parent.location.origin = http://localhost:3000
 
 // -------------------------------------------------------------------------------------------
@@ -43,6 +61,12 @@ function getLikeStatus(element) {
     // console.log("userId:",userId)
     // console.log("name:",name)
     $(document).ready(function () {
+
+        // set scroll on top page default
+        window.onbeforeunload = function () {
+            window.scrollTo(0, 0);
+        }
+
         fetch(window.parent.location.origin + `/status/${idStatus}`,{
             method: 'GET'
         })
