@@ -128,7 +128,9 @@ router.get('/' , authenticateToken,async function(req, res) {
             });
             resultStatus = await Promise.all(arraySortStatus)
             // log 1 comment của 1 status
+            // console.log(resultStatus[0])
             // console.log(resultStatus[0].comments)
+            // console.log(resultStatus[0].comments.length)
             // console.log("đổ data thành công")
             return res.render('index',{user: req.user, allStatus: resultStatus});
         }
