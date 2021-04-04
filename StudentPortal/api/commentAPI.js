@@ -51,11 +51,16 @@ router.get('/:id' ,authenticateToken,async function(req, res, next) {
     });
 })
 
-router.get('/status/:id' ,authenticateToken,async function(req, res, next) {
+// get status limit: 5 status
+router.get('/status/:id/:page' ,authenticateToken,async function(req, res, next) {
     const id = req.params.id
-    await commentsModel.findOne({statusId : id})
+    const page = req.params.page
+    const limit = 5
+    const skip = limit * (parseInt(page) - 1) // 5n - 5 => 0 5 10 15 20 ...
+    await commentsModel.find({statusId : id}).limit(limit).skip(skip)
     .sort({dateModified: 'desc'})
     .then((singleComment) => {
+        // console.log(singleComment)
         res.status(200).json({
         success: true,
         message: `More on ${singleComment._id}`,
@@ -101,7 +106,7 @@ router.post('/', authenticateToken,async function(req, res, next) {
         });
     })
     .catch((error) => {
-        console.log(error);
+        // console.log(error);
         res.status(500).json({
         success: false,
         message: 'Server error. Please try again.',

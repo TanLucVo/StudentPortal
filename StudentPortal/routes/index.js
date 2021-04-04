@@ -30,11 +30,11 @@ const upload = multer({dest:'uploads',
 })
 
 /* GET users listing. */
-router.get('/' , authenticateToken, function(req, res) {
+router.get('/' , authenticateToken,async function(req, res) {
     cookie = req.cookies
     // khai báo khi vào index mặc định load 3 status
     const page = 1
-    fetch(process.env.URL + `/status/page/${page}`, {
+    await fetch(process.env.URL + `/status/page/${page}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -42,43 +42,101 @@ router.get('/' , authenticateToken, function(req, res) {
         }
     })
     .then(res => res.text())
-    .then(json => {
-        let checkLike = false
-        arraySortStatus = JSON.parse(json).Status
-        arraySortStatus.forEach(status => {
-
-            startTime = new Date(status.dateModified)
-            endTime = new Date()
-            const currentTime = getCurrentTime(startTime, endTime)
-            status["currentTime"] = currentTime
-
-            // parse array like - json
-            // parse thành json
-            // lúc khởi tạo status.like chưa có trong model vì vậy ta phải kiểm tra tính xác thức của nó
-            if (!status.like) {
-                status.like = []
-                status.checkLike = false
-            }
-            else {
-                status.like = JSON.parse(status.like)
-                status.like.forEach(l => {
-                    if (req.user._id == l._id) {
-                        checkLike = true
+    .then(async json => {
+        if (JSON.parse(json).success) {
+            let checkLike = false
+            let arraySortStatus = JSON.parse(json).Status.map(async status => {
+    
+                startTime = new Date(status.dateModified)
+                endTime = new Date()
+                const currentTime = getCurrentTime(startTime, endTime)
+                status["currentTime"] = currentTime
+    
+                // parse array like - json
+                // parse thành json
+                // lúc khởi tạo status.like chưa có trong model vì vậy ta phải kiểm tra tính xác thức của nó
+                if (!status.like) {
+                    status.like = []
+                    status.checkLike = false
+                }
+                else {
+                    status.like = JSON.parse(status.like)
+                    status.like.forEach(l => {
+                        if (req.user._id == l._id) {
+                            checkLike = true
+                        }
+                    });
+                    status.checkLike = checkLike
+                    // gắn lại giá trị default cho biến checkLike để sử dụng cho element vòng lặp kế tiếp
+                    checkLike = false
+                }
+    
+                // fetch get comment API: lấy các comment trong 1 status
+                let comments = await fetch(`${process.env.URL}/comment/status/${status._id}/${page}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Cookie': `connect.sid=${cookie['connect.sid']};token=${cookie.token}`
                     }
-                });
-                status.checkLike = checkLike
-                // gắn lại giá trị default cho biến checkLike để sử dụng cho element vòng lặp kế tiếp
-                checkLike = false
-            }
-        });
+                })
+                .then(res => res.text())
+                .then(async data => {
+                    if (JSON.parse(data).success) {
+                        let comments = JSON.parse(data).Comment.map(async comment => {
+                            const timeComment = getCurrentTime(new Date(comment.dateModified), new Date())
+                            comment['dateModified'] = timeComment
 
-        // console.log("đổ data thành công")
+                            const commentNew = await fetch(`${process.env.URL}/user/${comment.author}`,{
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Cookie': `connect.sid=${cookie['connect.sid']};token=${cookie.token}`
+                                }
+                            })
+                            .then(res => res.text())
+                            .then(dataAuthorComment => {
+                                authorComment = JSON.parse(dataAuthorComment)
+                                if (authorComment.success) {
+                                    comment['imgAuthor'] = authorComment.user.image
+                                    comment['nameAuthor'] = authorComment.user.name
+                                    // console.log(comment)
+                                    return comment
+                                }
+                                else {
+                                    return undefined
+                                }
+                            }).catch(e => {
+                                console.log(e)
+                                return res.render('index',{user: req.user, allStatus: []});
+                            })
 
-        return res.render('index',{user: req.user, allStatus: arraySortStatus, page: page});
+                            // console.log(JSON.parse(commentNew))
+                            return commentNew
+                        })
+                        
+                        return await Promise.all(comments)
+                    }
+                    return undefined
+                }).catch(e => {
+                    console.log(e)
+                    return res.render('index',{user: req.user, allStatus: []});
+                })
+                status['comments'] = comments
+                // console.log(status)
+                return status
+                // console.log(comments)
+            });
+            resultStatus = await Promise.all(arraySortStatus)
+            // log 1 comment của 1 status
+            // console.log(resultStatus[0].comments)
+            // console.log("đổ data thành công")
+            return res.render('index',{user: req.user, allStatus: resultStatus});
+        }
+        return res.render('index',{user: req.user, allStatus: []});
     })
     .catch(e => {
         console.log(e)
-        return res.render('index',{user: req.user, allStatus: [], page: page});
+        return res.render('index',{user: req.user, allStatus: []});
     })
 });
 
