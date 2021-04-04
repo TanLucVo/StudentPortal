@@ -38,9 +38,9 @@ router.get('/page/:page', authenticateToken,async function(req, res, next) {
     const limit = 2
     const skip = (parseInt(page) * 2) - 2 // 2n - 2
 
-    console.log("status API --- skip & limit")
-    console.log("đây là limit:",limit)
-    console.log("đây là skip:",skip)
+    // console.log("status API --- skip & limit")
+    // console.log("đây là limit:",limit)
+    // console.log("đây là skip:",skip)
 
     await statusModel.find().limit(limit).skip(skip)
     .sort({dateModified: 'desc'})

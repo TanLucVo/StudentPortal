@@ -353,9 +353,9 @@ $(document).ready(async function () {
         var scrollHeight = $(document).height();
         var scrollPosition = $(window).height() + $(window).scrollTop();
         var check = false
-        // console.log(Math.floor(scrollPosition))
-        // console.log(scrollHeight)
-        if (scrollHeight === Math.floor(scrollPosition) + 1) {
+        console.log(Math.floor(scrollPosition))
+        console.log(scrollHeight)
+        if (scrollHeight === Math.floor(scrollPosition)) {
             page += 1
             // console.log("đây là skip:",parseInt(page)*2 - 2)
             // console.log("đây là limit:",2)
@@ -840,8 +840,8 @@ if($(".index-page")[0]){
         console.log('Error:', error);
     });
     $(".notification-body").scroll(function () {
-        console.log($('.notification-body')[0].scrollHeight - $('.main-card').height())
-        console.log($(".notification-body").scrollTop())
+        // console.log($('.notification-body')[0].scrollHeight - $('.main-card').height())
+        // console.log($(".notification-body").scrollTop())
         if($('.notification-body')[0].scrollHeight - $('.main-card').height() === $(".notification-body").scrollTop()) {
             console.log(`Loading....`);
             $(".spinerLoadingNotification .spinner-border").show();

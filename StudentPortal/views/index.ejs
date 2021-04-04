@@ -332,6 +332,22 @@
             opacity: 1;
             visibility: visible;
         }
+
+        /* Show user like status */
+
+        .index-page #showUserLikeModal .showUserLikeImg {
+            width: 35px;
+            border-radius: 100%;
+        }
+        .index-page #showUserLikeModal .cardShowUserLike {
+            margin: 20px;
+        }
+        .index-page #showUserLikeModal .listCardUserLike {
+            overflow-y: inherit;
+        }
+        .index-page #showUserLikeModal .cardShowUserLike .nameUserLike {
+            margin-left: 20px;
+        }
     </style>
 </head>
 
@@ -415,6 +431,35 @@
                                     </form>
                                     <div class="multi-card">
                                         <% locals.allStatus.forEach(status=> { %>
+                                        <!-- The Modal -->
+                                        <div class="modal fade" id="showUserLikeModal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                
+                                                    <!-- Modal Header -->
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Số người thích bài viết</h4>
+                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                    </div>
+                                                    
+                                                    <!-- Modal body -->
+                                                    <div class="modal-body listCardUserLike">
+                                                        <% status.like.forEach(l => { %>
+                                                            <div class="cardShowUserLike">
+                                                                <img src="<%= l.image %>" alt="" class="showUserLikeImg">
+                                                                <span class="nameUserLike"><%= l.name %></span>
+                                                            </div>
+                                                        <% }) %>
+                                                    </div>
+                                                    
+                                                    <!-- Modal footer -->
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="card">
                                             <!--Information of post's user-->
                                             <div class="d-flex justify-content-between p-2 px-2">
@@ -446,7 +491,7 @@
                                                 <div
                                                     class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
                                                     <span><i class="fa fa-thumbs-up"></i> <a
-                                                            class="view-<%= status._id %>" data-toggle="modal" data-target=".index-page #showUserLike">
+                                                            class="view-<%= status._id %>" href="#" data-toggle="modal" data-target=".index-page #showUserLikeModal">
                                                             <%= status.like.length %>
                                                         </a> </span>
                                                 </div>
@@ -552,6 +597,7 @@
 
                 </div>
             </div>
+
             <%- include partial/notification.ejs %>
 
         </section>

@@ -1,7 +1,7 @@
 /***login page***/
 body {
     min-width: 360px;
-    overflow-x: scroll !important;
+    /* overflow-x: scroll !important; */
     min-height: 100vh;
 }
 
