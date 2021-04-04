@@ -335,17 +335,17 @@
 
         /* Show user like status */
 
-        .index-page #showUserLikeModal .showUserLikeImg {
+        .index-page .showUserLikeModal .showUserLikeImg {
             width: 35px;
             border-radius: 100%;
         }
-        .index-page #showUserLikeModal .cardShowUserLike {
+        .index-page .showUserLikeModal .cardShowUserLike {
             margin: 20px;
         }
-        .index-page #showUserLikeModal .listCardUserLike {
+        .index-page .showUserLikeModal .listCardUserLike {
             overflow-y: inherit;
         }
-        .index-page #showUserLikeModal .cardShowUserLike .nameUserLike {
+        .index-page .showUserLikeModal .cardShowUserLike .nameUserLike {
             margin-left: 20px;
         }
     </style>
@@ -432,7 +432,7 @@
                                     <div class="multi-card">
                                         <% locals.allStatus.forEach(status=> { %>
                                         <!-- The Modal -->
-                                        <div class="modal fade" id="showUserLikeModal">
+                                        <div class="modal fade showUserLikeModal" id="showUserLikeModal<%= status._id %>">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                 
@@ -491,7 +491,7 @@
                                                 <div
                                                     class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
                                                     <span><i class="fa fa-thumbs-up"></i> <a
-                                                            class="view-<%= status._id %>" href="#" data-toggle="modal" data-target=".index-page #showUserLikeModal">
+                                                            class="view-<%= status._id %>" href="#" data-toggle="modal" data-target=".index-page #showUserLikeModal<%= status._id %>">
                                                             <%= status.like.length %>
                                                         </a> </span>
                                                 </div>
