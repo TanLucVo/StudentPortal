@@ -21736,7 +21736,7 @@ a.btn2:hover,
     margin: 0;
 }
 
-.addDepartment input {
+.addDepartment input:not(.side-panel .setting-row input) {
     width: 100%;
     display: block;
     border: none;

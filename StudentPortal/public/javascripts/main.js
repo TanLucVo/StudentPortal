@@ -260,8 +260,8 @@ $(document).ready(async function () {
         $('.nav-list').slideToggle(300);
     });
 
-    $('.index-page .setting-all').on('click', function() {
-        $('.index-page .side-panel').toggleClass('active');
+    $('.setting-all').on('click', function() {
+        $('.side-panel').toggleClass('active');
     });
 
     $('.index-page .post-btn-preview').on('click', function() {
