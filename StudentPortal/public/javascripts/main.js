@@ -21,9 +21,81 @@ btn.on('click', function(e) {
 
 // window.parent.location.origin = http://localhost:3000
 
+
+function focusPostBtnComment(element) {
+    $(`.index-page .comments #text-content-comment${element.dataset.status}`).focus()
+}
 // -------------------------------------------------------------------------------------------
     // comment
-
+function showCommentsStatus(element) {
+    const statusId = element.dataset.status
+    let page = parseInt(element.dataset.page) + 1
+    // let page = pageComment
+    console.log(`số page:${page} của id ${statusId}`)
+    fetch(`/comment/status/${statusId}/${page}`,{
+        method: 'GET'
+    })
+    .then(res => res.text())
+    .then(async data => {
+        data = JSON.parse(data)
+        if (data.success) {
+            if (data.Comment.length === 0) {
+                $(`.index-page .comments${statusId} .preview-comments-before`).hide()
+                $(`.index-page .comments .check-loading-preview-${statusId}`).hide()
+                $(`.index-page .comments .notification-preview-comments-${statusId}`).show()
+            }
+            else {
+                $(`.index-page .comments .check-loading-preview-${statusId}`).show()
+                let dataStringCard = data.Comment.map(async comment => {
+                    const {nameAuthor, imgAuthor} = await fetch(`/user/${comment.author}`, {
+                        method: 'GET'
+                    })
+                    .then(res => res.text())
+                    .then(dataAuthor => {
+                        dataAuthor = JSON.parse(dataAuthor)
+                        if (dataAuthor.success) {
+                            const nameAuthor = dataAuthor.user.name
+                            const imgAuthor = dataAuthor.user.image
+                            // console.log(imgAuthor)
+                            return {nameAuthor: nameAuthor,imgAuthor: imgAuthor}
+                        }
+                        else {
+                            return {nameAuthor: undefined,imgAuthor: undefined}
+                        }
+                    }).catch(e => console.log(e))
+                    comment["nameAuthor"] = nameAuthor
+                    comment["imgAuthor"] = imgAuthor
+    
+                    stringCardComment = `
+                    <div class="d-flex flex-row mb-2">
+                        <img src="${comment.imgAuthor}" width="40" class="round-img">
+                        <div class="d-flex flex-column ml-2">
+                            <span class="nameOfUser">${comment.nameAuthor}</span>
+                            <small class="comment-text">${comment.content}</small>
+                            <div
+                                class="d-flex flex-row align-items-center interactive_comment_color">
+                                <small>Thích</small>
+                                <small>Trả lời</small>
+                                <small>Dịch</small>
+                                <small>${getPassedTime(new Date(comment.dateModified),Date.now())}</small>
+                            </div>
+                        </div>
+                    </div>
+                    `
+                    return stringCardComment
+                });
+                let arrayStringCard = await Promise.all(dataStringCard)
+                temp = ""
+                arrayStringCard.forEach(stringCard => {
+                    temp += stringCard
+                });
+                $(`.index-page .comments${statusId} .card-comments-user`).append(temp)
+                $(`.index-page .comments${statusId} .preview-comments-before`).attr("data-page",page)
+                $(`.index-page .comments .check-loading-preview-${statusId}`).hide()
+            }
+        }
+    }).catch(e => console.log(e))
+}
 function fetchApiComment(element) {
     const statusId = element.dataset.status
     const author = element.dataset.author
@@ -231,6 +303,7 @@ $(document).ready(async function () {
         let userId = '<%= user.id %>'
         socket.emit('register-id', {socketId:socket.id,userId:userId }) //gui id qua cho server
     }
+
     // -------------------------------------------------------------------------------------------
     /*--- left menu full ---*/
     $(' .menu-small').on("click", function () {
@@ -353,9 +426,9 @@ $(document).ready(async function () {
         var scrollHeight = $(document).height();
         var scrollPosition = $(window).height() + $(window).scrollTop();
         var check = false
-        console.log(Math.floor(scrollPosition))
-        console.log(scrollHeight)
-        if (scrollHeight === Math.floor(scrollPosition)) {
+        // console.log(scrollPosition)
+        // console.log(scrollHeight)
+        if (scrollHeight - scrollPosition < 1) {
             page += 1
             // console.log("đây là skip:",parseInt(page)*2 - 2)
             // console.log("đây là limit:",2)
@@ -372,6 +445,7 @@ $(document).ready(async function () {
                     else {
                         data = ""
 
+                        // user login
                         const buttonPostBtn = document.querySelector('.index-page .post-btn')
                         userId = buttonPostBtn.dataset.id
                         image = buttonPostBtn.dataset.image
@@ -842,8 +916,8 @@ if($(".index-page")[0]){
     $(".notification-body").scroll(function () {
         // console.log($('.notification-body')[0].scrollHeight - $('.main-card').height())
         // console.log($(".notification-body").scrollTop())
-        if($('.notification-body')[0].scrollHeight - $('.main-card').height() === $(".notification-body").scrollTop()) {
-            console.log(`Loading....`);
+        if($('.notification-body')[0].scrollHeight - $('.main-card').height() - $(".notification-body").scrollTop() < 1) {
+            console.log(`Loading.... Notification`);
             $(".spinerLoadingNotification .spinner-border").show();
             $(".spinerLoadingNotification p").hide()
             $('.vertical-timeline').append($('.spinerLoadingNotification'))

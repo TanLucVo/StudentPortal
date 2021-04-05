@@ -38,6 +38,9 @@
             flex: 1 1 auto;
             padding: 1.25rem;
             max-height: 800px;
+            overflow-y: hidden;
+        }
+        .index-page .notification .card-body:hover {
             overflow-y: scroll;
         }
 
@@ -53,14 +56,14 @@
         /* Handle */
         .index-page .notification .card-body::-webkit-scrollbar-thumb {
             border-radius: 1rem;
-            background-color: #aa00ff;
-            background-image: linear-gradient(to top, #aa00ff 0%, #3a73d5 100%);
+            background-color: #aaaaaa;
+            background-image: linear-gradient(to top, #aaaaaa 0%, #3a73d5 100%);
 
         }
 
         /* Handle on hover */
         .index-page .notification .card-body::-webkit-scrollbar-thumb:hover {
-            background: #aa00ff;
+            background: #aaaaaa;
         }
 
         .index-page .notification .vertical-timeline {
@@ -349,6 +352,58 @@
         .index-page .showUserLikeModal .cardShowUserLike .nameUserLike {
             margin-left: 20px;
         }
+
+
+        /* add scrollbar in modal userlike */
+        .index-page .modal-dialog .modal-content {
+            max-height: 400px;
+            position: absolute;
+            overflow-y: scroll;
+        }
+        .index-page .modal-dialog .modal-content::-webkit-scrollbar {
+            width: 4px;
+            background-color: #858282;
+        }
+        .index-page .modal-dialog .modal-content::-webkit-scrollbar-thumb {
+            background-color: #a8a0a0;
+        }
+        .index-page .modal-dialog .modal-content::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(214, 200, 200, 0.3);
+            background-color: #F5F5F5;
+        }
+
+        /* spinner load comments */
+        .index-page .comments .spinner-border {
+            margin-left: 45%;
+            display: none;
+        }
+        /* focus btn post comment */
+        .index-page .comments .focus-btn-post-comment {
+            margin-bottom: 15px;
+            text-align: right;
+            color: rgb(7, 7, 7);
+        }
+        .index-page .comments .focus-btn-post-comment:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        /* css style preview comments */
+        .index-page .comments .preview-comments-before {
+            /* margin-bottom: 10px; */
+            color: blue;
+        }
+        .index-page .comments .preview-comments-before:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        /* notificaion-preview-comments */
+
+        .index-page .comments .notification-preview-comments {
+            text-align: center;
+            font-style: normal;
+            color: red;
+            display: none;
+        }
     </style>
 </head>
 
@@ -440,7 +495,6 @@
                                                     <!-- Modal Header -->
                                                     <div class="modal-header">
                                                         <h4 class="modal-title">Số người thích bài viết</h4>
-                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                     </div>
                                                     
                                                     <!-- Modal body -->
@@ -529,29 +583,42 @@
                                             <hr>
                                             <!--Comment-->
                                             <div class="comments mx-3 comments<%= status._id %>">
-                                                <% if (status.comments.length !== 0) { %>
-                                                    <% status.comments.forEach(comment => { %>
-                                                        <div class="d-flex flex-row mb-2">
-                                                            <img src="<%= comment.imgAuthor %>" width="40" class="round-img">
-                                                            <div class="d-flex flex-column ml-2">
-                                                                <span class="nameOfUser"><%= comment.nameAuthor %></span>
-                                                                <small class="comment-text"><%= comment.content %></small>
-                                                                <div
-                                                                    class="d-flex flex-row align-items-center interactive_comment_color">
-                                                                    <small>Thích</small>
-                                                                    <small>Trả lời</small>
-                                                                    <small>Dịch</small>
-                                                                    <small><%= comment.dateModified %></small>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    <% }) %>
-                                                <% } %>
                                                 <div class="comment-input"> 
                                                     <input type="text" class="form-control" id="text-content-comment<%= status._id %>">
                                                     <div class="fonts send-comment" data-author="<%= user._id %>" data-status = "<%= status._id %>" onclick="fetchApiComment(this)">
                                                         <i class="fas fa-paper-plane"></i>
                                                     </div>
+                                                </div>
+
+                                                <div class="card-comments-user">
+                                                    <% if (status.comments.length !== 0) { %>
+                                                        <% status.comments.forEach(comment => { %>
+                                                            <div class="d-flex flex-row mb-2">
+                                                                <img src="<%= comment.imgAuthor %>" width="40" class="round-img">
+                                                                <div class="d-flex flex-column ml-2">
+                                                                    <span class="nameOfUser"><%= comment.nameAuthor %></span>
+                                                                    <small class="comment-text"><%= comment.content %></small>
+                                                                    <div
+                                                                        class="d-flex flex-row align-items-center interactive_comment_color">
+                                                                        <small>Thích</small>
+                                                                        <small>Trả lời</small>
+                                                                        <small>Dịch</small>
+                                                                        <small><%= comment.dateModified %></small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        <% }) %>
+                                                    <% } %>
+                                                </div>
+                                                <div class="spinner-border check-loading-preview-<%= status._id %>"></div>
+                                                <div class="notification-preview-comments notification-preview-comments-<%= status._id %>">
+                                                    Không còn bài viết nào
+                                                </div>
+                                                <div class="preview-comments-before" onclick="showCommentsStatus(this)" data-page="1" data-status = "<%= status._id %>">
+                                                    Xem thêm bình luận
+                                                </div>
+                                                <div class="focus-btn-post-comment" onclick="focusPostBtnComment(this)" data-status = "<%= status._id %>">
+                                                    Viết bình luận của bạn...
                                                 </div>
                                             </div>
                                         </div>

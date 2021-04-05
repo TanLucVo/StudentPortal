@@ -63,7 +63,7 @@ router.get('/status/:id/:page' ,authenticateToken,async function(req, res, next)
         // console.log(singleComment)
         res.status(200).json({
         success: true,
-        message: `More on ${singleComment._id}`,
+        message: `More on comments of ${id}`,
         Comment: singleComment,
         });
     })
