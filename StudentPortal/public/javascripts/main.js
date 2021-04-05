@@ -21,6 +21,10 @@ btn.on('click', function(e) {
 
 // window.parent.location.origin = http://localhost:3000
 
+function showHideComments(element) {
+    const statusId = element.dataset.status
+    $(`.index-page .comments${statusId}`).slideToggle("slow");
+}
 
 function focusPostBtnComment(element) {
     $(`.index-page .comments #text-content-comment${element.dataset.status}`).focus()

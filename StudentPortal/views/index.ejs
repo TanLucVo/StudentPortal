@@ -372,6 +372,10 @@
             background-color: #F5F5F5;
         }
 
+        .index-page .comments {
+            display: none;
+        }
+
         /* spinner load comments */
         .index-page .comments .spinner-border {
             margin-left: 45%;
@@ -571,7 +575,7 @@
                                                             <i class=" fa fa-thumbs-up"></i> <span>Thích</span>
                                                 </div>
                                                 <% } %>
-                                                <div class="cmts">
+                                                <div class="cmts" onclick="showHideComments(this)" data-status="<%= status._id %>">
                                                     <i class="fa fa-comments"></i> <span>Bình
                                                         luận</span>
                                                 </div>
