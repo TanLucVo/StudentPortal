@@ -408,6 +408,11 @@
             color: red;
             display: none;
         }
+
+
+        .index-page .comments .card-comments-user .comment-text {
+            word-break: break-word;
+        }
     </style>
 </head>
 
@@ -565,13 +570,13 @@
                                                 <% if (status.checkLike) { %>
                                                 <div class="like liked <%= status._id %>" onclick="getLikeStatus(this)"
                                                     data-userid="<%= user._id %>" data-name="<%= user.name %>"
-                                                    data-image="<%= user.image %>" data-id="<%= status._id %>"">
+                                                    data-image="<%= user.image %>" data-id="<%= status._id %>">
                                                             <i class=" fa fa-thumbs-up"></i> <span>Thích</span>
                                                 </div>
                                                 <% } else { %>
                                                 <div class="like <%= status._id %>" onclick="getLikeStatus(this)"
                                                     data-userid="<%= user._id %>" data-name="<%= user.name %>"
-                                                    data-image="<%= user.image %>" data-id="<%= status._id %>"">
+                                                    data-image="<%= user.image %>" data-id="<%= status._id %>">
                                                             <i class=" fa fa-thumbs-up"></i> <span>Thích</span>
                                                 </div>
                                                 <% } %>
@@ -587,7 +592,7 @@
                                             <hr>
                                             <!--Comment-->
                                             <div class="comments mx-3 comments<%= status._id %>">
-                                                <div class="comment-input"> 
+                                                <div class="comment-input">
                                                     <input type="text" class="form-control" id="text-content-comment<%= status._id %>">
                                                     <div class="fonts send-comment" data-author="<%= user._id %>" data-status = "<%= status._id %>" onclick="fetchApiComment(this)">
                                                         <i class="fas fa-paper-plane"></i>

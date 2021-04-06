@@ -275,7 +275,7 @@ $(document).ready(async function () {
         .then(json => {
             console.log('data user:',json)
             if (json.success) {
-                $(`.index-page .comments${data.statusId}`).prepend(
+                $(`.index-page .comments${data.statusId} .card-comments-user`).prepend(
                     `<div class="d-flex flex-row mb-2">
                         <img src="${json.user.image}" width="40" class="round-img">
                         <div class="d-flex flex-column ml-2"> <span
