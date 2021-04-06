@@ -413,6 +413,10 @@
         .index-page .comments .card-comments-user .comment-text {
             word-break: break-word;
         }
+
+        .index-page .card .view-like-user {
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -552,12 +556,13 @@
                                             <img src="<%= status.image %>" alt="" class="img-fluid">
                                             <!-- Number of Comment and Interactive-->
                                             <div class="d-flex justify-content-between align-items-centerl">
-                                                <div
-                                                    class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
-                                                    <span><i class="fa fa-thumbs-up"></i> <a
-                                                            class="view-<%= status._id %>" href="#" data-toggle="modal" data-target=".index-page #showUserLikeModal<%= status._id %>">
+                                                <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
+                                                    <span>
+                                                        <i class="fa fa-thumbs-up"></i>
+                                                        <span class="view-like-user view-<%= status._id %>" title="Số người thích bài viết" href="#" data-status="<%= status._id %>" onclick="showModalUserLike(this)">
                                                             <%= status.like.length %>
-                                                        </a> </span>
+                                                        </span> 
+                                                    </span>
                                                 </div>
                                                 <div class="d-flex flex-row interactive_color m-3">
                                                     <span class="mr-3 cmt">Bình luận</span>
