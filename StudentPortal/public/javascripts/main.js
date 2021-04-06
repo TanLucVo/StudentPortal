@@ -1079,6 +1079,9 @@ if($(".index-page")[0]){
         $('.index-page .post-btn').prop('disabled', true)
         $('.index-page .post-btn').css('cursor', 'no-drop')
     }
+
+    // fetch api status
+    // ------------------------------------------------------------------------
     $(".index-page .post-btn").click(e => {
         var file_data = $('.index-page #imageUpload').prop('files')[0];
         var statusTitle = $('.index-page textarea.statusTitle').val()
@@ -1138,7 +1141,12 @@ if($(".index-page")[0]){
                             <!-- Number of Comment and Interactive-->
                             <div class="d-flex justify-content-between align-items-centerl">
                                 <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
-                                    <span><i class="fa fa-thumbs-up"></i> <a class="view-${json.Status._id}" href=""> ${like}</a> </span>
+                                    <span>
+                                        <i class="fa fa-thumbs-up"></i>
+                                        <span class="view-like-user view-${json.Status._id}" title="Số người thích bài viết" href="#" data-status="${json.Status._id}" onclick="showModalUserLike(this)">
+                                            ${like}
+                                        </span> 
+                                    </span>
                                 </div>
                                 <div class="d-flex flex-row interactive_color m-3">
                                     <span class="mr-3 cmt">Bình luận</span>
@@ -1151,8 +1159,8 @@ if($(".index-page")[0]){
                                 <div class="like ${json.Status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${json.Status._id}">
                                     <i class="fa fa-thumbs-up"></i> <span>Thích</span>
                                 </div>
-                                <div class="cmts">
-                                    <i class="fa fa-comments"></i> <span>Bình  luận</span>
+                                <div class="cmts" onclick="showHideComments(this)" data-status="${json.Status._id}">
+                                    <i class="fa fa-comments"></i> <span>Bình luận</span>
                                 </div>
                                 <div class="shr">
                                     <i class="fa fa-share-square"></i> <span>Chia sẻ</span>
@@ -1161,22 +1169,24 @@ if($(".index-page")[0]){
                             <hr>
                             <!--Comment-->
                             <div class="comments mx-3 comments${json.Status._id}">
-                                <div class="d-flex flex-row mb-2">
-                                    <img src="/images/avatar-default.jpg" width="40" class="round-img">
-                                    <div class="d-flex flex-column ml-2"> <span class="nameOfUser">User_Name</span> <small class="comment-text">What user was commented appear here</small>
-                                        <div class="d-flex flex-row align-items-center interactive_comment_color">
-                                            <small>Thích</small>
-                                            <small>Trả lời</small>
-                                            <small>Dịch</small>
-                                            <small>20 phút</small>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="comment-input">
                                     <input type="text" class="form-control" id="text-content-comment${json.Status._id}">
                                     <div class="fonts send-comment" data-author="${user.userId}" data-status = "${json.Status._id}" onclick="fetchApiComment(this)">
                                         <i class="fas fa-paper-plane"></i>
                                     </div>
+                                </div>
+
+                                <div class="card-comments-user">
+                                </div>
+                                <div class="spinner-border check-loading-preview-${json.Status._id}"></div>
+                                <div class="notification-preview-comments notification-preview-comments-${json.Status._id}">
+                                    Không còn bài viết nào
+                                </div>
+                                <div class="preview-comments-before" onclick="showCommentsStatus(this)" data-page="1" data-status = "${json.Status._id}">
+                                    Xem thêm bình luận
+                                </div>
+                                <div class="focus-btn-post-comment" onclick="focusPostBtnComment(this)" data-status = "${json.Status._id}">
+                                    Viết bình luận của bạn...
                                 </div>
                             </div>
                         </div>`
