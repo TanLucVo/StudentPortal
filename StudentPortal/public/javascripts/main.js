@@ -654,6 +654,7 @@ $(document).ready(async function () {
 
                             // console.log(arrayCardStringComment)
                             // ĐANG BỊ LỖI CẦN SỬA ------------------------------------------------------------
+                            // thêm card string vào cho thẻ card-comments-user
                             $(`.index-page .comments${status._id} .card-comments-user`).append(arrayCardStringComment)
                         });
     
