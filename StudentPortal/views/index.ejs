@@ -604,7 +604,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="card-comments-user">
+                                                <div class="card-comments-user card-comments-user<%= status._id %>">
                                                     <% if (status.comments.length !== 0) { %>
                                                         <% status.comments.forEach(comment => { %>
                                                             <div class="d-flex flex-row mb-2">
@@ -628,7 +628,7 @@
                                                 <div class="notification-preview-comments notification-preview-comments-<%= status._id %>">
                                                     Không còn bài viết nào
                                                 </div>
-                                                <div class="preview-comments-before" onclick="showCommentsStatus(this)" data-page="1" data-status = "<%= status._id %>">
+                                                <div class="preview-comments-before" onclick="showCommentsStatus(this)" data-status = "<%= status._id %>">
                                                     Xem thêm bình luận
                                                 </div>
                                                 <div class="focus-btn-post-comment" onclick="focusPostBtnComment(this)" data-status = "<%= status._id %>">

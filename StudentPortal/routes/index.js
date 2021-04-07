@@ -72,7 +72,7 @@ router.get('/' , authenticateToken,async function(req, res) {
                 }
     
                 // fetch get comment API: lấy các comment trong 1 status
-                let comments = await fetch(`${process.env.URL}/comment/status/${status._id}/${page}`, {
+                let comments = await fetch(`${process.env.URL}/comment/status/${status._id}/0`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

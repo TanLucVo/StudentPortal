@@ -38,10 +38,9 @@ function focusPostBtnComment(element) {
     // comment
 function showCommentsStatus(element) {
     const statusId = element.dataset.status
-    let page = parseInt(element.dataset.page) + 1
-    // let page = pageComment
-    console.log(`số page:${page} của id ${statusId}`)
-    fetch(`/comment/status/${statusId}/${page}`,{
+    const commentLength = $(`.index-page .comments .card-comments-user${statusId}`).children().length
+    // console.log(`số comment:${commentLength} của id ${statusId}`)
+    fetch(`/comment/status/${statusId}/${commentLength}`,{
         method: 'GET'
     })
     .then(res => res.text())
@@ -99,7 +98,6 @@ function showCommentsStatus(element) {
                     temp += stringCard
                 });
                 $(`.index-page .comments${statusId} .card-comments-user`).append(temp)
-                $(`.index-page .comments${statusId} .preview-comments-before`).attr("data-page",page)
                 $(`.index-page .comments .check-loading-preview-${statusId}`).hide()
             }
         }
@@ -584,15 +582,14 @@ $(document).ready(async function () {
                                         </div>
                                     </div>
 
-                                    <div class="card-comments-user">
-                                        
+                                    <div class="card-comments-user card-comments-user${status._id}">
                                     </div>
 
                                     <div class="spinner-border check-loading-preview-${status._id}"></div>
                                     <div class="notification-preview-comments notification-preview-comments-${status._id}">
                                         Không còn bài viết nào
                                     </div>
-                                    <div class="preview-comments-before" onclick="showCommentsStatus(this)" data-page="1" data-status = "${status._id}">
+                                    <div class="preview-comments-before" onclick="showCommentsStatus(this)" data-status = "${status._id}">
                                         Xem thêm bình luận
                                     </div>
                                     <div class="focus-btn-post-comment" onclick="focusPostBtnComment(this)" data-status = "${status._id}">
@@ -602,7 +599,7 @@ $(document).ready(async function () {
                             </div>`
 
                             // ĐANG BỊ LỖI CẦN SỬA ------------------------------------------------------------
-                            let arrayCardStringComment = await fetch(`${window.parent.location.origin}/comment/status/${status._id}/1`, {
+                            let arrayCardStringComment = await fetch(`${window.parent.location.origin}/comment/status/${status._id}/0`, {
                                 method:'GET'
                             })
                             .then(res => res.text())

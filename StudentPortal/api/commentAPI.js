@@ -52,11 +52,11 @@ router.get('/:id' ,authenticateToken,async function(req, res, next) {
 })
 
 // get status limit: 5 status
-router.get('/status/:id/:page' ,authenticateToken,async function(req, res, next) {
+router.get('/status/:id/:skip' ,authenticateToken,async function(req, res, next) {
     const id = req.params.id
-    const page = req.params.page
     const limit = 5
-    const skip = limit * (parseInt(page) - 1) // 5n - 5 => 0 5 10 15 20 ...
+    const skip = parseInt(req.params.skip)
+    // console.log(skip)
     await commentsModel.find({statusId : id}).limit(limit).skip(skip)
     .sort({dateModified: 'desc'})
     .then((singleComment) => {
