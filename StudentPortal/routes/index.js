@@ -33,8 +33,7 @@ const upload = multer({dest:'uploads',
 router.get('/' , authenticateToken,async function(req, res) {
     cookie = req.cookies
     // khai báo khi vào index mặc định load 3 status
-    const page = 1
-    await fetch(process.env.URL + `/status/page/${page}`, {
+    await fetch(process.env.URL + `/status/page/0`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -132,13 +131,13 @@ router.get('/' , authenticateToken,async function(req, res) {
             // console.log(resultStatus[0].comments)
             // console.log(resultStatus[0].comments.length)
             // console.log("đổ data thành công")
-            return res.render('index',{user: req.user, allStatus: resultStatus});
+            return res.render('index',{user: req.user, allStatus: resultStatus, lengthStatus: 0});
         }
-        return res.render('index',{user: req.user, allStatus: []});
+        return res.render('index',{user: req.user, allStatus: [], lengthStatus: 0});
     })
     .catch(e => {
         console.log(e)
-        return res.render('index',{user: req.user, allStatus: []});
+        return res.render('index',{user: req.user, allStatus: [], lengthStatus: 0});
     })
 });
 

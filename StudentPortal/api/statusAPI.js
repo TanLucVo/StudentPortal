@@ -32,11 +32,10 @@ router.get('/', authenticateToken,async function(req, res, next) {
 })
 
 // GET LIMIT STATUS
-router.get('/page/:page', authenticateToken,async function(req, res, next) {
-    const {page} = req.params
-
+router.get('/page/:skip', authenticateToken,async function(req, res, next) {
+    const skip = parseInt(req.params.skip)
+    // console.log("skip:",skip)
     const limit = 2
-    const skip = (parseInt(page) * 2) - 2 // 2n - 2
 
     // console.log("status API --- skip & limit")
     // console.log("đây là limit:",limit)
