@@ -415,7 +415,7 @@ $(document).ready(async function () {
         // console.log(scrollPosition)
         // console.log(scrollHeight)
         if (parseInt(statusLengthInPage) !== parseInt(checkLengthInPage)) {
-            if (scrollHeight - scrollPosition < 1) {
+            if (scrollHeight - scrollPosition < 2) {
                 $(".index-page .multi-card").attr("data-length_status",statusLengthInPage)
 
                 // console.log('Số status có trên view:',statusLengthInPage)
