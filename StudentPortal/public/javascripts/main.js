@@ -380,29 +380,6 @@ $(document).ready(async function () {
             $('#menu').mmenu();
         });
     }
-
-    // -------------------------------------------------------------------------------------------
-    // tinyMCE
-    // tinymce.init({
-    //     height: "350",
-    //     selector: '.index-page textarea.statusTitle',
-    //     plugins: 'autoresize lists code emoticons media mediaembed pageembed paste powerpaste',
-    //     toolbar: 'undo redo | styleselect | bold italic | ' +
-    //         'alignleft aligncenter alignright alignjustify | ' +
-    //         'outdent indent | numlist bullist | emoticons',
-    //     emoticons_append: {
-    //         custom_mind_explode: {
-    //             keywords: ['brain', 'mind', 'explode', 'blown'],
-    //             char: '🤯'
-    //         }
-    //     },
-    //     autoresize_max_height: 500,
-    //     tinycomments_mode: 'embedded',
-    //     tinycomments_author: 'Author name',
-    //     inline_boundaries: false,
-    // });
-    // -------------------------------------------------------------------------------------------
-    // fetch api - status
    
     // -------------------------------------------------------------------------------------------
     // preview image uploaded
@@ -1083,13 +1060,33 @@ if($(".index-page")[0]){
         $('.index-page .post-btn').prop('disabled', true)
         $('.index-page .post-btn').css('cursor', 'no-drop')
     }
-
-    // fetch api status
+    // -------------------------------------------------------------------------------------------
+    // tinyMCE
+    // tinymce.init({
+    //     height: "350",
+    //     selector: '.index-page textarea.statusTitle',
+    //     plugins: 'autoresize lists code emoticons media mediaembed pageembed paste powerpaste',
+    //     toolbar: 'undo redo | styleselect | bold italic | ' +
+    //         'alignleft aligncenter alignright alignjustify | ' +
+    //         'outdent indent | numlist bullist | emoticons',
+    //     emoticons_append: {
+    //         custom_mind_explode: {
+    //             keywords: ['brain', 'mind', 'explode', 'blown'],
+    //             char: '🤯'
+    //         }
+    //     },
+    //     autoresize_max_height: 500,
+    //     tinycomments_mode: 'embedded',
+    //     tinycomments_author: 'Author name',
+    //     inline_boundaries: false,
+    // });
+    // -------------------------------------------------------------------------------------------
+    // fetch api - status
     // ------------------------------------------------------------------------
     $(".index-page .post-btn").click(e => {
         var file_data = $('.index-page #imageUpload').prop('files')[0];
         var statusTitle = $('.index-page textarea.statusTitle').val()
-        // console.log(statusTitle)
+        // console.log(tinymce.get('statusTitle').getContent())
         // console.log(file_data)
         var form_data = new FormData();
         userId = e.target.dataset.id
