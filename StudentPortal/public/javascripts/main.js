@@ -276,7 +276,7 @@ $(document).ready(async function () {
         })
         .then(res => res.json())
         .then(json => {
-            console.log('data user:',json)
+            // console.log('data user:',json)
             if (json.success) {
                 $(`.index-page .comments${data.statusId} .card-comments-user`).prepend(
                     `<div class="d-flex flex-row mb-2">
@@ -405,247 +405,249 @@ $(document).ready(async function () {
     })
     // -------------------------------------------------------------------------------------------
     // Scroll load status
-    $(window).on("scroll",async () => {
-        var scrollHeight = $(document).height();
-        var scrollPosition = $(window).height() + $(window).scrollTop();
-        const statusLengthInPage = $('.index-page .multi-card .card').length
-        const checkLengthInPage = document.querySelector('.index-page .multi-card').dataset.length_status
-        // console.log("check status length:",checkLengthInPage)
-        // console.log("check status trên view:",statusLengthInPage)
-        // console.log(scrollPosition)
-        // console.log(scrollHeight)
-        if (parseInt(statusLengthInPage) !== parseInt(checkLengthInPage)) {
-            if (scrollHeight - scrollPosition < 2) {
-                $(".index-page .multi-card").attr("data-length_status",statusLengthInPage)
-
-                // console.log('Số status có trên view:',statusLengthInPage)
-                console.log("dang scroll............... STATUS")
-                fetch(window.parent.location.origin + `/status/page/${statusLengthInPage}`, {
-                    method: 'GET'
-                })
-                .then(res => res.json())
-                .then(async json => {
-                    if (json.success) {
-                        if (json.Status.length === 0) {
-                            $('.index-page .gap2 .container .row .loader').hide()
-                        }
-                        else {
-                            data = ""
+    if ($(".index-page")[0]) {
+        $(window).on("scroll",async () => {
+            var scrollHeight = $(document).height();
+            var scrollPosition = $(window).height() + $(window).scrollTop();
+            const statusLengthInPage = $('.index-page .multi-card .card').length
+            const checkLengthInPage = document.querySelector('.index-page .multi-card').dataset.length_status
+            // console.log("check status length:",checkLengthInPage)
+            // console.log("check status trên view:",statusLengthInPage)
+            // console.log(scrollPosition)
+            // console.log(scrollHeight)
+            if (parseInt(statusLengthInPage) !== parseInt(checkLengthInPage)) {
+                if (scrollHeight - scrollPosition < 2) {
+                    $(".index-page .multi-card").attr("data-length_status",statusLengthInPage)
     
-                            // user login
-                            const buttonPostBtn = document.querySelector('.index-page .post-btn')
-                            userId = buttonPostBtn.dataset.id
-                            image = buttonPostBtn.dataset.image
-                            fullName = buttonPostBtn.dataset.name
-                            var user = {
-                                userId: userId,
-                                image: image,
-                                fullName: fullName
+                    // console.log('Số status có trên view:',statusLengthInPage)
+                    console.log("dang scroll............... STATUS")
+                    fetch(window.parent.location.origin + `/status/page/${statusLengthInPage}`, {
+                        method: 'GET'
+                    })
+                    .then(res => res.json())
+                    .then(async json => {
+                        if (json.success) {
+                            if (json.Status.length === 0) {
+                                $('.index-page .gap2 .container .row .loader').hide()
                             }
-                            // console.log("user: ",user)
-                            var checkLike = false
-                            await json.Status.forEach(async status => {
-                                author = JSON.parse(status.author)
-                                // console.log(status)
-                                let stringUserLike = ""
-                                if (!status.like) {
-                                    status.like = []
-                                    checkLike = false
+                            else {
+                                data = ""
+        
+                                // user login
+                                const buttonPostBtn = document.querySelector('.index-page .post-btn')
+                                userId = buttonPostBtn.dataset.id
+                                image = buttonPostBtn.dataset.image
+                                fullName = buttonPostBtn.dataset.name
+                                var user = {
+                                    userId: userId,
+                                    image: image,
+                                    fullName: fullName
                                 }
-                                else {
-                                    status.like = JSON.parse(status.like)
-                                    status.like.forEach(l => {
-                                        if (user.userId == l._id) {
-                                            checkLike = true
-                                        }
-    
-                                        stringUserLike += `
-                                        <div class="cardShowUserLike">
-                                            <img src="${l.image}" alt="" class="showUserLikeImg">
-                                            <span class="nameUserLike">${l.name}</span>
-                                        </div>
-                                        `
-                                    });
-                                    status.checkLike = checkLike
-                                    // gắn lại giá trị default cho biến checkLike để sử dụng cho element vòng lặp kế tiếp
-                                    checkLike = false
-                                }
-                                var likeString = ""
-                                if (status.checkLike) {
-                                    likeString =
-                                    `<div class="like liked ${status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${status._id}">
-                                        <i class="fa fa-thumbs-up"></i> <span>Thích</span>
-                                    </div>`
-                                }
-                                else {
-                                    likeString =
-                                    `<div class="like ${status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${status._id}">
-                                        <i class="fa fa-thumbs-up"></i> <span>Thích</span>
-                                    </div>`
-                                }
-    
-                                data +=
-                                `
-                                <div class="modal fade showUserLikeModal" id="showUserLikeModal${status._id}">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <!-- Modal Header -->
-                                            <div class="modal-header">
-                                                <h4 class="modal-title">Số người thích bài viết</h4>
+                                // console.log("user: ",user)
+                                var checkLike = false
+                                await json.Status.forEach(async status => {
+                                    author = JSON.parse(status.author)
+                                    // console.log(status)
+                                    let stringUserLike = ""
+                                    if (!status.like) {
+                                        status.like = []
+                                        checkLike = false
+                                    }
+                                    else {
+                                        status.like = JSON.parse(status.like)
+                                        status.like.forEach(l => {
+                                            if (user.userId == l._id) {
+                                                checkLike = true
+                                            }
+        
+                                            stringUserLike += `
+                                            <div class="cardShowUserLike">
+                                                <img src="${l.image}" alt="" class="showUserLikeImg">
+                                                <span class="nameUserLike">${l.name}</span>
                                             </div>
-                                            <!-- Modal body -->
-                                            <div class="modal-body listCardUserLike">
-                                                ${stringUserLike}
+                                            `
+                                        });
+                                        status.checkLike = checkLike
+                                        // gắn lại giá trị default cho biến checkLike để sử dụng cho element vòng lặp kế tiếp
+                                        checkLike = false
+                                    }
+                                    var likeString = ""
+                                    if (status.checkLike) {
+                                        likeString =
+                                        `<div class="like liked ${status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${status._id}">
+                                            <i class="fa fa-thumbs-up"></i> <span>Thích</span>
+                                        </div>`
+                                    }
+                                    else {
+                                        likeString =
+                                        `<div class="like ${status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${status._id}">
+                                            <i class="fa fa-thumbs-up"></i> <span>Thích</span>
+                                        </div>`
+                                    }
+        
+                                    data +=
+                                    `
+                                    <div class="modal fade showUserLikeModal" id="showUserLikeModal${status._id}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Số người thích bài viết</h4>
+                                                </div>
+                                                <!-- Modal body -->
+                                                <div class="modal-body listCardUserLike">
+                                                    ${stringUserLike}
+                                                </div>
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+                                                </div>
                                             </div>
-                                            <!-- Modal footer -->
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-    
-                                <div class="card">
-                                    <!--Information of post's user-->
-                                    <div class="d-flex justify-content-between p-2 px-2">
-                                        <div class="d-flex flex-row align-items-center">
-                                            <img src="${author.image}" alt="" class="image-user rounded-circle" width="52">
-                                            <div class="d-flex flex-column ml-2">
-                                                <span class="font-weight-bold">${author.fullName}</span>
-                                                <small class="text-primary">Thông tin</small>
-                                            </div>
-                                        </div>
-                                        <!--Time and more-->
-                                        <div class="time-and-more d-flex flex-row mt-2">
-                                        <small class="mr-2">${getPassedTime(new Date(status.dateModified),Date.now())}</small><i class="fas fa-ellipsis-v"></i>
                                         </div>
                                     </div>
-                                    <!--Area of post-->
-                                    <hr style="border: none;">
-                                    <p class="text-justify ml-3">${ status.statusTitle }</p>
-                                    <img src="${ status.image }" alt="" class="img-fluid">
-                                    <!-- Number of Comment and Interactive-->
-                                    <div class="d-flex justify-content-between align-items-centerl">
-                                        <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
-                                            
-                                            <span><i class="fa fa-thumbs-up"></i> 
-                                                <span class="view-like-user view-${status._id}" title="Số người thích bài viết" href="#" data-status="${status._id}" onclick="showModalUserLike(this)">
-                                                    ${status.like.length}
+        
+                                    <div class="card">
+                                        <!--Information of post's user-->
+                                        <div class="d-flex justify-content-between p-2 px-2">
+                                            <div class="d-flex flex-row align-items-center">
+                                                <img src="${author.image}" alt="" class="image-user rounded-circle" width="52">
+                                                <div class="d-flex flex-column ml-2">
+                                                    <span class="font-weight-bold">${author.fullName}</span>
+                                                    <small class="text-primary">Thông tin</small>
+                                                </div>
+                                            </div>
+                                            <!--Time and more-->
+                                            <div class="time-and-more d-flex flex-row mt-2">
+                                            <small class="mr-2">${getPassedTime(new Date(status.dateModified),Date.now())}</small><i class="fas fa-ellipsis-v"></i>
+                                            </div>
+                                        </div>
+                                        <!--Area of post-->
+                                        <hr style="border: none;">
+                                        <p class="text-justify ml-3">${ status.statusTitle }</p>
+                                        <img src="${ status.image }" alt="" class="img-fluid">
+                                        <!-- Number of Comment and Interactive-->
+                                        <div class="d-flex justify-content-between align-items-centerl">
+                                            <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
+                                                
+                                                <span><i class="fa fa-thumbs-up"></i> 
+                                                    <span class="view-like-user view-${status._id}" title="Số người thích bài viết" href="#" data-status="${status._id}" onclick="showModalUserLike(this)">
+                                                        ${status.like.length}
+                                                    </span>
                                                 </span>
-                                            </span>
-                                        </div>
-                                        <div class="d-flex flex-row interactive_color m-3">
-                                            <span class="mr-3 cmt">Bình luận</span>
-                                            <span class="shares">Chia sẻ</span>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <!--Interative-->
-                                    <div class="d-flex justify-content-between align-items-centerl mx-5">
-        
-                                        ${likeString}
-        
-                                        <div class="cmts"  onclick="showHideComments(this)" data-status="${status._id}">
-                                            <i class="fa fa-comments"></i> <span>Bình luận</span>
-                                        </div>
-                                        <div class="shr">
-                                            <i class="fa fa-share-square"></i> <span>Chia sẻ</span>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <!--Comment-->
-                                    <div class="comments mx-3 comments${status._id}">
-                                        <div class="comment-input">
-                                            <input type="text" class="form-control" id="text-content-comment${status._id}">
-                                            <div class="fonts send-comment" data-author="${user.userId}" data-status = "${status._id}" onclick="fetchApiComment(this)">
-                                                <i class="fas fa-paper-plane"></i>
+                                            </div>
+                                            <div class="d-flex flex-row interactive_color m-3">
+                                                <span class="mr-3 cmt">Bình luận</span>
+                                                <span class="shares">Chia sẻ</span>
                                             </div>
                                         </div>
-    
-                                        <div class="card-comments-user card-comments-user${status._id}">
+                                        <hr>
+                                        <!--Interative-->
+                                        <div class="d-flex justify-content-between align-items-centerl mx-5">
+            
+                                            ${likeString}
+            
+                                            <div class="cmts"  onclick="showHideComments(this)" data-status="${status._id}">
+                                                <i class="fa fa-comments"></i> <span>Bình luận</span>
+                                            </div>
+                                            <div class="shr">
+                                                <i class="fa fa-share-square"></i> <span>Chia sẻ</span>
+                                            </div>
                                         </div>
-    
-                                        <div class="spinner-border check-loading-preview-${status._id}"></div>
-                                        <div class="notification-preview-comments notification-preview-comments-${status._id}">
-                                            Không còn bài viết nào
+                                        <hr>
+                                        <!--Comment-->
+                                        <div class="comments mx-3 comments${status._id}">
+                                            <div class="comment-input">
+                                                <input type="text" class="form-control" id="text-content-comment${status._id}">
+                                                <div class="fonts send-comment" data-author="${user.userId}" data-status = "${status._id}" onclick="fetchApiComment(this)">
+                                                    <i class="fas fa-paper-plane"></i>
+                                                </div>
+                                            </div>
+        
+                                            <div class="card-comments-user card-comments-user${status._id}">
+                                            </div>
+        
+                                            <div class="spinner-border check-loading-preview-${status._id}"></div>
+                                            <div class="notification-preview-comments notification-preview-comments-${status._id}">
+                                                Không còn bài viết nào
+                                            </div>
+                                            <div class="preview-comments-before" onclick="showCommentsStatus(this)" data-status = "${status._id}">
+                                                Xem thêm bình luận
+                                            </div>
+                                            <div class="focus-btn-post-comment" onclick="focusPostBtnComment(this)" data-status = "${status._id}">
+                                                Viết bình luận của bạn...
+                                            </div>
                                         </div>
-                                        <div class="preview-comments-before" onclick="showCommentsStatus(this)" data-status = "${status._id}">
-                                            Xem thêm bình luận
-                                        </div>
-                                        <div class="focus-btn-post-comment" onclick="focusPostBtnComment(this)" data-status = "${status._id}">
-                                            Viết bình luận của bạn...
-                                        </div>
-                                    </div>
-                                </div>`
-    
-                                // ĐANG BỊ LỖI CẦN SỬA ------------------------------------------------------------
-                                let arrayCardStringComment = await fetch(`${window.parent.location.origin}/comment/status/${status._id}/0`, {
-                                    method:'GET'
-                                })
-                                .then(res => res.text())
-                                .then(async dataLike => {
-                                    const dataLikeParse = JSON.parse(dataLike)
-                                    // console.log(dataLikeParse)
-                                    if (dataLikeParse.success) {
-                                        let arrayCardString = ''
-                                        let arrayCardComment = dataLikeParse.Comment.map(async comment => {
-                                            // console.log(comment.statusId)
-                                            let cardStringComment = await fetch(`${window.parent.location.origin}/user/${comment.author}`, {
-                                                method:'GET'
-                                            })
-                                            .then(res => res.text())
-                                            .then(dataAuthorComment => {
-                                                dataAuthorComment = JSON.parse(dataAuthorComment)
-                                                if (dataAuthorComment.success) {
-                                                    // console.log(dataAuthorComment)
-                                                    let cardStringComment = `
-                                                    <div class="d-flex flex-row mb-2">
-                                                        <img src="${dataAuthorComment.user.image}" width="40" class="round-img">
-                                                        <div class="d-flex flex-column ml-2">
-                                                            <span class="nameOfUser">${dataAuthorComment.user.name}</span>
-                                                            <small class="comment-text">${comment.content}</small>
-                                                            <div
-                                                                class="d-flex flex-row align-items-center interactive_comment_color">
-                                                                <small>Thích</small>
-                                                                <small>Trả lời</small>
-                                                                <small>Dịch</small>
-                                                                <small>${getPassedTime(new Date(comment.dateModified),Date.now())}</small>
+                                    </div>`
+        
+                                    // ĐANG BỊ LỖI CẦN SỬA ------------------------------------------------------------
+                                    let arrayCardStringComment = await fetch(`${window.parent.location.origin}/comment/status/${status._id}/0`, {
+                                        method:'GET'
+                                    })
+                                    .then(res => res.text())
+                                    .then(async dataLike => {
+                                        const dataLikeParse = JSON.parse(dataLike)
+                                        // console.log(dataLikeParse)
+                                        if (dataLikeParse.success) {
+                                            let arrayCardString = ''
+                                            let arrayCardComment = dataLikeParse.Comment.map(async comment => {
+                                                // console.log(comment.statusId)
+                                                let cardStringComment = await fetch(`${window.parent.location.origin}/user/${comment.author}`, {
+                                                    method:'GET'
+                                                })
+                                                .then(res => res.text())
+                                                .then(dataAuthorComment => {
+                                                    dataAuthorComment = JSON.parse(dataAuthorComment)
+                                                    if (dataAuthorComment.success) {
+                                                        // console.log(dataAuthorComment)
+                                                        let cardStringComment = `
+                                                        <div class="d-flex flex-row mb-2">
+                                                            <img src="${dataAuthorComment.user.image}" width="40" class="round-img">
+                                                            <div class="d-flex flex-column ml-2">
+                                                                <span class="nameOfUser">${dataAuthorComment.user.name}</span>
+                                                                <small class="comment-text">${comment.content}</small>
+                                                                <div
+                                                                    class="d-flex flex-row align-items-center interactive_comment_color">
+                                                                    <small>Thích</small>
+                                                                    <small>Trả lời</small>
+                                                                    <small>Dịch</small>
+                                                                    <small>${getPassedTime(new Date(comment.dateModified),Date.now())}</small>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    `
-                                                    return cardStringComment
-                                                }
-                                            }).catch(e => console.log(e))
-    
-                                            return cardStringComment
-                                        });
-                                        let arrayCardStringComment = ""
-                                        let temp = await Promise.all(arrayCardComment)
-                                        temp.forEach(e => {
-                                            arrayCardStringComment += e
-                                        });
-                                        return arrayCardStringComment
-                                    }
-                                }).catch(e => console.log(e))
-    
-                                // console.log(arrayCardStringComment)
-                                // ĐANG BỊ LỖI CẦN SỬA ------------------------------------------------------------
-                                // thêm card string vào cho thẻ card-comments-user
-                                $(`.index-page .comments${status._id} .card-comments-user`).append(arrayCardStringComment)
-                            });
+                                                        `
+                                                        return cardStringComment
+                                                    }
+                                                }).catch(e => console.log(e))
         
-                            $(".index-page .multi-card").append(data)
+                                                return cardStringComment
+                                            });
+                                            let arrayCardStringComment = ""
+                                            let temp = await Promise.all(arrayCardComment)
+                                            temp.forEach(e => {
+                                                arrayCardStringComment += e
+                                            });
+                                            return arrayCardStringComment
+                                        }
+                                    }).catch(e => console.log(e))
+        
+                                    // console.log(arrayCardStringComment)
+                                    // ĐANG BỊ LỖI CẦN SỬA ------------------------------------------------------------
+                                    // thêm card string vào cho thẻ card-comments-user
+                                    $(`.index-page .comments${status._id} .card-comments-user`).append(arrayCardStringComment)
+                                });
+            
+                                $(".index-page .multi-card").append(data)
+                            }
                         }
-                    }
-                }).catch(e => console.log(e))
+                    }).catch(e => console.log(e))
+                }
             }
-        }
-        else {
-            // console.log("data không được đổ lên -> số status trên view:",statusLengthInPage)
-        }
-
-    });
+            else {
+                // console.log("data không được đổ lên -> số status trên view:",statusLengthInPage)
+            }
+    
+        });
+    }
 
     // -------------------------------------------------------------------------------------------
     //dashboardDepartment
