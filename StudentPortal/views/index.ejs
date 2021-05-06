@@ -528,7 +528,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card">
+                                        <div class="card card-<%= status._id %>">
                                             <!--Information of post's user-->
                                             <div class="d-flex justify-content-between p-2 px-2">
                                                 <div class="d-flex flex-row align-items-center">
@@ -542,13 +542,26 @@
                                                     </div>
                                                 </div>
                                                 <!--Time and more-->
-                                                <div class="time-and-more d-flex flex-row mt-2">
+                                                <div class="time-and-more d-flex flex-row mt-2" data-status="<%= status._id %>" onclick="editStatus(this)">
                                                     <small class="mr-2">
                                                         <%= status.currentTime %>
                                                     </small><i class="fas fa-ellipsis-v"></i>
                                                 </div>
                                             </div>
                                             <!--Area of post-->
+                                            <!-- dropdown edit status -->
+                                            <div class="dropdown-edit-status">
+                                                <div class="dropdowns">
+                                                    <ul>
+                                                        <li>
+                                                            Chỉnh sửa <i class="fas fa-edit"></i>
+                                                        </li>
+                                                        <li>
+                                                            Xoá <i class="far fa-trash-alt"></i>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                             <hr style="border: none;">
                                             <p class="text-justify ml-3 statusId">
                                                 <%= status.statusTitle %>

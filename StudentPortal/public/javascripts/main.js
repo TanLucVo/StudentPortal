@@ -18,6 +18,11 @@ btn.on('click', function(e) {
   $('html, body').animate({scrollTop:0}, '300');
 });
 
+function editStatus(element) {
+    const statusId = element.dataset.status
+    // console.log(statusId)
+    $(`.index-page .card-${statusId} .dropdown-edit-status .dropdowns`).toggleClass('active');
+}
 
 // window.parent.location.origin = http://localhost:3000
 function showModalUserLike(element) {
@@ -506,7 +511,7 @@ $(document).ready(async function () {
                                         </div>
                                     </div>
         
-                                    <div class="card">
+                                    <div class="card card-${status._id}">
                                         <!--Information of post's user-->
                                         <div class="d-flex justify-content-between p-2 px-2">
                                             <div class="d-flex flex-row align-items-center">
@@ -517,11 +522,24 @@ $(document).ready(async function () {
                                                 </div>
                                             </div>
                                             <!--Time and more-->
-                                            <div class="time-and-more d-flex flex-row mt-2">
+                                            <div class="time-and-more d-flex flex-row mt-2" data-status="${status._id}" onclick="editStatus(this)">
                                             <small class="mr-2">${getPassedTime(new Date(status.dateModified),Date.now())}</small><i class="fas fa-ellipsis-v"></i>
                                             </div>
                                         </div>
                                         <!--Area of post-->
+                                        <!-- dropdown edit status -->
+                                            <div class="dropdown-edit-status">
+                                                <div class="dropdowns">
+                                                    <ul>
+                                                        <li>
+                                                            Chỉnh sửa <i class="fas fa-edit"></i>
+                                                        </li>
+                                                        <li>
+                                                            Xoá <i class="far fa-trash-alt"></i>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         <hr style="border: none;">
                                         <p class="text-justify ml-3">${ status.statusTitle }</p>
                                         <img src="${ status.image }" alt="" class="img-fluid">
@@ -1122,7 +1140,7 @@ if($(".index-page")[0]){
                             like = 0
                         }
                         var htmlString =
-                        `<div class="card">
+                        `<div class="card card-${json.Status._id}">
                             <!--Information of post's user-->
                             <div class="d-flex justify-content-between p-2 px-2">
                                 <div class="d-flex flex-row align-items-center">
@@ -1133,11 +1151,24 @@ if($(".index-page")[0]){
                                     </div>
                                 </div>
                                 <!--Time and more-->
-                                <div class="time-and-more d-flex flex-row mt-2">
+                                <div class="time-and-more d-flex flex-row mt-2"  data-status="${json.Status._id}" onclick="editStatus(this)>
                                 <small class="mr-2">${json.Status.currentTime}</small><i class="fas fa-ellipsis-v"></i>
                                 </div>
                             </div>
                             <!--Area of post-->
+                            <!-- dropdown edit status -->
+                                <div class="dropdown-edit-status">
+                                    <div class="dropdowns">
+                                        <ul>
+                                            <li>
+                                                Chỉnh sửa <i class="fas fa-edit"></i>
+                                            </li>
+                                            <li>
+                                                Xoá <i class="far fa-trash-alt"></i>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             <hr style="border: none;">
                             <p class="text-justify ml-3">${ json.Status.statusTitle }</p>
                             <img src="${ json.Status.image }" alt="" class="img-fluid">

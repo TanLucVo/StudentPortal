@@ -5,6 +5,35 @@ body {
     min-height: 100vh;
 }
 
+/* list style edit status */
+.index-page .card .dropdown-edit-status {
+    margin-top: -20px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-end;
+    align-content: stretch;
+}
+.index-page .card .dropdown-edit-status .dropdowns {
+    position: initial;
+    text-align: right;
+    width: 110px;
+}
+.index-page .card .dropdown-edit-status ul {
+    margin: 0px;
+    padding: 0px;
+}
+.index-page .card .dropdown-edit-status ul li {
+    color: rgb(184, 174, 174);
+    list-style: none;
+    padding: 5px;
+    cursor: pointer;
+}
+.index-page .card .dropdown-edit-status ul li:hover {
+    background-color: #FAFAFA;
+}
+
 .index-page .send-comment:hover {
     cursor: pointer;
 }
@@ -1606,6 +1635,7 @@ body {
     line-height: initial;
     list-style: outside none none;
     max-height: 340px;
+    z-index: 9;
 
     overflow: auto;
     padding-left: 0;
