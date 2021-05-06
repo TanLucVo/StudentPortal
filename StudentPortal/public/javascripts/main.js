@@ -20,8 +20,12 @@ btn.on('click', function(e) {
 
 function editStatus(element) {
     const statusId = element.dataset.status
-    // console.log(statusId)
-    $(`.index-page .card-${statusId} .dropdown-edit-status .dropdowns`).toggleClass('active');
+    const authorId = element.dataset.user
+    const userId = document.querySelector('.index-page .multi-card').dataset.user
+
+    if (userId == authorId) {
+        $(`.index-page .card-${statusId} .dropdown-edit-status .dropdowns`).toggleClass('active');
+    }
 }
 
 // window.parent.location.origin = http://localhost:3000
@@ -522,7 +526,7 @@ $(document).ready(async function () {
                                                 </div>
                                             </div>
                                             <!--Time and more-->
-                                            <div class="time-and-more d-flex flex-row mt-2" data-status="${status._id}" onclick="editStatus(this)">
+                                            <div class="time-and-more d-flex flex-row mt-2" data-user=${author.userId} data-status="${status._id}" onclick="editStatus(this)">
                                             <small class="mr-2">${getPassedTime(new Date(status.dateModified),Date.now())}</small><i class="fas fa-ellipsis-v"></i>
                                             </div>
                                         </div>
@@ -1151,7 +1155,7 @@ if($(".index-page")[0]){
                                     </div>
                                 </div>
                                 <!--Time and more-->
-                                <div class="time-and-more d-flex flex-row mt-2"  data-status="${json.Status._id}" onclick="editStatus(this)>
+                                <div class="time-and-more d-flex flex-row mt-2" data-user="${author.userId}"  data-status="${json.Status._id}" onclick="editStatus(this)>
                                 <small class="mr-2">${json.Status.currentTime}</small><i class="fas fa-ellipsis-v"></i>
                                 </div>
                             </div>

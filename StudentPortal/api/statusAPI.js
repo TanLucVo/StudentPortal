@@ -4,6 +4,7 @@ const router = express.Router()
 const {authenticateToken,authenticateTokenAPI} = require('../config/token')
 const mongoose = require('mongoose')
 const statusModel = require('../models/status')
+const authorModel = require('../models/author')
 
 
 // api status: GET POST PUT DELETE
@@ -102,18 +103,38 @@ router.post('/', authenticateToken,async function(req, res, next) {
     })
     await status
     .save()
-    .then((newStatus) => {
-        return res.status(201).json({
-        success: true,
-        message: 'New status created successfully',
-        Status: newStatus,
-        });
+    .then(async (newStatus) => {
+
+        const query = new authorModel({
+            user: JSON.parse(data.author).userId,
+            status: newStatus._id
+        })
+        try {
+            var author = await query.save()
+
+            if (author == null || author == undefined) {
+                throw new Error('Error, please refresh the page.')
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: 'New status created successfully',
+                Status: newStatus,
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: 'Server error. Please try again.',
+                error: error.message,
+            });
+        }
+
     })
     .catch((error) => {
         return res.status(500).json({
-        success: false,
-        message: 'Server error. Please try again.',
-        error: error.message,
+            success: false,
+            message: 'Server error. Please try again.',
+            error: error.message,
         });
     });
 })

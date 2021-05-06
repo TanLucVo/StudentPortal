@@ -498,7 +498,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                    <div class="multi-card" data-length_status="<%= lengthStatus %>">
+                                    <div class="multi-card" data-length_status="<%= lengthStatus %>" data-user="<%= user._id %>">
                                         <% locals.allStatus.forEach(status=> { %>
                                         <!-- The Modal -->
                                         <div class="modal fade showUserLikeModal" id="showUserLikeModal<%= status._id %>">
@@ -542,7 +542,7 @@
                                                     </div>
                                                 </div>
                                                 <!--Time and more-->
-                                                <div class="time-and-more d-flex flex-row mt-2" data-status="<%= status._id %>" onclick="editStatus(this)">
+                                                <div class="time-and-more d-flex flex-row mt-2" data-user="<%= JSON.parse(status.author).userId %>" data-status="<%= status._id %>" onclick="editStatus(this)">
                                                     <small class="mr-2">
                                                         <%= status.currentTime %>
                                                     </small><i class="fas fa-ellipsis-v"></i>
