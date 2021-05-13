@@ -4,7 +4,6 @@ const router = express.Router()
 const {authenticateToken,authenticateTokenAPI} = require('../config/token')
 const mongoose = require('mongoose')
 const statusModel = require('../models/status')
-const authorModel = require('../models/author')
 
 
 // api status: GET POST PUT DELETE
@@ -44,7 +43,8 @@ router.get('/page/:skip', authenticateToken,async function(req, res, next) {
 
     await statusModel.find().limit(limit).skip(skip)
     .sort({dateModified: 'desc'})
-    .select('_id author statusTitle statusId dateModified like image')
+    .populate('user')
+    .select('_id author statusTitle statusId dateModified like image user')
     .then((allStatus) => {
       return res.status(200).json({
         success: true,
@@ -99,35 +99,22 @@ router.post('/', authenticateToken,async function(req, res, next) {
         like: undefined,
         statusTitle: data.statusTitle,
         dateModified: new Date(),
-        image: data.image
+        image: data.image,
+        user: req.user
     })
     await status
     .save()
     .then(async (newStatus) => {
 
-        const query = new authorModel({
-            user: JSON.parse(data.author).userId,
-            status: newStatus._id
-        })
-        try {
-            var author = await query.save()
-
-            if (author == null || author == undefined) {
-                throw new Error('Error, please refresh the page.')
-            }
-
-            return res.status(200).json({
-                success: true,
-                message: 'New status created successfully',
-                Status: newStatus,
-            });
-        } catch (error) {
-            return res.status(500).json({
-                success: false,
-                message: 'Server error. Please try again.',
-                error: error.message,
-            });
+        if (newStatus == null || newStatus == undefined) {
+            throw new Error('Server error. Please try again.')
         }
+
+        return res.status(200).json({
+            success: true,
+            message: 'New status created successfully',
+            Status: newStatus,
+        });
 
     })
     .catch((error) => {

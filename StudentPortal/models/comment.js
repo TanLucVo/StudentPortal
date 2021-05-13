@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 const CommentSchema = mongoose.Schema({
     statusId: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId, ref: 'status',
         require: true,
     },
     author: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId, ref: 'users',
         require: true,
     },
     content: {

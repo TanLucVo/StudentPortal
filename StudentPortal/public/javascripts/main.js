@@ -140,9 +140,9 @@ function fetchApiComment(element) {
 
 function getLikeStatus(element) {
     const idStatus = element.dataset.id
-    const userImage = element.dataset.image
-    const userId = element.dataset.userid
-    const name = element.dataset.name
+    const userImage = document.querySelector('.index-page').dataset.image
+    const userId = document.querySelector('.index-page').dataset.userid
+    const name = document.querySelector('.index-page').dataset.name
     let myLike = undefined
     // console.log("id status:",idStatus)
     // console.log("userImage:", userImage)
@@ -455,7 +455,7 @@ $(document).ready(async function () {
                                 // console.log("user: ",user)
                                 var checkLike = false
                                 await json.Status.forEach(async status => {
-                                    author = JSON.parse(status.author)
+                                    author = status.user
                                     // console.log(status)
                                     let stringUserLike = ""
                                     if (!status.like) {
@@ -483,13 +483,13 @@ $(document).ready(async function () {
                                     var likeString = ""
                                     if (status.checkLike) {
                                         likeString =
-                                        `<div class="like liked ${status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${status._id}">
+                                        `<div class="like liked ${status._id}" onclick="getLikeStatus(this)" data-id="${status._id}">
                                             <i class="fa fa-thumbs-up"></i> <span>Thích</span>
                                         </div>`
                                     }
                                     else {
                                         likeString =
-                                        `<div class="like ${status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${status._id}">
+                                        `<div class="like ${status._id}" onclick="getLikeStatus(this)" data-id="${status._id}">
                                             <i class="fa fa-thumbs-up"></i> <span>Thích</span>
                                         </div>`
                                     }
@@ -521,12 +521,12 @@ $(document).ready(async function () {
                                             <div class="d-flex flex-row align-items-center">
                                                 <img src="${author.image}" alt="" class="image-user rounded-circle" width="52">
                                                 <div class="d-flex flex-column ml-2">
-                                                    <span class="font-weight-bold">${author.fullName}</span>
+                                                    <span class="font-weight-bold">${author.name}</span>
                                                     <small class="text-primary">Thông tin</small>
                                                 </div>
                                             </div>
                                             <!--Time and more-->
-                                            <div class="time-and-more d-flex flex-row mt-2" data-user=${author.userId} data-status="${status._id}" onclick="editStatus(this)">
+                                            <div class="time-and-more d-flex flex-row mt-2" data-user=${author._id} data-status="${status._id}" onclick="editStatus(this)">
                                             <small class="mr-2">${getPassedTime(new Date(status.dateModified),Date.now())}</small><i class="fas fa-ellipsis-v"></i>
                                             </div>
                                         </div>
@@ -1136,7 +1136,7 @@ if($(".index-page")[0]){
                 .then(res => res.json())
                 .then(json => {
                     if (json.success) {
-                        author = JSON.parse(json.Status.author)
+                        author = json.Status.user
                         if (json.Status.like) {
                             like = JSON.parse(json.Status.like)
                         }
@@ -1150,29 +1150,32 @@ if($(".index-page")[0]){
                                 <div class="d-flex flex-row align-items-center">
                                     <img src="${author.image}" alt="" class="image-user rounded-circle" width="52">
                                     <div class="d-flex flex-column ml-2">
-                                        <span class="font-weight-bold">${author.fullName}</span>
+                                        <span class="font-weight-bold">${author.name}</span>
                                         <small class="text-primary">Thông tin</small>
                                     </div>
                                 </div>
                                 <!--Time and more-->
-                                <div class="time-and-more d-flex flex-row mt-2" data-user="${author.userId}"  data-status="${json.Status._id}" onclick="editStatus(this)>
-                                <small class="mr-2">${json.Status.currentTime}</small><i class="fas fa-ellipsis-v"></i>
+                                <div class="time-and-more d-flex flex-row mt-2" onclick="editStatus(this)" data-user= "${author._id}" data-status="${json.Status._id}">
+                                    <small class="mr-2">
+                                    ${json.Status.currentTime}
+                                    </small>
+                                    <i class="fas fa-ellipsis-v"></i>
                                 </div>
                             </div>
                             <!--Area of post-->
                             <!-- dropdown edit status -->
-                                <div class="dropdown-edit-status">
-                                    <div class="dropdowns">
-                                        <ul>
-                                            <li>
-                                                Chỉnh sửa <i class="fas fa-edit"></i>
-                                            </li>
-                                            <li>
-                                                Xoá <i class="far fa-trash-alt"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
+                            <div class="dropdown-edit-status">
+                                <div class="dropdowns">
+                                    <ul>
+                                        <li>
+                                            Chỉnh sửa <i class="fas fa-edit"></i>
+                                        </li>
+                                        <li>
+                                            Xoá <i class="far fa-trash-alt"></i>
+                                        </li>
+                                    </ul>
                                 </div>
+                            </div>
                             <hr style="border: none;">
                             <p class="text-justify ml-3">${ json.Status.statusTitle }</p>
                             <img src="${ json.Status.image }" alt="" class="img-fluid">
@@ -1194,7 +1197,7 @@ if($(".index-page")[0]){
                             <hr>
                             <!--Interative-->
                             <div class="d-flex justify-content-between align-items-centerl mx-5">
-                                <div class="like ${json.Status._id}" onclick="getLikeStatus(this)" data-userid="${author.userId}" data-name="${author.fullName}" data-image="${author.image}" data-id="${json.Status._id}">
+                                <div class="like ${json.Status._id}" onclick="getLikeStatus(this)" data-id="${json.Status._id}">
                                     <i class="fa fa-thumbs-up"></i> <span>Thích</span>
                                 </div>
                                 <div class="cmts" onclick="showHideComments(this)" data-status="${json.Status._id}">
