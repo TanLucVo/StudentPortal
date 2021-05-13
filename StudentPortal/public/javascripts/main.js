@@ -349,7 +349,7 @@ $(document).ready(async function () {
     }
     $(document).on('click', function(e) {
         let emojiBtn = $('.index-page .attachments .fileContainer #emojiSelector')
-        if (!$(e.target).closest(emojiBtn).length) {
+        if (!$(e.target).closest(emojiBtn).length && !$(e.target).closest($('emoji-picker')).length) {
             $('emoji-picker').removeClass("emoji-display")
         }
     });
