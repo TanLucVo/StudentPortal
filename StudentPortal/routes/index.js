@@ -121,10 +121,12 @@ router.get('/' , authenticateToken,async function(req, res) {
 router.post('/', authenticateToken, async function(req, res, next) {
     const statusTitle = req.body.statusTitle
     let image = req.body.imageStatus
+    let video = req.body.urlYoutube
 
     let status = {
         statusTitle: statusTitle,
         image: image,
+        video
     }
     fetch(process.env.URL + '/status', {
             method: 'POST',

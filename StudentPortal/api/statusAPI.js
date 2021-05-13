@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+const youtubeEmbed = require('youtube-embed')
+
 const {authenticateToken,authenticateTokenAPI} = require('../config/token')
 const mongoose = require('mongoose')
 
@@ -47,7 +49,7 @@ router.get('/page/:skip', authenticateToken,async function(req, res, next) {
     await statusModel.find().limit(limit).skip(skip)
     .sort({dateModified: 'desc'})
     .populate('user')
-    .select('_id author statusTitle statusId dateModified like image user')
+    .select('_id author statusTitle statusId dateModified like image user video')
     .then((allStatus) => {
       return res.status(200).json({
         success: true,
@@ -106,33 +108,40 @@ router.post('/', authenticateToken,async function(req, res, next) {
         user: req.user._id
     })
 
-    let queryImg = {
-        image: data.image,
-        image_name: status._id,
-        folder: `status/${status._id}`
+    if (data.image) {
+        let queryImg = {
+            image: data.image,
+            image_name: status._id,
+            folder: `status/${status._id}`
+        }
+    
+        const url = await fetch(`${process.env.URL}/api/upload-image-v2`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Cookie': `connect.sid=${cookie['connect.sid']};token=${cookie.token}`
+            },
+            body: JSON.stringify(queryImg)
+        }).then(res => res.text())
+        .then(data => {
+            data = JSON.parse(data)
+            if (data.status) {
+                return data.result.url
+            }
+        }).catch(error => {
+            return res.status(500).json({
+                status: false,
+                error: error.message
+            })
+        })
+        status.image = url
     }
 
-    const url = await fetch(`${process.env.URL}/api/upload-image-v2`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Cookie': `connect.sid=${cookie['connect.sid']};token=${cookie.token}`
-        },
-        body: JSON.stringify(queryImg)
-    }).then(res => res.text())
-    .then(data => {
-        data = JSON.parse(data)
-        if (data.status) {
-            return data.result.url
-        }
-    }).catch(error => {
-        return res.status(500).json({
-            status: false,
-            error: error.message
-        })
-    })
+    if (data.video) {
+        status.video = youtubeEmbed(data.video)
+    }
+
     try {
-        status.image = url
         const temp = await status.save()
         const newStatus = await statusModel.findById(temp._id).populate('user')
         if (newStatus == null || newStatus == undefined) {

@@ -329,10 +329,26 @@ $(document).ready(async function () {
         $(".fixed-sidebar.left").removeClass("open");
     });
     // -------------------------------------------------------------------------------------------
+    /*--- show - hide form upload link youtube ---*/
+    $('.index-page .attachments .fileContainer #youtubeVideoUpload').on('click', () => {
+        $('.index-page .attachments .input-link-youtube').toggleClass("active")
+    })
+    // -------------------------------------------------------------------------------------------
+    /*--- show emoji ---*/
+    $('.index-page .attachments .fileContainer #emojiSelector').on('click', () => {
+        $('emoji-picker').toggleClass("active")
+    })
+    document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
+        let value = $('.index-page textarea.statusTitle').val()
+        let emoji = event.detail.emoji.unicode
+        let newValue = value + emoji
+        $('.index-page textarea.statusTitle').val(newValue)
+    });
+    // -------------------------------------------------------------------------------------------
     //--- user setting dropdown on topbar
     $('.user-img').on('click', function () {
         // toggleClass(): Thêm hoặc loại bỏ một hoặc nhiều class của thành phần.
-        $('.user-setting').toggleClass("active");
+        $('.user-setting').toggleClass("emoji-display");
     });
 
     $('.gap2 .container').on('click', function () {
@@ -493,6 +509,15 @@ $(document).ready(async function () {
                                             <i class="fa fa-thumbs-up"></i> <span>Thích</span>
                                         </div>`
                                     }
+
+                                    let iframe = ""
+                                    if (status.video != undefined || status.video != null) {
+                                        iframe = `
+                                        <iframe
+                                            src="${status.video}" height="450" frameborder="0">
+                                        </iframe>
+                                        `
+                                    }
         
                                     data +=
                                     `
@@ -544,8 +569,8 @@ $(document).ready(async function () {
                                                     </ul>
                                                 </div>
                                             </div>
-                                        <hr style="border: none;">
-                                        <p class="text-justify ml-3">${ status.statusTitle }</p>
+                                        <p class="text-justify ml-3 content-status">${ status.statusTitle }</p>
+                                        ${iframe}
                                         <img src="${ status.image }" alt="" class="img-fluid">
                                         <!-- Number of Comment and Interactive-->
                                         <div class="d-flex justify-content-between align-items-centerl">
@@ -1108,8 +1133,11 @@ if($(".index-page")[0]){
     // fetch api - status
     // ------------------------------------------------------------------------
     $(".index-page .post-btn").click(e => {
+        $('.index-page .view-btn-add-new-status').hide()
+        $('.index-page .spinner-border-btn-add-status').css('display', 'inline-block')
         var statusTitle = $('.index-page textarea.statusTitle').val()
         var base64Img = $('#output').attr('src')
+        var urlYoutube = $('.index-page .attachments .input-link-youtube #urlYoutubeUpload').val()
 
         userId = e.target.dataset.id
         image = e.target.dataset.image
@@ -1118,7 +1146,8 @@ if($(".index-page")[0]){
         if (statusTitle.length !== 0) {
             let query = {
                 imageStatus : base64Img,
-                statusTitle : statusTitle
+                statusTitle : statusTitle,
+                urlYoutube: urlYoutube
             }
             uploadImage(query)
         }
@@ -1139,6 +1168,14 @@ if($(".index-page")[0]){
                         }
                         else{
                             like = 0
+                        }
+                        let iframe = ""
+                        if (json.Status.video != undefined || json.Status.video != null) {
+                            iframe = `
+                            <iframe
+                                src="${json.Status.video}" height="450" frameborder="0">
+                            </iframe>
+                            `
                         }
                         var htmlString =
                         `<div class="card card-${json.Status._id}">
@@ -1173,8 +1210,10 @@ if($(".index-page")[0]){
                                     </ul>
                                 </div>
                             </div>
-                            <hr style="border: none;">
-                            <p class="text-justify ml-3">${ json.Status.statusTitle }</p>
+                            <p class="text-justify ml-3 content-status">${ json.Status.statusTitle }</p>
+
+                            ${iframe}
+
                             <img src="${ json.Status.image }" alt="" class="img-fluid">
                             <!-- Number of Comment and Interactive-->
                             <div class="d-flex justify-content-between align-items-centerl">
@@ -1237,9 +1276,16 @@ if($(".index-page")[0]){
                             $('.index-page .image-upload-preview .close-icon').trigger('click');
                         }
                         $('.index-page textarea.statusTitle').val("");
+                        $('.index-page .attachments .input-link-youtube #urlYoutubeUpload').val("")
+
+                        if (json.Status.video != undefined) {
+                            $('.index-page .attachments .input-link-youtube').trigger('click');
+                        }
 
                         $('.index-page .post-btn').prop('disabled', true)
                         $('.index-page .post-btn').css('cursor', 'no-drop')
+                        $('.index-page .spinner-border-btn-add-status').css('display', 'none');
+                        $('.index-page .view-btn-add-new-status').show()
                     }
                 })
                 .catch(e => console.log(e))

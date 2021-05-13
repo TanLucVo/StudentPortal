@@ -21,6 +21,9 @@ const StatusSchema = mongoose.Schema({
     },
     image: {
         type: String,
+    },
+    video: {
+        type: String,
     }
 })
 module.exports = mongoose.model('status', StatusSchema)
