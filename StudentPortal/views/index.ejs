@@ -43,23 +43,21 @@
         font-size: 20px;
     }
     emoji-picker {
-        display: none;
         background-color: white;
         width: 400px;
         height: 300px;
         position: absolute;
         z-index: 99998;
-        transition: all 200ms;
+        transition: opacity 1s ease-out;
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
     }
     .emoji-display {
-        display: block;
+        opacity: 1;
+        height: 300px;
     }
 </style>
-<script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
-<script>
-    document.querySelector('emoji-picker')
-    .addEventListener('emoji-click', event => console.log(event.detail));
-</script>
 <body>
     <div class="index-page" data-userid="<%= user._id %>" data-name="<%= user.name %>" data-image="<%= user.image %>" >
         <div class="postoverlay"></div>

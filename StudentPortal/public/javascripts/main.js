@@ -336,19 +336,28 @@ $(document).ready(async function () {
     // -------------------------------------------------------------------------------------------
     /*--- show emoji ---*/
     $('.index-page .attachments .fileContainer #emojiSelector').on('click', () => {
-        $('emoji-picker').toggleClass("active")
+        $('emoji-picker').toggleClass("emoji-display")
     })
-    document.querySelector('emoji-picker').addEventListener('emoji-click', event => {
-        let value = $('.index-page textarea.statusTitle').val()
-        let emoji = event.detail.emoji.unicode
-        let newValue = value + emoji
-        $('.index-page textarea.statusTitle').val(newValue)
+    let emoji = document.querySelector('emoji-picker')
+    if (emoji) {
+        emoji.addEventListener('emoji-click', event => {
+            let value = $('.index-page textarea.statusTitle').val()
+            let emoji = event.detail.emoji.unicode
+            let newValue = value + emoji
+            $('.index-page textarea.statusTitle').val(newValue)
+        });
+    }
+    $(document).on('click', function(e) {
+        let emojiBtn = $('.index-page .attachments .fileContainer #emojiSelector')
+        if (!$(e.target).closest(emojiBtn).length) {
+            $('emoji-picker').removeClass("emoji-display")
+        }
     });
     // -------------------------------------------------------------------------------------------
     //--- user setting dropdown on topbar
     $('.user-img').on('click', function () {
         // toggleClass(): Thêm hoặc loại bỏ một hoặc nhiều class của thành phần.
-        $('.user-setting').toggleClass("emoji-display");
+        $('.user-setting').toggleClass("active");
     });
 
     $('.gap2 .container').on('click', function () {
