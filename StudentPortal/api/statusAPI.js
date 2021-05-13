@@ -1,9 +1,12 @@
 const express = require('express')
-const passport = require('passport')
 const router = express.Router()
+
 const {authenticateToken,authenticateTokenAPI} = require('../config/token')
 const mongoose = require('mongoose')
+
 const statusModel = require('../models/status')
+
+const fetch = require("node-fetch");
 
 
 // api status: GET POST PUT DELETE
@@ -92,38 +95,57 @@ router.post('/', authenticateToken,async function(req, res, next) {
                 error: error.message,
         });
     }
+    let cookie = req.cookies
     const data = req.body
-    const status = new statusModel({
+
+    let status = new statusModel({
         statusId: mongoose.Types.ObjectId(),
-        author: data.author,
         like: undefined,
         statusTitle: data.statusTitle,
         dateModified: new Date(),
-        image: data.image,
-        user: req.user
+        user: req.user._id
     })
-    await status
-    .save()
-    .then(async (newStatus) => {
 
+    let queryImg = {
+        image: data.image,
+        image_name: status._id,
+        folder: `status/${status._id}`
+    }
+
+    const url = await fetch(`${process.env.URL}/api/upload-image-v2`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Cookie': `connect.sid=${cookie['connect.sid']};token=${cookie.token}`
+        },
+        body: JSON.stringify(queryImg)
+    }).then(res => res.text())
+    .then(data => {
+        data = JSON.parse(data)
+        if (data.status) {
+            return data.result.url
+        }
+    }).catch(error => {
+        return res.status(500).json({
+            status: false,
+            error: error.message
+        })
+    })
+    try {
+        status.image = url
+        const temp = await status.save()
+        const newStatus = await statusModel.findById(temp._id).populate('user')
         if (newStatus == null || newStatus == undefined) {
             throw new Error('Server error. Please try again.')
         }
-
         return res.status(200).json({
             success: true,
             message: 'New status created successfully',
             Status: newStatus,
         });
-
-    })
-    .catch((error) => {
-        return res.status(500).json({
-            success: false,
-            message: 'Server error. Please try again.',
-            error: error.message,
-        });
-    });
+    } catch (error) {
+        throw new Error('Server error. Please try again.')
+    }
 })
 
 // PUT STATUS BY ID

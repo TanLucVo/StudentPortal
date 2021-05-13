@@ -4,10 +4,6 @@ const StatusSchema = mongoose.Schema({
         type: String,
         require: true,
     },
-    author: {
-        type: String,
-        require: true,
-    },
     user : {
         type: mongoose.Schema.Types.ObjectId, ref: 'users',
         require: true

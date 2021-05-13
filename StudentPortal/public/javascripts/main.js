@@ -1108,30 +1108,27 @@ if($(".index-page")[0]){
     // fetch api - status
     // ------------------------------------------------------------------------
     $(".index-page .post-btn").click(e => {
-        var file_data = $('.index-page #imageUpload').prop('files')[0];
         var statusTitle = $('.index-page textarea.statusTitle').val()
-        // console.log(tinymce.get('statusTitle').getContent())
-        // console.log(file_data)
-        var form_data = new FormData();
+        var base64Img = $('#output').attr('src')
+
         userId = e.target.dataset.id
         image = e.target.dataset.image
         fullName = e.target.dataset.name
-        var user = {
-            userId: userId,
-            image: image,
-            fullName: fullName
-        }
+
         if (statusTitle.length !== 0) {
-            form_data.append('imageStatus', file_data);
-            form_data.append('statusTitle', statusTitle);
-            form_data.append('author', JSON.stringify(user))
-            uploadImage(form_data, user)
+            let query = {
+                imageStatus : base64Img,
+                statusTitle : statusTitle
+            }
+            uploadImage(query)
         }
-        function uploadImage(form_data, user) {
+        function uploadImage(query) {
            fetch(window.parent.location.origin, { // Your POST endpoint
                     method: 'POST',
-
-                    body: form_data // This is your file object
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(query)
                 })
                 .then(res => res.json())
                 .then(json => {
@@ -1186,7 +1183,7 @@ if($(".index-page")[0]){
                                         <i class="fa fa-thumbs-up"></i>
                                         <span class="view-like-user view-${json.Status._id}" title="Số người thích bài viết" href="#" data-status="${json.Status._id}" onclick="showModalUserLike(this)">
                                             ${like}
-                                        </span> 
+                                        </span>
                                     </span>
                                 </div>
                                 <div class="d-flex flex-row interactive_color m-3">
@@ -1212,7 +1209,7 @@ if($(".index-page")[0]){
                             <div class="comments mx-3 comments${json.Status._id}">
                                 <div class="comment-input">
                                     <input type="text" class="form-control" id="text-content-comment${json.Status._id}">
-                                    <div class="fonts send-comment" data-author="${user.userId}" data-status = "${json.Status._id}" onclick="fetchApiComment(this)">
+                                    <div class="fonts send-comment" data-author="${author._id}" data-status = "${json.Status._id}" onclick="fetchApiComment(this)">
                                         <i class="fas fa-paper-plane"></i>
                                     </div>
                                 </div>
@@ -1236,7 +1233,7 @@ if($(".index-page")[0]){
                         
 
                         // set null in content and image upload = null
-                        if (file_data !== undefined) {
+                        if (base64Img !== undefined) {
                             $('.index-page .image-upload-preview .close-icon').trigger('click');
                         }
                         $('.index-page textarea.statusTitle').val("");

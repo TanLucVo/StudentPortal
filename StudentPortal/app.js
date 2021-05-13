@@ -11,6 +11,7 @@ const statusAPI = require("./api/statusAPI");
 const commentAPI = require("./api/commentAPI");
 const uploadImageAPI = require('./api/upLoadImageAPI')
 const userAPI = require('./api/userAPI')
+const uploadImageV2Api = require('./api/uploadImageV2Api')
 
 // ROUTES
 const api = require("./routes/API");
@@ -87,6 +88,7 @@ app.use("/auth", loginRouter);
 
 //UPLOAD IMAGE
 app.use('/upload-image', uploadImageAPI)
+app.use('/api/upload-image-v2', uploadImageV2Api)
 
 //API NOTIFICATION
 app.use('/api', api)
