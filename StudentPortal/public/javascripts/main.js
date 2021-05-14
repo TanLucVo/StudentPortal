@@ -468,10 +468,35 @@ $(document).ready(async function () {
         $(".image-upload-preview").css("display", "block")
         $('.index-page .preview-image-upload').addClass('active');
     })
-
+    // -------------------------------------------------------------------------------------------
+    // Edit status infor
     $('.index-page #modalEditStatus #updateStatusByIdBtn').on('click', e => {
         var status = $('.index-page #modalEditStatus').attr('data-status')
-        console.log(status)
+        var statusTitle = $('.index-page #statusTitleEditStatus').val()
+        var image = $('.index-page #imgPreview').attr('src')
+        
+        const query = {
+            statusTitle: statusTitle,
+            image: image
+        }
+        console.log(query)
+        fetch(`./status/${status}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(query)
+        }).then(res => res.text())
+        .then(data => {
+            data = JSON.parse(data)
+            if (data.status) {
+                setTimeout(() => {
+                    location.reload()
+                }, 2000)
+            }
+        }).catch(e => {
+            console.log(e)
+        })
     })
     // -------------------------------------------------------------------------------------------
     // Scroll load status
@@ -605,7 +630,7 @@ $(document).ready(async function () {
                                             <div class="dropdown-edit-status">
                                                 <div class="dropdowns">
                                                     <ul>
-                                                        <li>
+                                                        <li data-toggle="modal" data-target="#modalEditStatus" data-status="${ status._id }" onclick="liEditStatus(this)">
                                                             Chỉnh sửa <i class="fas fa-edit"></i>
                                                         </li>
                                                         <li>
@@ -1246,7 +1271,7 @@ if($(".index-page")[0]){
                             <div class="dropdown-edit-status">
                                 <div class="dropdowns">
                                     <ul>
-                                        <li>
+                                        <li data-toggle="modal" data-target="#modalEditStatus" data-status="${ json.Status._id }" onclick="liEditStatus(this)">
                                             Chỉnh sửa <i class="fas fa-edit"></i>
                                         </li>
                                         <li>

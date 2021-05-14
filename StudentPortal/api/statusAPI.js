@@ -217,7 +217,7 @@ router.put('/:id', statusUpdateValidator, async function(req, res, next) {
         }
 
         try {
-            var newStatus = await statusModel.findByIdAndUpdate(id, newStatus, {new: true, useFindAndModify: false})
+            var newStatus = await statusModel.findByIdAndUpdate(id, statusTemp, {new: true, useFindAndModify: false})
 
             if (newStatus == null || newStatus == undefined) {
                 throw new Error('Server error, please try again.')
