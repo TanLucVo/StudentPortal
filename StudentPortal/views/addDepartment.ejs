@@ -159,4 +159,95 @@ ul.ks-cboxtags li input[type="checkbox"]:focus + label {
 </body>
 <script src="https://releases.transloadit.com/uppy/v1.26.1/uppy.min.js"></script>
 <script src="/javascripts/main.js"></script>
+<script>
+      // addDepartment
+if($(".addDepartment")[0]){
+    $.ajaxSetup({
+        traditional: true
+    });
+    var uppyDepartment = Uppy.Core({
+            restrictions: {
+                maxFileSize: 3145728,
+                maxNumberOfFiles: 1,
+                minNumberOfFiles: 1,
+                allowedFileTypes: ["image/*"]
+            }
+        })
+        .use(Uppy.Dashboard, {
+            trigger: '#register',
+            inline: true,
+            target: '#drag-drop-area',
+            replaceTargetContent: true,
+            showProgressDetails: true,
+            note: 'Images and video only 1 file, up to 3MB',
+            height: 300,
+            metaFields: [{
+                id: 'caption',
+                name: 'Caption',
+                placeholder: 'describe what the image is about'
+            }],
+            hideUploadButton: true
+        })
+    uppyDepartment.on('file-added', (file) => {
+        console.log(file);
+        uppy.setFileMeta(file.meta.id, {
+            caption: file.name
+        });
+    });
+    uppyDepartment.use(Uppy.XHRUpload, {
+
+        id: 'XHRUpload',
+        endpoint: `${window.parent.location.origin}/upload-image`,
+        method: 'POST',
+        formData: true,
+        fieldName: 'my_fieldName',
+        metaFields: ['caption'],
+
+    });
+
+    uppyDepartment.on('upload-success', (file, response) => {
+        $('.addDepartment #urlImage').val(response.uploadURL)
+        $(".addDepartment .register-form").submit()
+    });
+    $(".addDepartment #register").click(function () {
+        uppyDepartment.upload()
+    })
+    $(".addDepartment .register-form").submit(e => {
+        e.preventDefault();
+        let department = []
+        $(".addDepartment input:checkbox:checked").each(function () {
+            department.push($(this).val());
+        });
+        let user = {
+            username: $('.addDepartment #username').val(),
+            pass: $('.addDepartment #pass').val(),
+            re_pass: $('.addDepartment #re_pass').val(),
+            name: $('.addDepartment #name').val(),
+            maphong: $('.addDepartment #maphong').val(),
+            urlImage: $('.addDepartment #urlImage').val(),
+            department: department
+        }
+        $.post("", user)
+            .done(function (res) {
+                if (res.success) {
+                    $(".addDepartment .alert").removeClass("alert-danger")
+                    $(".addDepartment .alert").addClass("alert-success")
+                    $(".addDepartment .alert").text(res.mess)
+                    $('.addDepartment #myCollapsible').collapse('show')
+                    $('.addDepartment input').val("")
+                    uppyDepartment.reset()
+                } else {
+                    $(".addDepartment .alert").removeClass("alert-success")
+                    $(".addDepartment .alert").addClass("alert-danger")
+                    $(".addDepartment .alert").text(res.mess)
+                    $('.addDepartment #myCollapsible').collapse('show')
+
+                }
+            });
+        $('.addDepartment input').on("keypress change ", () => {
+            $('.addDepartment #myCollapsible').collapse('hide')
+        })
+    })
+}
+</script>
 </html>
