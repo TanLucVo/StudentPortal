@@ -35,6 +35,33 @@ function showModalUserLike(element) {
     $(`.index-page #showUserLikeModal${statusId}`).modal()
 }
 
+function liEditStatus(element) {
+    var status = element.dataset.status
+    $('.index-page #modalEditStatus').attr('data-status', status)
+}
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+  
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('.index-page .addPreview').html(`
+            <div class="preview-image-status-upload-modal-edit" id="preview-image-status-upload-modal-edit">
+                <i class="fas fa-times" onclick="removePreviewImageEditStatus(this)">
+                    <img src="${e.target.result}" width="200px" height="200px" id="imgPreview">
+                </i>
+            </div>
+            `)
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+}
+
+function removePreviewImageEditStatus() {
+    var temp = document.getElementById('preview-image-status-upload-modal-edit')
+    temp.remove()
+}
+
 function showHideComments(element) {
     const statusId = element.dataset.status
     $(`.index-page .comments${statusId}`).slideToggle("slow");
@@ -352,6 +379,10 @@ $(document).ready(async function () {
         if (!$(e.target).closest(emojiBtn).length && !$(e.target).closest($('emoji-picker')).length) {
             $('emoji-picker').removeClass("emoji-display")
         }
+        let dropdownEditDeleteStatus = $(`.index-page .dropdown-edit-status .dropdowns`)
+        if (!$(e.target).closest(dropdownEditDeleteStatus).length && !$(e.target).closest($('.index-page .multi-card .card .time-and-more')).length) {
+            dropdownEditDeleteStatus.removeClass("active")
+        }
     });
     // -------------------------------------------------------------------------------------------
     //--- user setting dropdown on topbar
@@ -436,6 +467,11 @@ $(document).ready(async function () {
         reader.readAsDataURL(file);
         $(".image-upload-preview").css("display", "block")
         $('.index-page .preview-image-upload').addClass('active');
+    })
+
+    $('.index-page #modalEditStatus #updateStatusByIdBtn').on('click', e => {
+        var status = $('.index-page #modalEditStatus').attr('data-status')
+        console.log(status)
     })
     // -------------------------------------------------------------------------------------------
     // Scroll load status
@@ -1341,7 +1377,7 @@ if($(".addDepartment")[0]){
     uppyDepartment.use(Uppy.XHRUpload, {
 
         id: 'XHRUpload',
-        endpoint: 'http://localhost:3000/upload-image',
+        endpoint: `${window.parent.location.origin}/upload-image`,
         method: 'POST',
         formData: true,
         fieldName: 'my_fieldName',

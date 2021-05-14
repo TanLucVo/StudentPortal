@@ -4,6 +4,90 @@ body {
     /* overflow-x: scroll !important; */
     min-height: 100vh;
 }
+.index-page #modalEditStatus .modal-dialog{
+    width: 700px;
+}
+.index-page #modalEditStatus .modal-dialog .modal-content .modal-footer button:not(.btn-cancel) {
+    background-color: #34465d;
+    color: white;
+}
+.index-page #modalEditStatus .modal-dialog .modal-content .modal-footer .btn-cancel {
+    border: 0.5px solid;
+}
+.index-page .label-for-img-upload-input {
+  display: inline-block;
+  background-color: #A13BB6;
+  color: white;
+  padding: 0.5rem;
+  font-family: sans-serif;
+  border-radius: 0.3rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+.index-page .preview-image-status-upload-modal-edit {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-content: flex-start;
+    align-items: baseline;
+    justify-content: space-around;
+    border: 1px solid;
+}
+
+.index-page .preview-image-status-upload-modal-edit .fa-times {
+    cursor: pointer;
+}
+.index-page .preview-image-status-upload-modal-edit .fa-times img {
+    margin-left: 10px;
+}
+.index-page .spinner-border-btn-add-status {
+    display: none;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+}
+.index-page .attachments .fileContainer #youtubeVideoUpload,.index-page .attachments .fileContainer #emojiSelector {
+    height: 20px;
+    margin-right: 5px;
+    margin-top: -10px;
+    cursor: pointer;
+    display: block;
+    opacity: 0;
+    position: absolute;
+    right: 0px;
+    text-align: right;
+    top: 0;
+    width: 100%;
+    overflow: hidden;
+}
+.index-page .attachments .input-link-youtube {
+    margin-top: 10px;
+    display: none;
+}
+.index-page .attachments .active {
+    display: block !important;
+}
+.index-page .attachments #urlYoutubeUpload {
+    width: 100%;
+}
+.index-page .card .content-status {
+    font-size: 20px;
+}
+emoji-picker {
+    background-color: white;
+    width: 400px;
+    height: 300px;
+    position: absolute;
+    z-index: 99998;
+    transition: opacity 1s ease-out;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+}
+.emoji-display {
+    opacity: 1;
+    height: 300px;
+}
 .index-page #back-to-top-button {
     display: inline-block;
     background-color: #dbd4c9;
@@ -60,19 +144,19 @@ body {
 
 
 /* add scrollbar in modal userlike */
-.index-page .modal-dialog .modal-content {
+.index-page .showUserLikeModal .modal-dialog .modal-content {
     max-height: 400px;
     position: absolute;
-    overflow-y: scroll;
+    overflow-y: overlay;
 }
-.index-page .modal-dialog .modal-content::-webkit-scrollbar {
+.index-page .showUserLikeModal .modal-dialog .modal-content::-webkit-scrollbar {
     width: 4px;
     background-color: #858282;
 }
-.index-page .modal-dialog .modal-content::-webkit-scrollbar-thumb {
+.index-page .showUserLikeModal .modal-dialog .modal-content::-webkit-scrollbar-thumb {
     background-color: #a8a0a0;
 }
-.index-page .modal-dialog .modal-content::-webkit-scrollbar-track {
+.index-page .showUserLikeModal .modal-dialog .modal-content::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(214, 200, 200, 0.3);
     background-color: #F5F5F5;
 }
