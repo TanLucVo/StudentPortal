@@ -32,12 +32,10 @@ ul.ks-cboxtags li label{
     -webkit-tap-highlight-color: transparent;
     transition: all .2s;
 }
-
 ul.ks-cboxtags li label {
     padding: 8px 12px;
     cursor: pointer;
 }
-
 ul.ks-cboxtags li label::before {
     display: inline-block;
     font-style: normal;
@@ -51,20 +49,17 @@ ul.ks-cboxtags li label::before {
     content: "\f067";
     transition: transform .3s ease-in-out;
 }
-
 ul.ks-cboxtags li input[type="checkbox"]:checked + label::before {
     content: "\f00c";
     transform: rotate(-360deg);
     transition: transform .3s ease-in-out;
 }
-
 ul.ks-cboxtags li input[type="checkbox"]:checked + label {
     border: 2px solid #1bdbf8;
     background-color: #12bbd4;
     color: #fff;
     transition: all .2s;
 }
-
 ul.ks-cboxtags li input[type="checkbox"] {
   display: absolute;
 }
@@ -147,7 +142,7 @@ ul.ks-cboxtags li input[type="checkbox"]:focus + label {
                                 </div>
                             </div>
                         </form>
-                        <button id="register" class="btn btn-outline-primary" >Register</button>
+                        <button id="register" type="submit" class="btn btn-outline-primary" >Register</button>
                         
                     </div>  
                    
@@ -186,7 +181,7 @@ if($(".addDepartment")[0]){
                 name: 'Caption',
                 placeholder: 'describe what the image is about'
             }],
-            hideUploadButton: true
+            hideUploadButton: false
         })
     uppyDepartment.on('file-added', (file) => {
         console.log(file);
@@ -195,25 +190,23 @@ if($(".addDepartment")[0]){
         });
     });
     uppyDepartment.use(Uppy.XHRUpload, {
-
         id: 'XHRUpload',
-        endpoint: `${window.parent.location.origin}/upload-image`,
+        endpoint: `https://xhr-server.herokuapp.com/upload`,
         method: 'POST',
         formData: true,
         fieldName: 'my_fieldName',
         metaFields: ['caption'],
-
     });
-
     uppyDepartment.on('upload-success', (file, response) => {
         $('.addDepartment #urlImage').val(response.uploadURL)
-        $(".addDepartment .register-form").submit()
+        
     });
     $(".addDepartment #register").click(function () {
-        uppyDepartment.upload()
+        $(".addDepartment .register-form").submit()
     })
     $(".addDepartment .register-form").submit(e => {
         e.preventDefault();
+        console.log(123)
         let department = []
         $(".addDepartment input:checkbox:checked").each(function () {
             department.push($(this).val());
@@ -241,7 +234,6 @@ if($(".addDepartment")[0]){
                     $(".addDepartment .alert").addClass("alert-danger")
                     $(".addDepartment .alert").text(res.mess)
                     $('.addDepartment #myCollapsible').collapse('show')
-
                 }
             });
         $('.addDepartment input').on("keypress change ", () => {
