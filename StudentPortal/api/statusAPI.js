@@ -7,8 +7,21 @@ const {authenticateToken,authenticateTokenAPI} = require('../config/token')
 const mongoose = require('mongoose')
 
 const statusModel = require('../models/status')
+const commentModel = require('../models/comment')
+
+const statusUpdateValidator = require('../validator/statusUpdateValidator')
+
+const {validationResult} = require('express-validator')
 
 const fetch = require("node-fetch");
+
+const cloudinary = require('cloudinary').v2
+
+cloudinary.config({
+	cloud_name: process.env.CLOUD_NAME,
+	api_key: process.env.API_KEY,
+	api_secret: process.env.API_SECRET
+});
 
 
 // api status: GET POST PUT DELETE
@@ -159,57 +172,101 @@ router.post('/', authenticateToken,async function(req, res, next) {
 
 // PUT STATUS BY ID
 
-router.put('/:id' ,authenticateToken,async function(req, res, next) {
-    if (!req.body) {
-        return res.status(500).json({
-                success: false,
-                message: 'data error. Please try again.',
-                error: error.message,
-        });
-    }
-    const log =  await statusModel.findOneAndUpdate(
-        {_id: req.params.id},
-        {
-            author: req.body.author,
-            statusTitle: req.body.statusTitle,
-            image: req.body.image,
-            like: req.body.like,
-            dateModified: req.body.dateModified
-        },
-        {
-            useFindAndModify: false,
-            upsert: false,
-            new: true
+router.put('/:id', statusUpdateValidator, async function(req, res, next) {
+    let result = validationResult(req)
+    if (result.errors.length === 0) {
+        let cookie = req.cookies
+        const {image, video, statusTitle} = req.body
+        const {id} = req.params
+        let statusTemp = {
+            statusTitle
         }
-    )
-    .exec()
-    .then((oldStatus) => {
-        return res.status(200).json({
-            success: true,
-            message: 'this status was updated successfully',
-            Status: oldStatus,
-        });
-    })
-    .catch((err) => {
-        return res.status(500).json({
-            success: false,
-            message: 'Server error. Please try again.',
-            error: err.message,
-        });
-    });
+
+        if (image) {
+            let queryImg = {
+                image: image,
+                image_name: id,
+                folder: `status/${id}`
+            }
+
+            let url = await fetch(`${process.env.URL}/api/upload-image-v2`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cookie': `connect.sid=${cookie['connect.sid']};token=${cookie.token}`
+                },
+                body: JSON.stringify(queryImg)
+            }).then(res => res.text())
+            .then(data => {
+                data = JSON.parse(data)
+                if (data.status) {
+                    return data.result.url
+                }
+                return null
+            }).catch(error => {
+                return res.status(500).json({
+                    status: false,
+                    error: error.message
+                })
+            })
+            statusTemp.image = url
+        }
+    
+        if (video) {
+            statusTemp.video = youtubeEmbed(video)
+        }
+
+        try {
+            var newStatus = await statusModel.findByIdAndUpdate(id, newStatus, {new: true, useFindAndModify: false})
+
+            if (newStatus == null || newStatus == undefined) {
+                throw new Error('Server error, please try again.')
+            }
+            return res.status(200).json({
+                status: true,
+                message: 'Cập nhật bài viết thành công',
+                Status: newStatus
+            })
+        } catch (error) {
+            return res.status(500).json({
+                status: false,
+                error: error.message
+            })
+        }
+    }
+    else {
+        let messages = result.mapped()
+        let message = 'error - 404 not found'
+        for (m in messages) {
+            message = messages[m].msg
+            break
+        }
+		return res.status(500).json({
+			status: false,
+			error: message
+		})
+    }
+
 })
 
 // DELETE STATUS BY ID
 
-router.delete('/:id' ,authenticateToken,async function(req, res, next) {
+router.delete('/:id' ,async function(req, res, next) {
     const id = req.params.id
-    await statusModel.findByIdAndRemove(id)
+    await statusModel.findByIdAndRemove(id, {useFindAndModify: false})
     .exec()
     .then(()=> {
-        return res.status(204).json({
-            success: true,
-            message: 'this status was deleted successfully',
-        })
+        try {
+            cloudinary.uploader.destroy(`status/${id}/${id}`)
+            cloudinary.api.delete_folder(`status/${id}`)
+            commentModel.findOneAndRemove({statusId: id}, {useFindAndModify: false})
+            return res.status(200).json({
+                success: true,
+                message: 'this status was deleted successfully',
+            })
+        } catch (error) {
+            throw Error('Server error, please try again.')
+        }
     })
     .catch((err) => {
         return res.status(500).json({
