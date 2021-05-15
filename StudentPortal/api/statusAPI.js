@@ -80,7 +80,7 @@ router.get('/page/:skip', authenticateToken,async function(req, res, next) {
 })
 
 // GET STATUS BY ID
-router.get('/:id' ,authenticateToken,async function(req, res, next) {
+router.get('/:id' ,async function(req, res, next) {
     const id = req.params.id
     await statusModel.findById(id)
     .then((singleStatus) => {
@@ -169,8 +169,48 @@ router.post('/', authenticateToken,async function(req, res, next) {
         throw new Error('Server error. Please try again.')
     }
 })
+// PUT STATUS LIKE BY ID
+router.put('/like/:id' ,authenticateToken,async function(req, res, next) {
+    if (!req.body) {
+        return res.status(500).json({
+                success: false,
+                message: 'data error. Please try again.',
+                error: error.message,
+        });
+    }
+    const log =  await statusModel.findOneAndUpdate(
+        {_id: req.params.id},
+        {
+            author: req.body.author,
+            statusTitle: req.body.statusTitle,
+            image: req.body.image,
+            like: req.body.like,
+            dateModified: req.body.dateModified
+        },
+        {
+            useFindAndModify: false,
+            upsert: false,
+            new: true
+        }
+    )
+    .exec()
+    .then((oldStatus) => {
+        return res.status(200).json({
+            success: true,
+            message: 'this status was updated successfully',
+            Status: oldStatus,
+        });
+    })
+    .catch((err) => {
+        return res.status(500).json({
+            success: false,
+            message: 'Server error. Please try again.',
+            error: err.message,
+        });
+    });
+})
 
-// PUT STATUS BY ID
+// PUT STATUS form BY ID
 
 router.put('/:id', statusUpdateValidator, async function(req, res, next) {
     let result = validationResult(req)

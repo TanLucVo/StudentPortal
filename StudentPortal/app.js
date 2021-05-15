@@ -18,7 +18,8 @@ const api = require("./routes/API");
 const departmentRouter = require("./routes/department");
 const loginRouter = require("./routes/login");
 const indexRouter = require("./routes/index");
-const notificationRouter = require('./routes/notification')
+const notificationRouter = require('./routes/notification');
+const profileRouter = require('./routes/profile');
 
 require('dotenv').config()
 const {ensureAuth, ensureGuest} = require('./middleware/auth')
@@ -103,7 +104,8 @@ app.use("/user",userAPI)
 app.use(ensureAuth)
 app.use("/",indexRouter);
 app.use("/department", departmentRouter);
-app.use("/notification",notificationRouter)
+app.use("/notification",notificationRouter);
+app.use("/profile", profileRouter);
 
 
 

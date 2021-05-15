@@ -203,12 +203,11 @@ function getLikeStatus(element) {
             window.scrollTo(0, 0);
         }
 
-        fetch(window.parent.location.origin + `/status/${idStatus}`,{
+        fetch(`/status/${idStatus}`,{
             method: 'GET'
         })
         .then(res => res.json())
         .then(data => {
-            // console.log('before:',data.Status)
             if (data.Status.like === undefined || data.Status.like === null) {
                 $(`.${idStatus}`).addClass("liked");
                 
@@ -261,7 +260,7 @@ function getLikeStatus(element) {
                 }
             }
             // console.log(data.Status)
-            fetch(window.parent.location.origin + `/status/${idStatus}`,{
+            fetch(`/status/like/${idStatus}`,{
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -271,7 +270,7 @@ function getLikeStatus(element) {
             .then(res => res.json())
             .then(json => {
                 if (json.success) {
-                    console.log(json.message)
+                    // console.log(json.message)
                 }
             }).catch(e => console.log(e))
         })
@@ -350,7 +349,7 @@ $(document).ready(async function () {
 
     socket.on('add-comment', (data) => {
         // console.log("data comment:",data)
-        fetch(window.parent.location.origin + `/user/${data.author}`, {
+        fetch(`/user/${data.author}`, {
             method: 'GET'
         })
         .then(res => res.json())
@@ -359,7 +358,7 @@ $(document).ready(async function () {
             if (json.success) {
                 $(`.index-page .comments${data.statusId} .card-comments-user`).prepend(
                     `<div class="d-flex flex-row mb-2">
-                        <img src="${json.user.image}" width="40" class="round-img">
+                        <a href="./profile?id=${json.user._id}"><img src="${json.user.image}" width="40" class="round-img"></a>
                         <div class="d-flex flex-column ml-2"> <span
                                 class="nameOfUser">${json.user.name}</span>
                                 <small class="comment-text">${data.content}</small>
@@ -654,10 +653,10 @@ $(document).ready(async function () {
                                 data = ""
         
                                 // user login
-                                const buttonPostBtn = document.querySelector('.index-page .post-btn')
-                                userId = buttonPostBtn.dataset.id
-                                image = buttonPostBtn.dataset.image
-                                fullName = buttonPostBtn.dataset.name
+                                const pageIndex = document.querySelector('.index-page')
+                                userId = pageIndex.dataset.userid
+                                image = pageIndex.dataset.image
+                                fullName = pageIndex.dataset.name
                                 var user = {
                                     userId: userId,
                                     image: image,
@@ -739,7 +738,7 @@ $(document).ready(async function () {
                                         <!--Information of post's user-->
                                         <div class="d-flex justify-content-between p-2 px-2">
                                             <div class="d-flex flex-row align-items-center">
-                                                <img src="${author.image}" alt="" class="image-user rounded-circle" width="52">
+                                                <a href="./profile?id=${author.image}"><img src="${author.image}" alt="" class="image-user rounded-circle" width="52"></a>
                                                 <div class="d-flex flex-column ml-2">
                                                     <span class="font-weight-bold">${author.name}</span>
                                                     <small class="text-primary">Thông tin</small>
@@ -1382,7 +1381,7 @@ if($(".index-page")[0]){
                             <!--Information of post's user-->
                             <div class="d-flex justify-content-between p-2 px-2">
                                 <div class="d-flex flex-row align-items-center">
-                                    <img src="${author.image}" alt="" class="image-user rounded-circle" width="52">
+                                    <a href="./profile?id=${author.image}"><img src="${author.image}" alt="" class="image-user rounded-circle" width="52"></a>
                                     <div class="d-flex flex-column ml-2">
                                         <span class="font-weight-bold">${author.name}</span>
                                         <small class="text-primary">Thông tin</small>

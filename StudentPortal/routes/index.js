@@ -75,6 +75,7 @@ router.get('/' , authenticateToken,async function(req, res) {
                                 if (authorComment.success) {
                                     comment['imgAuthor'] = authorComment.user.image
                                     comment['nameAuthor'] = authorComment.user.name
+                                    comment['id'] = authorComment.user._id
                                     // console.log(comment)
                                     return comment
                                 }
