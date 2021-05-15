@@ -36,8 +36,24 @@ function showModalUserLike(element) {
 }
 
 function liEditStatus(element) {
+    $('.index-page #modalEditStatus .video-col-modal-edit').hide()
+    $('.index-page #modalEditStatus .image-col-modal-edit').hide()
     var status = element.dataset.status
     $('.index-page #modalEditStatus').attr('data-status', status)
+    $('.index-page #modalEditStatus .addPreview').html("")
+    $('.index-page #modalEditStatus #youtubeUrlEditStatus').val("")
+    $('.index-page #modalEditStatus #statusTitleEditStatus').val("")
+}
+
+function showVideoEditModal(element) {
+    $('.index-page #modalEditStatus .addPreview').html("")
+    $('.index-page #modalEditStatus .video-col-modal-edit').show()
+    $('.index-page #modalEditStatus .image-col-modal-edit').hide()
+}
+
+function showImageEditModal(element) {
+    $('.index-page #modalEditStatus .video-col-modal-edit').hide()
+    $('.index-page #modalEditStatus .image-col-modal-edit').show()
 }
 
 function readURL(input) {
@@ -445,7 +461,11 @@ $(document).ready(async function () {
             $('#menu').mmenu();
         });
     }
-   
+    // -------------------------------------------------------------------------------------------
+    // close message alert
+    $('.messsageAlertPage #message-alert-show .close').click(e => {
+        $('.messsageAlertPage #message-alert-show').fadeOut();
+    })
     // -------------------------------------------------------------------------------------------
     // preview image uploaded
     $(document).delegate('.index-page .image-upload-preview .close-icon', 'click', function () {
@@ -472,13 +492,16 @@ $(document).ready(async function () {
     // Edit status infor
     $('.index-page #modalEditStatus #updateStatusByIdBtn').on('click', e => {
         $('.index-page #modalEditStatus #updateStatusByIdBtn .fa-spinner').show()
+        $('.index-page #modalEditStatus #updateStatusByIdBtn').attr('data-dismiss','')
         var status = $('.index-page #modalEditStatus').attr('data-status')
-        var statusTitle = $('.index-page #statusTitleEditStatus').val()
-        var image = $('.index-page #imgPreview').attr('src')
+        var statusTitle = $('.index-page #modalEditStatus #statusTitleEditStatus').val()
+        var image = $('.index-page #modalEditStatus #imgPreview').attr('src')
+        var video = $('.index-page #modalEditStatus #youtubeUrlEditStatus').val()
         
         const query = {
             statusTitle: statusTitle,
-            image: image
+            image: image,
+            video: video
         }
         console.log(query)
         fetch(`./status/${status}`, {
@@ -490,15 +513,35 @@ $(document).ready(async function () {
         }).then(res => res.text())
         .then(data => {
             data = JSON.parse(data)
+            let imgString = ''
+            let videoString = ''
+            let status = data.Status
             if (data.status) {
                 $('.index-page #modalEditStatus #updateStatusByIdBtn .fa-spinner').hide()
                 $('.messsageAlertPage #message-alert-show .content').html(data.message)
                 $('.messsageAlertPage #message-alert-show').fadeIn();
-    
+                
+                $(`.index-page .card-${status._id} .content-status`).html(status.statusTitle)
+
+                if (status.image) {
+                    imgString = `<img src="${status.image}" alt="" class="img-fluid">`
+                }
+                if (status.video) {
+                    videoString = `
+                        <iframe
+                            src="${status.video}" height="450" frameborder="0">
+                        </iframe>
+                    `
+                }
+
+                $(`.index-page .card-${status._id} .ajax-image-status`).html(imgString)
+                $(`.index-page .card-${status._id} .ajax-video-status`).html(videoString)
+
                 setTimeout(() => {
                     $('.messsageAlertPage #message-alert-show').fadeOut();
-                    location.reload()
                 },2000)
+
+                $('.index-page #modalEditStatus').modal('hide')
             }
             else {
                 $('.index-page #modalEditStatus #updateStatusByIdBtn .fa-spinner').hide()
@@ -598,9 +641,11 @@ $(document).ready(async function () {
                                     let iframe = ""
                                     if (status.video != undefined || status.video != null) {
                                         iframe = `
-                                        <iframe
-                                            src="${status.video}" height="450" frameborder="0">
-                                        </iframe>
+                                        <div class="ajax-video-status">
+                                            <iframe
+                                                src="${status.video}" height="450" frameborder="0">
+                                            </iframe>
+                                        </div>
                                         `
                                     }
         
@@ -656,7 +701,9 @@ $(document).ready(async function () {
                                             </div>
                                         <p class="text-justify ml-3 content-status">${ status.statusTitle }</p>
                                         ${iframe}
-                                        <img src="${ status.image }" alt="" class="img-fluid">
+                                        <div class="ajax-image-status">
+                                            <img src="${ status.image }" alt="" class="img-fluid">
+                                        </div>
                                         <!-- Number of Comment and Interactive-->
                                         <div class="d-flex justify-content-between align-items-centerl">
                                             <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">
@@ -1257,9 +1304,11 @@ if($(".index-page")[0]){
                         let iframe = ""
                         if (json.Status.video != undefined || json.Status.video != null) {
                             iframe = `
-                            <iframe
-                                src="${json.Status.video}" height="450" frameborder="0">
-                            </iframe>
+                            <div class="ajax-video-status">
+                                <iframe
+                                    src="${json.Status.video}" height="450" frameborder="0">
+                                </iframe>
+                            </div>
                             `
                         }
                         var htmlString =
@@ -1298,8 +1347,9 @@ if($(".index-page")[0]){
                             <p class="text-justify ml-3 content-status">${ json.Status.statusTitle }</p>
 
                             ${iframe}
-
-                            <img src="${ json.Status.image }" alt="" class="img-fluid">
+                            <div class="ajax-image-status">
+                                <img src="${ json.Status.image }" alt="" class="img-fluid">
+                            </div>
                             <!-- Number of Comment and Interactive-->
                             <div class="d-flex justify-content-between align-items-centerl">
                                 <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">

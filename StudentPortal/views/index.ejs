@@ -8,8 +8,6 @@
     <title>Ton Duc Thang University Social network</title>
     <%- include partial/cdn.ejs %>
 </head>
-<style>
-</style>
 <body>
     <div class="index-page" data-userid="<%= user._id %>" data-name="<%= user.name %>" data-image="<%= user.image %>" >
         <div class="postoverlay"></div>
@@ -113,11 +111,23 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-12">
-                                                        <label for="">Chọn link video youtube</label>
-                                                        <input type="text" id="youtubeUrlEditStatus">
+                                                    <div class="col-md-6">
+                                                        <div id="outer">
+                                                            <div class="button_slide slide_down" onclick="showImageEditModal(this)">Chọn ảnh</div>
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
+                                                        <div id="outer">
+                                                            <div class="button_slide slide_down" onclick="showVideoEditModal(this)">Chọn video</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 video-col-modal-edit">
+                                                        <label for="">Chọn link video youtube</label>
+                                                        <input type="text" id="youtubeUrlEditStatus" placeholder="Nhập link youtube của bạn">
+                                                    </div>
+                                                    <div class="col-md-12 image-col-modal-edit">
                                                         <input type="file" id="img-upload-input" multiple hidden accept=".jpg, .jpeg, .png" onchange="readURL(this)" style="opacity: 1; position: initial;">
                                                         <label for="img-upload-input" class="label-for-img-upload-input">Chọn hình ảnh bài viết</label>
                                                     </div>
@@ -207,11 +217,15 @@
                                                 <%= status.statusTitle %>
                                             </p>
                                             <% if (status.video != undefined || status.video != null) { %>
-                                                <iframe
-                                                    src="<%= status.video %>" height="450" frameborder="0">
-                                                </iframe>
+                                                <div class="ajax-video-status">
+                                                    <iframe
+                                                        src="<%= status.video %>" height="450" frameborder="0">
+                                                    </iframe>
+                                                </div>
                                             <% } %>
-                                            <img src="<%= status.image %>" alt="" class="img-fluid">
+                                            <div class="ajax-image-status">
+                                                <img src="<%= status.image %>" alt="" class="img-fluid">
+                                            </div>
                                             <!-- Number of Comment and Interactive-->
                                             <div class="d-flex justify-content-between align-items-centerl">
                                                 <div class="d-flex flex-row icons d-flex align-items-center ml-3 interactive_color">

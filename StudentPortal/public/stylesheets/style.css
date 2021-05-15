@@ -4,11 +4,83 @@ body {
     /* overflow-x: scroll !important; */
     min-height: 100vh;
 }
+/* Message alert page */
+.messsageAlertPage #message-alert-show .popup {
+    margin: 20px;
+    padding: 20px;
+    width: 300px;
+    background: white;
+    border-radius: 5px;
+    position: relative;
+}
+.messsageAlertPage #message-alert-show .popup .close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #333;
+}
+.messsageAlertPage #message-alert-show {
+    position: fixed;
+    bottom: 0;
+    z-index: 99999;
+    display: none;
+}
+/* ---------------------------------------- */
+.index-page #modalEditStatus label {
+    font-family: "Lucida Console", Monaco, monospace;
+}
+.index-page #modalEditStatus #youtubeUrlEditStatus {
+    width: 100%;
+}
+.index-page #modalEditStatus .button_slide {
+    color: gray;
+    border: 2px solid rgb(177, 164, 172);
+    border-radius: 0px;
+    padding: 18px 36px;
+    display: inline-block;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 0 #797376;
+    -webkit-transition: ease-out 0.4s;
+    -moz-transition: ease-out 0.4s;
+    transition: ease-out 0.4s;
+}
+
+.index-page #modalEditStatus .slide_down:hover {
+    color: white;
+    box-shadow: inset 0 100px 0 0 #797376;
+}
+
+.index-page #modalEditStatus .slide_right:hover {
+    color: white;
+    box-shadow: inset 400px 0 0 0 #797376;
+}
+
+.index-page #modalEditStatus .slide_left:hover {
+    color: white;
+    box-shadow: inset 0 0 0 50px #797376;
+}
+
+.index-page #modalEditStatus .slide_diagonal:hover {
+    color: white;
+    box-shadow: inset 400px 50px 0 0 #797376;
+}
+
+.index-page #modalEditStatus #outer {
+    margin: 50px auto 0 auto;
+    text-align: center;
+}
 .index-page #modalEditStatus .modal-dialog{
     width: 700px;
 }
 .index-page #modalEditStatus .modal-dialog .modal-content .modal-footer button:not(.btn-cancel) {
-    background-color: #34465d;
+    background-color: #797376;
     color: white;
 }
 .index-page #modalEditStatus .modal-dialog .modal-content .modal-footer .btn-cancel {
@@ -16,7 +88,7 @@ body {
 }
 .index-page .label-for-img-upload-input {
   display: inline-block;
-  background-color: #A13BB6;
+  background-color: #797376;
   color: white;
   padding: 0.5rem;
   font-family: sans-serif;
