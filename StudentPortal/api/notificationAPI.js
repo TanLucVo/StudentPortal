@@ -26,10 +26,7 @@ router.get('/', authenticateTokenAPI, async (req, res) => {
     if (!end) {
         end = Date.now()
     }
-    console.log("Log nay o notificationAPI")
-    if (unread) console.log("unread " + unread)
 
-    if (!page) page = 1
     await Notification.find({...condition, createAt: { $gte: start, $lte: end}}).sort( { createAt : -1} ).skip((page-1)*10).limit(10).exec(async (err, data) => {
         
         if (err){ 

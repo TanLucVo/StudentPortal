@@ -109,7 +109,7 @@ app.use("/notification",notificationRouter)
 
 // CATCH ERROR AND FORWARD TO HANDLE
 app.use(function (req, res, next) {
-	next(createError(404));
+	res.render("notfound")
 });
 
 // ERROR HANDLE
