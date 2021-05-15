@@ -13,7 +13,7 @@
 <body>
     <div class="index-page" data-userid="<%= user._id %>" data-name="<%= user.name %>" data-image="<%= user.image %>" >
         <div class="postoverlay"></div>
-
+        <%- include partial/message-alert.ejs %>
         <%- include partial/responsiveMenu.ejs %>
         <%- include partial/topbar.ejs %>
         <%- include partial/header-leftbar.ejs %>
@@ -111,6 +111,12 @@
                                                         <label for="">Nội dung</label>
                                                         <textarea name="" id="statusTitleEditStatus" cols="30" rows="4" placeholder="Nhập nội dung bài viết"></textarea>
                                                     </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label for="">Chọn link video youtube</label>
+                                                        <input type="text" id="youtubeUrlEditStatus">
+                                                    </div>
                                                     <div class="col-md-12">
                                                         <input type="file" id="img-upload-input" multiple hidden accept=".jpg, .jpeg, .png" onchange="readURL(this)" style="opacity: 1; position: initial;">
                                                         <label for="img-upload-input" class="label-for-img-upload-input">Chọn hình ảnh bài viết</label>
@@ -125,7 +131,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-cancel" data-dismiss="modal">Đóng</button>
-                                                <button type="button" class="btn btn-primary" id="updateStatusByIdBtn">Cập nhật</button>
+                                                <button type="button" class="btn btn-primary" id="updateStatusByIdBtn"><i class="fa fa-spinner fa-spin" style="display: none;"></i> Cập nhật</button>
                                             </div>
                                           </div>
                                       
