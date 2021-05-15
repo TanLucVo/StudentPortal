@@ -6,10 +6,7 @@ const socketIO = {
 // Add your socket.io logic here!
 io.on("connection", function (client) {
 
-    console.log("Client "+client.id+" da ket noi")
     let users = Array.from([])
-    
-    client.on('disconnect', () => console.log("Client " + client.id + " da thoat"))
 
     // server lắng nghe dữ liệu từ client
     client.on('register-id', data => {
