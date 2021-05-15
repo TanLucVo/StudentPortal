@@ -154,7 +154,9 @@ function showCommentsStatus(element) {
     
                     stringCardComment = `
                     <div class="d-flex flex-row mb-2">
-                        <img src="${comment.imgAuthor}" width="40" class="round-img">
+                        <a href="./profile?id=${comment.author}">
+                            <img src="${comment.imgAuthor}" width="40" class="round-img">
+                        </a>
                         <div class="d-flex flex-column ml-2">
                             <span class="nameOfUser">${comment.nameAuthor}</span>
                             <small class="comment-text">${comment.content}</small>
@@ -939,7 +941,7 @@ $(document).ready(async function () {
                                         <!--Information of post's user-->
                                         <div class="d-flex justify-content-between p-2 px-2">
                                             <div class="d-flex flex-row align-items-center">
-                                                <a href="./profile?id=${author.image}"><img src="${author.image}" alt="" class="image-user rounded-circle" width="52"></a>
+                                                <a href="./profile?id=${author._id}"><img src="${author.image}" alt="" class="image-user rounded-circle" width="52"></a>
                                                 <div class="d-flex flex-column ml-2">
                                                     <span class="font-weight-bold">${author.name}</span>
                                                     <small class="text-primary">Thông tin</small>
@@ -1047,7 +1049,9 @@ $(document).ready(async function () {
                                                         // console.log(dataAuthorComment)
                                                         let cardStringComment = `
                                                         <div class="d-flex flex-row mb-2">
-                                                            <img src="${dataAuthorComment.user.image}" width="40" class="round-img">
+                                                            <a href="./profile?id=${comment.author}">
+                                                                <img src="${dataAuthorComment.user.image}" width="40" class="round-img">
+                                                            </a>
                                                             <div class="d-flex flex-column ml-2">
                                                                 <span class="nameOfUser">${dataAuthorComment.user.name}</span>
                                                                 <small class="comment-text">${comment.content}</small>
@@ -1538,9 +1542,9 @@ if($(".index-page")[0]){
         var base64Img = $('#output').attr('src')
         var urlYoutube = $('.index-page .attachments .input-link-youtube #urlYoutubeUpload').val()
 
-        userId = e.target.dataset.id
-        image = e.target.dataset.image
-        fullName = e.target.dataset.name
+        const image = document.querySelector('.index-page').dataset.image
+        const userId = document.querySelector('.index-page').dataset.userid
+        const fullName = document.querySelector('.index-page').dataset.name
 
         if (statusTitle.length !== 0) {
             let query = {
@@ -1582,7 +1586,7 @@ if($(".index-page")[0]){
                             <!--Information of post's user-->
                             <div class="d-flex justify-content-between p-2 px-2">
                                 <div class="d-flex flex-row align-items-center">
-                                    <a href="./profile?id=${author.image}"><img src="${author.image}" alt="" class="image-user rounded-circle" width="52"></a>
+                                    <a href="./profile?id=${author._id}"><img src="${author.image}" alt="" class="image-user rounded-circle" width="52"></a>
                                     <div class="d-flex flex-column ml-2">
                                         <span class="font-weight-bold">${author.name}</span>
                                         <small class="text-primary">Thông tin</small>
