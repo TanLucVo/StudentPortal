@@ -83,6 +83,27 @@ function removePreviewImageEditStatus() {
     temp.remove()
 }
 
+function readURLImgUser(input) {
+    if (input.files && input.files[0]) {
+  
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('.profile-page .addPreview').html(`
+            <div class="preview-image-status-upload-modal-edit" id="preview-image-status-upload-modal-edit-user">
+                <i class="fas fa-times" onclick="removePreviewImageEditImgUser(this)">
+                    <img src="${e.target.result}" width="200px" height="200px" id="imgPreview">
+                </i>
+            </div>
+            `)
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+}
+function removePreviewImageEditImgUser() {
+    var temp = document.getElementById('preview-image-status-upload-modal-edit-user')
+    temp.remove()
+}
+
 function showHideComments(element) {
     const statusId = element.dataset.status
     $(`.index-page .comments${statusId}`).slideToggle("slow");
@@ -671,6 +692,56 @@ $(document).ready(async function () {
             $('.index-page #modalDeleteStatus #deleteStatusByIdBtn .fa-spinner').hide()
         }).catch(e => {
             $('.index-page #modalDeleteStatus #deleteStatusByIdBtn .fa-spinner').hide()
+            $('.messsageAlertPage #message-alert-show .content').html(e.message)
+            $('.messsageAlertPage #message-alert-show').fadeIn();
+
+            setTimeout(() => {
+                $('.messsageAlertPage #message-alert-show').fadeOut();
+            },3000)
+        })
+    })
+    // Edit avatar user
+    $('.profile-page #modalEditImgUser #updateImgUserBtn').on('click', e => {
+        $('.profile-page #modalEditImgUser #updateImgUserBtn .fa-spinner').show()
+        var image = $('.profile-page #modalEditImgUser #imgPreview').attr('src')
+        const id = e.target.dataset.user
+        const query = {
+            image
+        }
+        fetch(`./user/image/${id}`, {
+            method:'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(query)
+        }).then(res => res.text())
+        .then(data => {
+            data = JSON.parse(data)
+            if (data.status) {
+                let url = data.User.image
+
+                $('.profile-page #user-main-social-network').attr('src', url)
+                $('.messsageAlertPage #message-alert-show .content').html(data.message)
+                $('.messsageAlertPage #message-alert-show').fadeIn();
+    
+                setTimeout(() => {
+                    $('.messsageAlertPage #message-alert-show').fadeOut();
+                },3000)
+
+                $('.profile-page #modalEditImgUser').modal('hide')
+                $('.preview-image-status-upload-modal-edit .fa-times').trigger('click')
+            }
+            else {
+                $('.messsageAlertPage #message-alert-show .content').html(data.error)
+                $('.messsageAlertPage #message-alert-show').fadeIn();
+    
+                setTimeout(() => {
+                    $('.messsageAlertPage #message-alert-show').fadeOut();
+                },3000)
+            }
+            $('.profile-page #modalEditImgUser #updateImgUserBtn .fa-spinner').hide()
+        }).catch(e => {
+            $('.profile-page #modalEditImgUser #updateImgUserBtn .fa-spinner').hide()
             $('.messsageAlertPage #message-alert-show .content').html(e.message)
             $('.messsageAlertPage #message-alert-show').fadeIn();
 
