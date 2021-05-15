@@ -279,6 +279,7 @@ function getLikeStatus(element) {
 }
 // -------------------------------------------------------------------------------------------
 $(document).ready(async function () {
+    $('.index-page .gap2 .container .row .loader').hide()
     if($(".login-page")[0]){
  
         $("#login_form").submit(e=>{
@@ -1369,6 +1370,7 @@ if($(".index-page")[0]){
                         }
                         let iframe = ""
                         if (json.Status.video != undefined || json.Status.video != null) {
+                            $('.index-page #youtubeVideoUpload').trigger('click')
                             iframe = `
                                 <iframe
                                     src="${json.Status.video}" height="450" frameborder="0">

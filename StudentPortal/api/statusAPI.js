@@ -53,7 +53,7 @@ router.get('/', authenticateToken,async function(req, res, next) {
 router.get('/page/:skip', authenticateToken,async function(req, res, next) {
     const skip = parseInt(req.params.skip)
     // console.log("skip:",skip)
-    const limit = 2
+    const limit = 3
 
     // console.log("status API --- skip & limit")
     // console.log("đây là limit:",limit)
