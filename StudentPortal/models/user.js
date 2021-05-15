@@ -13,6 +13,24 @@ const UserSchema = mongoose.Schema({
 	image: {
 		type: String,
 	},
+	faculty: {
+		type: String,
+	},
+	major: {
+		type: String,
+	},
+	birth: {
+		type: Date,
+	},
+	gender: {
+		type: String,
+	},
+	phone: {
+		type: String,
+	},
+	address: {
+		type: String,
+	},
 	type: {
 		type: String,
 		required: true,

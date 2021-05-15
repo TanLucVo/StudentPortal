@@ -8,7 +8,450 @@
     <title>Ton Duc Thang University Social network</title>
     <%- include partial/cdn.ejs %>
 </head>
+<style>
+    body{
+    background:#eee;    
+}
 
+.social-wallpaper {
+    position: relative;
+    height:300px;
+    background-size: cover;
+    background-color:#00b5ec;
+}
+
+.card.social-tabs {
+    border-top: none;
+}
+
+.timeline-right .card,
+.timeline-left .card {
+    border-top: none;
+    box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.05), 0 -2px 1px -2px rgba(0, 0, 0, 0.04), 0 0 0 -1px rgba(0, 0, 0, 0.05);
+    transition: all 180ms linear;
+}
+
+.timeline-right .card:hover,
+.timeline-left .card:hover {
+    box-shadow: 0 0 25px -5px #9e9c9e;
+    transition: all 180ms linear;
+}
+
+.timeline-icon {
+    z-index: 1;
+}
+
+.tab-pane form .md-add-on i {
+    font-size: 20px;
+}
+
+.wall-elips {
+    position: absolute;
+    right: 15px;
+}
+
+
+
+.social-profile {
+    position: relative;
+    padding-top: 15px;
+}
+
+.timeline-btn {
+    position: absolute;
+    bottom: 0;
+    right: 30px;
+}
+
+.nav-tabs.md-tabs.tab-timeline li a {
+    padding: 20px 0 10px;
+    color: #666666;
+    font-size: 18px;
+}
+
+.social-timeline-left {
+    position: absolute;
+    top: -200px;
+}
+
+.post-input {
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    resize: none;
+}
+
+.user-box .media-object,
+.friend-box .media-object {
+    height: 45px;
+    width: 45px;
+    display: inline-block;
+}
+
+.friend-box img {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.user-box .media-left {
+    margin-top: 15px;
+    position: relative;
+}
+
+.chat-header {
+    color: #222222;
+}
+
+.live-status {
+    height: 7px;
+    width: 7px;
+    position: absolute;
+    bottom: 0;
+    right: 17px;
+    border-radius: 100%;
+    border: 1px solid;
+}
+
+.tab-timeline .slide {
+    bottom: -1px;
+}
+
+.image-upload input {
+    visibility: hidden;
+    max-width: 0;
+    max-height: 0
+}
+
+.file-upload-lbl {
+    max-width: 15px;
+    padding: 5px 0 0;
+}
+
+.ellipsis::after {
+    top: 15px;
+    border: none;
+    position: absolute;
+    content: '\f142';
+    font-family: FontAwesome;
+}
+
+.elipsis-box {
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.11);
+    top: 40px;
+    right: -10px;
+}
+
+.elipsis-box:after {
+    content: '';
+    height: 13px;
+    width: 13px;
+    background: #fff;
+    position: absolute;
+    top: -5px;
+    right: 10px;
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    transform: rotate(45deg);
+    box-shadow: -3px -3px 11px 1px rgba(170, 170, 170, 0.22);
+}
+
+.friend-elipsis {
+    left: -10px;
+    top: -10px;
+}
+
+.social-profile:hover .profile-hvr,
+.social-wallpaper:hover .profile-hvr {
+    opacity: 1;
+    transition: all ease-in-out 0.3s;
+}
+
+.profile-hvr {
+    opacity: 0;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    font-size: 20px;
+    padding: 10px;
+    top: 0;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.61);
+    transition: all ease-in-out 0.3s;
+}
+
+.social-profile {
+    margin: 0 15px;
+}
+
+.social-follower {
+    text-align: center;
+}
+
+.social-follower h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-style: normal;
+}
+
+.social-follower h5 {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.social-follower .follower-counter {
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    font-size: 13px;
+}
+
+.social-follower .follower-counter .txt-primary {
+    font-size: 24px;
+}
+
+.timeline-icon {
+    height: 45px;
+    width: 45px;
+    display: block;
+    margin: 0 auto;
+    border: 4px #fff solid;
+}
+
+.social-timelines-left:after {
+    height: 3px;
+    width: 25%;
+    position: absolute;
+    background: #cccccc;
+    top: 20px;
+    content: "";
+    right: 0;
+    z-index: 0;
+}
+
+.social-timelines:before {
+    position: absolute;
+    content: ' ';
+    width: 3px;
+    background: #cccccc;
+    left: 4%;
+    z-index: 0;
+    height: 100%;
+    top: 0;
+}
+
+.timeline-dot:after,
+.timeline-dot:before {
+    content: "";
+    position: absolute;
+    height: 9px;
+    width: 9px;
+    background-color: #cccccc;
+    left: 3.8%;
+    border-radius: 100%;
+}
+
+.user-box .social-designation,
+.post-timelines .social-time {
+    font-size: 13px;
+}
+
+.social-msg span {
+    color: #666;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+}
+
+.view-info .social-label,
+.contact-info .social-label,
+.work-info .social-label {
+    font-size: 15px;
+    padding-left: 0;
+    padding-top: 0;
+}
+
+.view-info .social-user-name,
+.contact-info .social-user-name,
+.work-info .social-user-name {
+    font-size: 14px;
+    padding-left: 0;
+}
+
+.friend-elipsis .social-designation {
+    font-size: 13px;
+}
+
+.social-client-description {
+    padding-bottom: 20px;
+}
+
+.user-box .media-body {
+    padding-top: 6px;
+}
+
+.timeline-details p {
+    padding-top: 10px;
+}
+
+.timeline-details .chat-header,
+.post-timelines .chat-header {
+    font-size: 15px;
+}
+
+.social-client-description {
+    padding-bottom: 20px;
+}
+
+.social-client-description p {
+    margin-top: 5px;
+}
+
+.social-client-description span {
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.social-client-description .chat-header {
+    font-size: 13px;
+}
+
+.social-tabs a {
+    font-size: 18px;
+}
+
+.timeline-btn a {
+    margin-bottom: 20px;
+}
+
+.profile-hvr i {
+    cursor: pointer;
+}
+
+.social-timelines:before {
+    position: absolute;
+    content: ' ';
+    width: 3px;
+    background: #cccccc;
+    left: 4%;
+    z-index: 0;
+    height: 100%;
+    top: 0;
+}
+
+.timeline-dot:after,
+.timeline-dot:before {
+    content: "";
+    position: absolute;
+    height: 9px;
+    width: 9px;
+    background-color: #cccccc;
+    left: 3.8%;
+    border-radius: 100%;
+}
+
+ul#profile-lightgallery {
+    display: inline-flex;
+}
+
+.social-timeline .btn i {
+    margin-right: 0;
+}
+
+.card .card-block {
+    padding: 25px;
+}
+
+.social-follower {
+    text-align: center;
+}
+
+.media-left {
+    padding-right: 20px;
+}
+
+.live-status {
+    height: 9px;
+    width: 9px;
+    position: absolute;
+    bottom: 0;
+    right: 17px;
+    border-radius: 100%;
+    border: 1px solid;
+    top: 5px;
+}
+
+.live-status {
+    height: 10px;
+    width: 10px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border-radius: 100%;
+    border: 1px solid;
+}
+
+.bg-danger {
+    background-color: #FF5370!important;
+    color: #fff;
+}
+
+.card {
+    border-radius: 5px;
+    -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
+    box-shadow: 0 1px 2.94px 0.06px rgba(4,26,55,0.16);
+    border: none;
+    margin-bottom: 30px;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.user-box .media-object, .friend-box .media-object {
+    height: 45px;
+    width: 45px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.md-tabs .nav-item {
+    width: calc(100%/ 4);
+    text-align: center;
+}
+
+.md-tabs .nav-item .nav-link.active~.slide {
+    opacity: 1;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}
+
+.md-tabs .nav-item .nav-link~.slide {
+    opacity: 0;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}
+
+.tab-timeline .slide {
+    bottom: -1px;
+}
+
+.nav-tabs .slide {
+    background: #4099ff;
+    width: calc(100%/ 4);
+    height: 4px;
+    position: absolute;
+    -webkit-transition: left 0.3s ease-out;
+    transition: left 0.3s ease-out;
+    bottom: 0;
+}
+.nav-tabs {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    align-content: space-between;
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+</style>
 <body>
     <div class="profile-page">
         <div class="postoverlay"></div>
@@ -18,6 +461,282 @@
         <%- include partial/header-leftbar.ejs %>
 
         <%- include partial/header-rightbar.ejs %>
+
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div>
+                            <div class="content social-timeline">
+                                <div class="">
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <img class="social-wallpaper" width="100%" src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/531081a5-86ad-4a9d-872f-ffa0dc8bf377/d629e3t-77de5c38-47a2-4d7e-b9c9-89854d2370d9.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzUzMTA4MWE1LTg2YWQtNGE5ZC04NzJmLWZmYTBkYzhiZjM3N1wvZDYyOWUzdC03N2RlNWMzOC00N2EyLTRkN2UtYjljOS04OTg1NGQyMzcwZDkuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.het_VhqFmj0nsOnQMndYP8ph4363aBoPCSfvt-3iHzk">
+                                                <div class="profile-hvr">
+                                                    <i class="icofont icofont-ui-edit p-r-10"></i>
+                                                    <i class="icofont icofont-ui-delete"></i>
+                                                </div>
+                                            </img>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xl-3 col-lg-4 col-md-4 col-xs-12">
+                                            <div class="social-timeline-left">
+                                                <div class="card">
+                                                    <div class="social-profile">
+                                                        <img class="img-fluid width-100" src="<%= mainUser.image %>" alt="" width="100%">
+                                                        <div class="profile-hvr m-t-15">
+                                                            <i class="icofont icofont-ui-edit p-r-10"></i>
+                                                            <i class="icofont icofont-ui-delete"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-block social-follower">
+                                                        <h4><%= mainUser.name %></h4>
+                                                        <div class="row follower-counter">
+                                                            <div class="col-4">
+                                                                <button class="btn btn-primary btn-icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="485">
+                                                                    <i class="fa fa-user"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <button class="btn btn-danger btn-icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="2k">
+                                                                    <i class="far fa-thumbs-up"></i>
+                                                                </button>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <button class="btn btn-success btn-icon" data-toggle="tooltip" data-placement="top" title="" data-original-title="90">
+                                                                    <i class="fa fa-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <% if (mainUser._id == user._id) { %>
+                                                        <div class="">
+                                                            <button type="button" class="btn btn-outline-primary waves-effect btn-block"><i class="icofont icofont-ui-user m-r-10"></i>Chỉnh ảnh đại diện</button>
+                                                        </div>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h5 class="card-header-text">Thông tin cơ bản</h5>
+                                                    </div>
+                                                    <div class="card-block user-box">
+                                                        <div class="media m-b-10">
+                                                            <a class="media-left">
+                                                                <i class="fas fa-school"></i>
+                                                            </a>
+                                                            <div class="media-body">
+                                                                <div class="chat-header">Khoa</div>
+                                                                <div class="text-muted social-designation social-main-faculty"><%= mainUser.faculty %></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="media m-b-10">
+                                                            <a class="media-left">
+                                                                <i class="fas fa-graduation-cap"></i>
+                                                            </a>
+                                                            <div class="media-body">
+                                                                <div class="chat-header">Ngành</div>
+                                                                <div class="text-muted social-designation social-main-major"><%= mainUser.major %></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xl-9 col-lg-8 col-md-8 col-xs-12 ">
+
+                                            <div class="card social-tabs">
+                                                <ul class="nav nav-tabs md-tabs tab-timeline" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active" data-toggle="tab" href="#timeline" role="tab">Dòng thời gian</a>
+                                                        <div class="slide"></div>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" data-toggle="tab" href="#about" role="tab">Giới thiệu</a>
+                                                        <div class="slide"></div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="tab-content">
+
+                                                <div class="tab-pane" id="timeline">
+                                                    <div class="row">
+                                                        <div class="col-md-12 timeline-dot">
+                                                            <div class="social-timelines p-relative">
+                                                                <div class="row timeline-right p-t-35">
+                                                                    <div class="col-2 col-sm-2 col-xl-1">
+                                                                        <div class="social-timelines-left">
+                                                                            <img class="img-radius timeline-icon" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-10 col-sm-10 col-xl-11 p-l-5 p-b-35">
+                                                                        <div class="card">
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="f-30 text-muted text-center">2014</div>
+                                                </div>
+
+                                                <div class="tab-pane active" id="about">
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="card">
+                                                            
+                                                                <div class="card-header">
+                                                                    <h5 class="card-header-text">Thông tin cơ bản</h5>
+                                                                    <% if (mainUser._id == user._id) { %>
+                                                                        <button id="edit-btn-basic-information" type="button" class="btn btn-primary waves-effect waves-light f-right">
+                                                                            <i class="far fa-edit"></i>
+                                                                        </button>
+                                                                    <% } %>
+                                                                </div>
+                                                                
+                                                                <div class="card-block">
+                                                                    <div id="view-info" class="row">
+                                                                        <div class="col-lg-6 col-md-12">
+                                                                            <form>
+                                                                                <table class="table table-responsive m-b-0">
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <th class="social-label b-none p-t-0">Họ và tên
+                                                                                            </th>
+                                                                                            <td class="social-user-name b-none p-t-0 text-muted"><span id="social-name-ajax"><%= mainUser.name %></span></td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <th class="social-label b-none">Giới tính</th>
+                                                                                            <td class="social-user-name b-none text-muted"><span id="social-gender-ajax"><%= mainUser.gender %></span></td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <th class="social-label b-none">Ngày sinh</th>
+                                                                                            <td class="social-user-name b-none text-muted"><span id="social-birth-ajax"><%= moment(mainUser.birth).format('DD/MM/YYYY') %></span></td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <th class="social-label b-none">Khoa</th>
+                                                                                            <td class="social-user-name b-none text-muted"><span id="social-faculty-ajax"><%= mainUser.faculty %></span></td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <th class="social-label b-none">Ngành</th>
+                                                                                            <td class="social-user-name b-none text-muted"><span id="social-major-ajax"><%= mainUser.major %></span></td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div id="edit-info" class="row edit-info-basic-form" style="display: none;">
+                                                                        <div class="col-lg-12 col-md-12">
+                                                                            <form id="form-select-gender">
+                                                                                <div class="input-group">
+                                                                                    <input type="text" class="form-control" placeholder="Họ và tên" id="name-user" value="<%= mainUser.name %>">
+                                                                                </div>
+                                                                                <div class="input-group">
+                                                                                    <div class="form-radio">
+                                                                                        <div class="form-radio">
+                                                                                            <label class="md-check p-0">Giới tính</label>
+                                                                                            <div class="radio radio-inline">
+                                                                                                <label>
+                                                                                                    <input type="radio" name="radio" value="Nam" checked="checked">
+                                                                                                    <i class="helper"></i>Nam
+                                                                                                </label>
+                                                                                            </div>
+                                                                                            <div class="radio radio-inline">
+                                                                                                <label>
+                                                                                                    <input type="radio" name="radio" value="Nữ">
+                                                                                                    <i class="helper"></i>Nữ
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="input-group">
+                                                                                    <input type="date" id="birth-user" class="form-control" type="text" placeholder="Birth Date" value="<%= mainUser.birth %>">
+                                                                                </div>
+                                                                                <div class="input-group">
+                                                                                    <input type="text" class="form-control" placeholder="Khoa" id="faculty-user" value="<%= mainUser.faculty %>">
+                                                                                </div>
+                                                                                <div class="input-group">
+                                                                                    <input type="text" class="form-control" placeholder="Ngành" id="major-user" value="<%= mainUser.major %>">
+                                                                                </div>
+                                                                                <div class="text-center m-t-20" style="margin-top: 20px;">
+                                                                                    <a href="javascript:;" id="edit-save-basic-user-information" data-user="<%= mainUser._id %>" class="btn btn-primary waves-effect waves-light m-r-20">Cập nhật</a>
+                                                                                    <a href="javascript:;" id="edit-cancel" class="btn btn-primary-cancel-edit-basic-form waves-effect waves-light">Huỷ bỏ</a>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12">
+                                                            <div class="card">
+                                                                
+                                                                <div class="card-header">
+                                                                    <h5 class="card-header-text">Thông tin liên hệ</h5>
+                                                                    <% if (mainUser._id == user._id) { %>
+                                                                        <button id="edit-btn-contact-information" type="button" class="btn btn-primary waves-effect waves-light f-right">
+                                                                            <i class="far fa-edit"></i>
+                                                                        </button>
+                                                                    <% } %>
+                                                                </div>
+                                                                
+
+                                                                <div class="card-block">
+                                                                    <div id="contact-info" class="row">
+                                                                        <div class="col-lg-6 col-md-12">
+                                                                            <table class="table table-responsive m-b-0">
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <th class="social-label b-none p-t-0">Số điện thoại</th>
+                                                                                        <td class="social-user-name b-none p-t-0 text-muted" id="social-contact-phone-edit"><%= mainUser.phone %></td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th class="social-label b-none">Địa chỉ</th>
+                                                                                        <td class="social-user-name b-none text-muted" id="social-contact-address-edit"><%= mainUser.address %></td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div id="edit-contact-info" class="row edit-info-contact-form" style="display: none;">
+                                                                        <div class="col-lg-12 col-md-12">
+                                                                            <form>
+                                                                                <div class="input-group">
+                                                                                    <input type="text" class="form-control" placeholder="Số điện thoại" id="social-phone-contact-edit" value="<%= mainUser.phone %>">
+                                                                                </div>
+                                                                                <div class="md-group-add-on">
+                                                                                    <textarea rows="5" cols="5" class="form-control" placeholder="Địa chỉ..." id="social-address-contact-edit"><%= mainUser.address %></textarea>
+                                                                                </div>
+                                                                                <div class="text-center m-t-20" style="margin-top: 20px;">
+                                                                                    <a href="javascript:;" id="edit-save-contact-user-information" data-user="<%= mainUser._id %>"  class="btn btn-primary waves-effect waves-light m-r-20">Cập nhật</a>
+                                                                                    <a href="javascript:;" id="edit-cancel" class="btn btn-primary-cancel-edit-contact-form waves-effect waves-light">Huỷ bỏ</a>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </section>
 
         <!-- Back to top button -->
         <a id="back-to-top-button"></a>

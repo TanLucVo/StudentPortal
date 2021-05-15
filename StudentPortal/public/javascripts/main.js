@@ -427,6 +427,136 @@ $(document).ready(async function () {
         }
     });
     // -------------------------------------------------------------------------------------------
+    // edit profile user
+    $('.profile-page #edit-btn-basic-information').on('click' , e => {
+        $('.profile-page .edit-info-basic-form').fadeIn()
+
+        $('.profile-page .btn-primary-cancel-edit-basic-form').on('click', e => {
+            $('.profile-page .edit-info-basic-form').fadeOut()
+        })
+    })
+    $('.profile-page #edit-btn-contact-information').on('click' , e => {
+        $('.profile-page .edit-info-contact-form').fadeIn()
+
+        $('.profile-page .btn-primary-cancel-edit-contact-form').on('click', e => {
+            $('.profile-page .edit-info-contact-form').fadeOut()
+        })
+    })
+    $('.profile-page #edit-save-basic-user-information').on('click', e => {
+        const id = e.target.dataset.user
+        const name = $('.profile-page .edit-info-basic-form #name-user').val()
+        const gender = $('input[name=radio]:checked', '.profile-page #form-select-gender').val()
+        const birth = $('.profile-page .edit-info-basic-form #birth-user').val()
+        const faculty = $('.profile-page .edit-info-basic-form #faculty-user').val()
+        const major = $('.profile-page .edit-info-basic-form #major-user').val()
+
+        // console.log(`${name}   ${gender}  ${birth} ${address} ${faculty} ${major}`)
+
+        const query = {
+            name, gender, birth, faculty, major
+        }
+        fetch(`./user/basic/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(query)
+        }).then(res => res.text())
+        .then(data => {
+            data = JSON.parse(data)
+            if (data.status) {
+                let newBirth = new Date(birth)
+                $('.profile-page .social-main-faculty').html(faculty)
+                $('.profile-page .social-main-major').html(major)
+                $('.profile-page #social-name-ajax').html(name)
+                $('.profile-page #social-gender-ajax').html(gender)
+                $('.profile-page #social-birth-ajax').html(moment(newBirth).format('DD/MM/YYYY'))
+                $('.profile-page #social-faculty-ajax').html(faculty)
+                $('.profile-page #social-major-ajax').html(major)
+
+                $('.messsageAlertPage #message-alert-show .content').html(data.message)
+                $('.messsageAlertPage #message-alert-show').fadeIn();
+    
+                setTimeout(() => {
+                    $('.messsageAlertPage #message-alert-show').fadeOut();
+                },3000)
+
+                $('.profile-page .edit-info-basic-form #name-user').val("")
+                $('.profile-page .edit-info-basic-form #address-user').val("")
+                $('.profile-page .edit-info-basic-form #faculty-user').val("")
+                $('.profile-page .edit-info-basic-form #major-user').val("")
+
+                $('.profile-page .btn-primary-cancel-edit-basic-form').trigger('click')
+            }
+            else {
+                $('.messsageAlertPage #message-alert-show .content').html(data.error)
+                $('.messsageAlertPage #message-alert-show').fadeIn();
+    
+                setTimeout(() => {
+                    $('.messsageAlertPage #message-alert-show').fadeOut();
+                },3000)
+            }
+        }).catch(e => {
+            $('.messsageAlertPage #message-alert-show .content').html(e.message)
+            $('.messsageAlertPage #message-alert-show').fadeIn();
+
+            setTimeout(() => {
+                $('.messsageAlertPage #message-alert-show').fadeOut();
+            },3000)
+        })
+    })
+    $('.profile-page #edit-save-contact-user-information').on('click', e => {
+        const id = e.target.dataset.user
+        const phone = $('.profile-page .edit-info-contact-form #social-phone-contact-edit').val()
+        const address = $('.profile-page .edit-info-contact-form #social-address-contact-edit').val()
+
+        const query = {
+            phone, address
+        }
+        fetch(`./user/contact/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(query)
+        }).then(res => res.text())
+        .then(data => {
+            console.log(data)
+            data = JSON.parse(data)
+            if (data.status) {
+                $('.profile-page #social-contact-phone-edit').html(phone)
+                $('.profile-page #social-contact-address-edit').html(address)
+
+                $('.messsageAlertPage #message-alert-show .content').html(data.message)
+                $('.messsageAlertPage #message-alert-show').fadeIn();
+    
+                setTimeout(() => {
+                    $('.messsageAlertPage #message-alert-show').fadeOut();
+                },3000)
+
+                $('.profile-page .edit-info-contact-form #social-phone-contact-edit').val("")
+                $('.profile-page .edit-info-contact-form #social-address-contact-edit').val("")
+
+                $('.profile-page .btn-primary-cancel-edit-contact-form').trigger('click')
+            }
+            else {
+                $('.messsageAlertPage #message-alert-show .content').html(data.error)
+                $('.messsageAlertPage #message-alert-show').fadeIn();
+    
+                setTimeout(() => {
+                    $('.messsageAlertPage #message-alert-show').fadeOut();
+                },3000)
+            }
+        }).catch(e => {
+            $('.messsageAlertPage #message-alert-show .content').html(e.message)
+            $('.messsageAlertPage #message-alert-show').fadeIn();
+
+            setTimeout(() => {
+                $('.messsageAlertPage #message-alert-show').fadeOut();
+            },3000)
+        })
+    })
+    // -------------------------------------------------------------------------------------------
     //--- user setting dropdown on topbar
     $('.user-img').on('click', function () {
         // toggleClass(): Thêm hoặc loại bỏ một hoặc nhiều class của thành phần.
