@@ -30,6 +30,16 @@ body {
     display: none;
 }
 /* ---------------------------------------- */
+.index-page #modalDeleteStatus .modal-dialog .modal-content .modal-footer #deleteStatusByIdBtn {
+    background-color:#797376;
+    color: white;
+}
+.index-page #modalDeleteStatus label {
+    font-family: "Lucida Console", Monaco, monospace;
+}
+.index-page #modalDeleteStatus .modal-dialog .modal-content .modal-footer .btn-cancel {
+    border: 0.5px solid;
+}
 .index-page #modalEditStatus label {
     font-family: "Lucida Console", Monaco, monospace;
 }
@@ -290,6 +300,7 @@ emoji-picker {
     animation: load7 1.8s infinite ease-in-out;
 }
 .index-page .gap2 .loader {
+    display: none;
     color: #706969;
     font-size: 10px;
     margin: 0px auto;
@@ -1317,6 +1328,7 @@ a {
 .gray-bg {
     float: left;
     width: 100%;
+    padding-bottom: 700px;
     background: #edf2f6;
 }
 

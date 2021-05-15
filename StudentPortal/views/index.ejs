@@ -94,6 +94,23 @@
                                             </div>
                                         </div>
                                     </form>
+                                    <div class="modal fade" id="modalDeleteStatus" role="dialog">
+                                        <div class="modal-dialog">
+                                        
+                                          <!-- Modal content-->
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Xoá bài viết</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-cancel" data-dismiss="modal">Đóng</button>
+                                                <button type="button" class="btn btn-primary" id="deleteStatusByIdBtn"><i class="fa fa-spinner fa-spin" style="display: none;"></i> Xoá</button>
+                                            </div>
+                                          </div>
+                                          
+                                        </div>
+                                    </div>
                                     <div id="modalEditStatus" class="modal fade" role="dialog">
                                         <div class="modal-dialog">
                                       
@@ -207,7 +224,7 @@
                                                         <li data-toggle="modal" data-target="#modalEditStatus" data-status="<%= status._id %>" onclick="liEditStatus(this)">
                                                             Chỉnh sửa <i class="fas fa-edit"></i>
                                                         </li>
-                                                        <li>
+                                                        <li data-toggle="modal" data-target="#modalDeleteStatus" data-status="<%= status._id %>" onclick="liDeleteStatus(this)">
                                                             Xoá <i class="far fa-trash-alt"></i>
                                                         </li>
                                                     </ul>
@@ -216,13 +233,14 @@
                                             <p class="text-justify ml-3 content-status">
                                                 <%= status.statusTitle %>
                                             </p>
-                                            <% if (status.video != undefined || status.video != null) { %>
-                                                <div class="ajax-video-status">
+                                            <div class="ajax-video-status">
+                                                <% if (status.video != undefined || status.video != null) { %>
                                                     <iframe
                                                         src="<%= status.video %>" height="450" frameborder="0">
                                                     </iframe>
-                                                </div>
-                                            <% } %>
+                                                <% } %>
+                                            </div>
+                                            
                                             <div class="ajax-image-status">
                                                 <img src="<%= status.image %>" alt="" class="img-fluid">
                                             </div>

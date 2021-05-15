@@ -263,16 +263,16 @@ router.delete('/:id' ,async function(req, res, next) {
             cloudinary.api.delete_folder(`status/${id}`)
             commentModel.findOneAndRemove({statusId: id}, {useFindAndModify: false})
             return res.status(200).json({
-                success: true,
-                message: 'this status was deleted successfully',
+                status: true,
+                message: 'Xoá bài viết thành công',
             })
         } catch (error) {
-            throw Error('Server error, please try again.')
+            throw Error(error.message)
         }
     })
     .catch((err) => {
         return res.status(500).json({
-            success: false,
+            status: false,
             error: err.message,
         })
     });

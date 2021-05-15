@@ -45,6 +45,11 @@ function liEditStatus(element) {
     $('.index-page #modalEditStatus #statusTitleEditStatus').val("")
 }
 
+function liDeleteStatus(element) {
+    var status = element.dataset.status
+    $('.index-page #modalDeleteStatus').attr('data-status', status)
+}
+
 function showVideoEditModal(element) {
     $('.index-page #modalEditStatus .addPreview').html("")
     $('.index-page #modalEditStatus .video-col-modal-edit').show()
@@ -510,10 +515,44 @@ $(document).ready(async function () {
         $('.index-page .preview-image-upload').addClass('active');
     })
     // -------------------------------------------------------------------------------------------
+    // delete status
+    $('.index-page #modalDeleteStatus #deleteStatusByIdBtn').on('click', e => {
+        $('.index-page #modalDeleteStatus #deleteStatusByIdBtn .fa-spinner').show()
+        var status = $('.index-page #modalDeleteStatus').attr('data-status')
+
+        fetch(`./status/${status}`, {
+            method: 'DELETE'
+        }).then(res => res.text())
+        .then(data => {
+            data = JSON.parse(data)
+            if (data.status) {
+                $(`.index-page .card-${status}`).remove()
+                $(`.index-page #showUserLikeModal${status}`).remove()
+                
+                $('.messsageAlertPage #message-alert-show .content').html(data.message)
+                $('.messsageAlertPage #message-alert-show').fadeIn();
+    
+                setTimeout(() => {
+                    $('.messsageAlertPage #message-alert-show').fadeOut();
+                },3000)
+
+                $('.index-page #modalDeleteStatus').modal('hide')
+            }
+            $('.index-page #modalDeleteStatus #deleteStatusByIdBtn .fa-spinner').hide()
+        }).catch(e => {
+            $('.index-page #modalDeleteStatus #deleteStatusByIdBtn .fa-spinner').hide()
+            $('.messsageAlertPage #message-alert-show .content').html(e.message)
+            $('.messsageAlertPage #message-alert-show').fadeIn();
+
+            setTimeout(() => {
+                $('.messsageAlertPage #message-alert-show').fadeOut();
+            },3000)
+        })
+    })
+    // -------------------------------------------------------------------------------------------
     // Edit status infor
     $('.index-page #modalEditStatus #updateStatusByIdBtn').on('click', e => {
         $('.index-page #modalEditStatus #updateStatusByIdBtn .fa-spinner').show()
-        $('.index-page #modalEditStatus #updateStatusByIdBtn').attr('data-dismiss','')
         var status = $('.index-page #modalEditStatus').attr('data-status')
         var statusTitle = $('.index-page #modalEditStatus #statusTitleEditStatus').val()
         var image = $('.index-page #modalEditStatus #imgPreview').attr('src')
@@ -524,7 +563,6 @@ $(document).ready(async function () {
             image: image,
             video: video
         }
-        console.log(query)
         fetch(`./status/${status}`, {
             method: 'PUT',
             headers: {
@@ -574,7 +612,13 @@ $(document).ready(async function () {
                 },3000)
             }
         }).catch(e => {
-            console.log(e)
+                $('.index-page #modalEditStatus #updateStatusByIdBtn .fa-spinner').hide()
+                $('.messsageAlertPage #message-alert-show .content').html(e.message)
+                $('.messsageAlertPage #message-alert-show').fadeIn();
+    
+                setTimeout(() => {
+                    $('.messsageAlertPage #message-alert-show').fadeOut();
+                },3000)
         })
     })
     // -------------------------------------------------------------------------------------------
@@ -591,6 +635,7 @@ $(document).ready(async function () {
             // console.log(scrollHeight)
             if (parseInt(statusLengthInPage) !== parseInt(checkLengthInPage)) {
                 if (scrollHeight - scrollPosition < 2) {
+                    $('.index-page .gap2 .container .row .loader').show()
                     $(".index-page .multi-card").attr("data-length_status",statusLengthInPage)
     
                     // console.log('Số status có trên view:',statusLengthInPage)
@@ -662,11 +707,9 @@ $(document).ready(async function () {
                                     let iframe = ""
                                     if (status.video != undefined || status.video != null) {
                                         iframe = `
-                                        <div class="ajax-video-status">
                                             <iframe
                                                 src="${status.video}" height="450" frameborder="0">
                                             </iframe>
-                                        </div>
                                         `
                                     }
         
@@ -714,14 +757,16 @@ $(document).ready(async function () {
                                                         <li data-toggle="modal" data-target="#modalEditStatus" data-status="${ status._id }" onclick="liEditStatus(this)">
                                                             Chỉnh sửa <i class="fas fa-edit"></i>
                                                         </li>
-                                                        <li>
+                                                        <li data-toggle="modal" data-target="#modalDeleteStatus" data-status="${ status._id }" onclick="liDeleteStatus(this)">
                                                             Xoá <i class="far fa-trash-alt"></i>
                                                         </li>
                                                     </ul>
                                                 </div>
                                             </div>
                                         <p class="text-justify ml-3 content-status">${ status.statusTitle }</p>
-                                        ${iframe}
+                                        <div class="ajax-video-status">
+                                            ${iframe}
+                                        </div>
                                         <div class="ajax-image-status">
                                             <img src="${ status.image }" alt="" class="img-fluid">
                                         </div>
@@ -1325,11 +1370,9 @@ if($(".index-page")[0]){
                         let iframe = ""
                         if (json.Status.video != undefined || json.Status.video != null) {
                             iframe = `
-                            <div class="ajax-video-status">
                                 <iframe
                                     src="${json.Status.video}" height="450" frameborder="0">
                                 </iframe>
-                            </div>
                             `
                         }
                         var htmlString =
@@ -1359,15 +1402,16 @@ if($(".index-page")[0]){
                                         <li data-toggle="modal" data-target="#modalEditStatus" data-status="${ json.Status._id }" onclick="liEditStatus(this)">
                                             Chỉnh sửa <i class="fas fa-edit"></i>
                                         </li>
-                                        <li>
+                                        <li data-toggle="modal" data-target="#modalDeleteStatus" data-status="${ json.Status._id }" onclick="liDeleteStatus(this)">
                                             Xoá <i class="far fa-trash-alt"></i>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                             <p class="text-justify ml-3 content-status">${ json.Status.statusTitle }</p>
-
-                            ${iframe}
+                            <div class="ajax-video-status">
+                                ${iframe}
+                            </div>
                             <div class="ajax-image-status">
                                 <img src="${ json.Status.image }" alt="" class="img-fluid">
                             </div>
