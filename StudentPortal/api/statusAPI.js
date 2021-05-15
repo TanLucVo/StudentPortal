@@ -179,7 +179,9 @@ router.put('/:id', statusUpdateValidator, async function(req, res, next) {
         const {image, video, statusTitle} = req.body
         const {id} = req.params
         let statusTemp = {
-            statusTitle
+            statusTitle,
+            image: undefined,
+            video: undefined
         }
 
         if (image) {
@@ -220,7 +222,7 @@ router.put('/:id', statusUpdateValidator, async function(req, res, next) {
             var newStatus = await statusModel.findByIdAndUpdate(id, statusTemp, {new: true, useFindAndModify: false})
 
             if (newStatus == null || newStatus == undefined) {
-                throw new Error('Server error, please try again.')
+                throw new Error('Lỗi xảy ra, vui lòng refresh lại trang')
             }
             return res.status(200).json({
                 status: true,

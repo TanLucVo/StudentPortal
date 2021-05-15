@@ -471,6 +471,7 @@ $(document).ready(async function () {
     // -------------------------------------------------------------------------------------------
     // Edit status infor
     $('.index-page #modalEditStatus #updateStatusByIdBtn').on('click', e => {
+        $('.index-page #modalEditStatus #updateStatusByIdBtn .fa-spinner').show()
         var status = $('.index-page #modalEditStatus').attr('data-status')
         var statusTitle = $('.index-page #statusTitleEditStatus').val()
         var image = $('.index-page #imgPreview').attr('src')
@@ -490,9 +491,23 @@ $(document).ready(async function () {
         .then(data => {
             data = JSON.parse(data)
             if (data.status) {
+                $('.index-page #modalEditStatus #updateStatusByIdBtn .fa-spinner').hide()
+                $('.messsageAlertPage #message-alert-show .content').html(data.message)
+                $('.messsageAlertPage #message-alert-show').fadeIn();
+    
                 setTimeout(() => {
+                    $('.messsageAlertPage #message-alert-show').fadeOut();
                     location.reload()
-                }, 2000)
+                },2000)
+            }
+            else {
+                $('.index-page #modalEditStatus #updateStatusByIdBtn .fa-spinner').hide()
+                $('.messsageAlertPage #message-alert-show .content').html(data.error)
+                $('.messsageAlertPage #message-alert-show').fadeIn();
+    
+                setTimeout(() => {
+                    $('.messsageAlertPage #message-alert-show').fadeOut();
+                },3000)
             }
         }).catch(e => {
             console.log(e)
