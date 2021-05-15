@@ -18,7 +18,7 @@
             </form>
         </div>
         <div class="page-name">
-            <span><a href="https://stdportal.tdtu.edu.vn/">Std Portal TDTU</a></span>
+            <span><a href="https://stdportal.tdtu.edu.vn" target="_blank">Std Portal TDTU</a></span>
         </div>
         <ul class="setting-area">
             <li>
@@ -27,78 +27,23 @@
                 </a>
             </li>
             <li>
-                <a href="#" title="Thông tin người dùng" data-ripple="">
+                <a href="./profile?id=<%= user._id %>"  target="_blank" title="Thông tin người dùng" data-ripple="">
                     <i class="fa fa-user"></i>
                 </a>
             </li>
             <li class="notification-status">
-                <a href="#" title="Thông báo" data-ripple="">
+                <a href="./notification"  target="_blank" title="Thông báo" data-ripple="">
                     <i class="fa fa-bell"></i>
-                    <em class="bg-purple">3</em>
-                </a>
-
-                <div class="dropdowns">
-                    <span>3 thông báo mới <a href="#" title="">Đánh dấu đã đọc</a></span>
-                    <ul class="drops-menu">
-                        <li>
-                            <a href="notifications.html" title="">
-                                <figure>
-                                    <img src="/images/avatar-default.jpg" alt="">
-                                    <span class="status f-online"></span>
-                                </figure>
-                                <div class="mesg-meta">
-                                    <h6>sarah Loren</h6>
-                                    <span>commented on your new profile status</span>
-                                    <i>2 phút trước</i>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="notifications.html" title="">
-                                <figure>
-                                    <img src="/images/avatar-default.jpg" alt="">
-                                    <span class="status f-online"></span>
-                                </figure>
-                                <div class="mesg-meta">
-                                    <h6>Jhon doe</h6>
-                                    <span>Nicholas Grissom just became friends. Write on his wall.</span>
-                                    <i>4 giờ tước</i>
-                                    <figure>
-                                        <span>Today is Marina Valentine’s Birthday! wish for celebrating</span>
-                                        <img src="/images/avatar-default.jpg" alt="">
-                                    </figure>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="notifications.html" title="">
-                                <figure>
-                                    <img src="/images/avatar-default.jpg" alt="">
-                                    <span class="status f-online"></span>
-                                </figure>
-                                <div class="mesg-meta">
-                                    <h6>Andrew</h6>
-                                    <span>commented on your photo.</span>
-                                    <i>Chủ nhật</i>
-                                    <figure>
-                                        <span>"Celebrity looks Beautiful in that outfit! We should see each"</span>
-                                        <img src="/images/avatar-default.jpg" alt="">
-                                    </figure>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                    <a href="notifications.html" title="" class="more-mesg">Hiển thị tất cả</a>
-                </div>
-            </li>
-            <li>
-                <a href="#" title="Ngôn ngữ" data-ripple="">
-                    <i class="fa fa-globe"></i>
                 </a>
             </li>
             <li>
-                <a href="#" title="Giúp đỡ" data-ripple="">
-                    <i class="fa fa-question-circle"></i>
+                <a href="./department" target="_blank" title="Phòng ban" data-ripple="">
+                    <i class="fas fa-building"></i>
+                </a>
+            </li>
+            <li>
+                <a href="https://lib.tdtu.edu.vn" title="Thư viện" target="_blank" data-ripple="">
+                    <i class="fas fa-book-reader"></i>
                 </a>
             </li>
         </ul>
