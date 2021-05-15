@@ -14,7 +14,8 @@
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous" />
     <link rel="stylesheet" href="/stylesheets/style.css">
-    <script src="/javascripts/main.js"></script>
+    
+
     <title>Đăng nhập</title>
 </head>
 
@@ -82,30 +83,10 @@
             </div>
         </div>
     </div>
-    <script>
-        $(document).ready(function(){
-            //login function
-            $("#login_form").submit(e=>{
-                e.preventDefault()
-                const [username, password, remember_me] = $("#login_form").serializeArray();
-                $("#login_form .spinner-border").fadeIn()
-                $.post( "/auth",{username: username.value, password:password.value, remember_me:remember_me.value}, function( data ) {
-                    if(!data.error){
-                        location.reload();
-                    }else{
-                        $("#login_form .spinner-border").fadeOut("fast")
-                        $("#login_form .login-content-error").text(data.error)
-                        $("#login_form .show-error-login").fadeIn("slow");
+    <script src="/javascripts/main.js"></script>
 
-                    }
-                });
-            })
-            $("#login_form input").keypress(function(){
-                $("#login_form .show-error-login").fadeOut("slow");
-            })
-
-        })
-    </script>
 </body>
-
+<script>
+    
+</script>
 </html>
