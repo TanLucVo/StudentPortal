@@ -1021,6 +1021,8 @@ emoji-picker {
 }
 .index-page .spinerLoadingNotification{
     height: 30px;
+    display:flex;
+    justify-content: center;
 }
 .index-page .index-page .spinerLoadingNotification{
     display: none;
