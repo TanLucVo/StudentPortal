@@ -219,33 +219,7 @@
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <script src="https://momentjs.com/downloads/moment.js" type="text/javascript"></script>
-    <script>
-        $('.notificationPage').on('click', '.deleteNoti', function() {
-            // Code
-            $("#notification-name").text($(this).parent().children('.title').text())
-            $("#notification-id").val($(this).parent().attr('id'))
-            $("#exampleModal .error").text(" ")
-            $('#exampleModal').modal('show')
-        });
-        $(".delete-notification").click(function(){
-            fetch('/api/notification/'+$("#notification-id").val(),{
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(res => res.json())
-            .then(data => {
-                if(data.status===200){
-                    $(`#${$("#notification-id").val()}`).remove()
-                    $('#exampleModal').modal('hide')
 
-                }else{
-                    $("#exampleModal .error").text("Xảy ra lỗi")
-                }
-            }).catch(e => console.log(e))
-        })
-    </script>
 </body>
 
 </html>

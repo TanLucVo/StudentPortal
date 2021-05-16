@@ -1181,6 +1181,31 @@ $(document).ready(async function () {
         v.src = v.src;
     });
     if ($(".notificationPage")[0]) {
+        $('.notificationPage').on('click', '.deleteNoti', function() {
+            // Code
+            $("#notification-name").text($(this).parent().children('.title').text())
+            $("#notification-id").val($(this).parent().attr('id'))
+            $("#exampleModal .error").text(" ")
+            $('#exampleModal').modal('show')
+        });
+        $(".delete-notification").click(function(){
+            fetch('/api/notification/'+$("#notification-id").val(),{
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status===200){
+                    $(`#${$("#notification-id").val()}`).remove()
+                    $('#exampleModal').modal('hide')
+
+                }else{
+                    $("#exampleModal .error").text("Xảy ra lỗi")
+                }
+            }).catch(e => console.log(e))
+        })
         var data = []
         let indexPage=1
         let numberPage = 1
