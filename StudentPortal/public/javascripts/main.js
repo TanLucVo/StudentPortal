@@ -382,8 +382,9 @@ $(document).ready(async function () {
     // -------------------------------------------------------------------------------------------
     // socket add comment
 
-    socket.on('add-comment', (data, mainUser) => {
+    socket.on('add-comment', (data) => {
         // console.log("data comment:",data)
+        const mainUser = document.querySelector('.index-page').dataset.userid
         fetch(`/user/${data.author}`, {
             method: 'GET'
         })
