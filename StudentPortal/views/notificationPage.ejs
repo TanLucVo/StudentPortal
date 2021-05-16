@@ -7,7 +7,11 @@
     <title>Thông báo phòng ban</title>
     <%- include partial/cdn.ejs %>
 </head>
-
+<% if(locals.isAdd){%>
+    <body class="notificationPage add">
+<% }else{%>
+    <body class="notificationPage">
+<% } %>
 <body class="notificationPage">
     <%- include partial/notification.ejs %>
     <%- include partial/responsiveMenu.ejs %>
@@ -27,6 +31,27 @@
                     <% } %>
                     
                      <% if(locals.isAdd){%>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="exampleModalLabel">Xoá thông báo</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  Bạn có chắc chắn muốn xoá thông báo <b><span id="notification-name"></span></b>
+                                </div>
+                                <input type="hidden" id="notification-id">
+                                <div class="error text-danger ml-3"></div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="button" class="btn btn-danger delete-notification">Xoá</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                             <a data-toggle="modal" data-target="#modalAddNotification">
                                 <i class="fas fa-plus-circle text-primary"></i>
                             </a>
@@ -187,13 +212,40 @@
             </div>
 
         </div>
+        
         <%- include partial/header-rightbar.ejs %>
     </div>
     <script src="/javascripts/main.js"></script>
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <script src="https://momentjs.com/downloads/moment.js" type="text/javascript"></script>
+    <script>
+        $('.notificationPage').on('click', '.deleteNoti', function() {
+            // Code
+            $("#notification-name").text($(this).parent().children('.title').text())
+            $("#notification-id").val($(this).parent().attr('id'))
+            $("#exampleModal .error").text(" ")
+            $('#exampleModal').modal('show')
+        });
+        $(".delete-notification").click(function(){
+            fetch('/api/notification/'+$("#notification-id").val(),{
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status===200){
+                    $(`#${$("#notification-id").val()}`).remove()
+                    $('#exampleModal').modal('hide')
 
+                }else{
+                    $("#exampleModal .error").text("Xảy ra lỗi")
+                }
+            }).catch(e => console.log(e))
+        })
+    </script>
 </body>
 
 </html>

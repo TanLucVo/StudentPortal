@@ -335,7 +335,7 @@ $(document).ready(async function () {
     socket.on('add-notification', (data) => {
         
         $(".notificationPage .list-notification").prepend(
-            ` <li class="list-group-item">
+            ` <li class="list-group-item" id="${data.id}>
                 <h4 class="title" >${data.title}</h4>
                 <div class="content">
                     <a href="/notification/${data.department}/${data.id}">Chi tiết thông báo</a>
@@ -1136,12 +1136,13 @@ $(document).ready(async function () {
             tempData.forEach(item =>{
 
                 stringdata +=`
-                    <li class="list-group-item">
+                    <li class="list-group-item" id="${item._id}">
                         <h4 class="title" >${item.title}</h4>
                         <div class="content">
                             <a href="/notification/${item.department}/${item._id}">Chi tiết thông báo</a>
                         </div>
                         <p class="font-italic">[${item.author }] - ${item.createAt}</p>
+                        <span class="deleteNoti"><i class="fas fa-trash text-danger"></i></span>
                     </li>
                 `
             })
